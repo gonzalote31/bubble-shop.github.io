@@ -1,0 +1,3361 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bubble Shop - Tienda Online</title>
+    <!-- ============ GOOGLE FONTS ============ -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <!-- Font Awesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Bubble Animation Styles -->
+    <link rel="stylesheet" href="bubble-animation-styles.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --azul-suave: #B8D8F0;
+            --navy: #0F2D4D;
+            --gris: #F0F9FF;
+            --gris-oscuro: #DBEAFE;
+            --cian: #06B6D4;
+            --blanco: #FFFFFF;
+            --azul-primario: #1E40AF;
+            --azul-claro: #3B82F6;
+            --header-height: 77px;
+            --category-nav-height: 86px;
+
+            /* Escala de Spacing (8px base) */
+            --space-xs: 4px;
+            --space-sm: 8px;
+            --space-md: 12px;
+            --space-lg: 16px;
+            --space-xl: 24px;
+            --space-2xl: 32px;
+            --space-3xl: 40px;
+            --space-4xl: 48px;
+
+            /* Sombras mejoradas (tintadas con navy nuevo) */
+            --sombra: 0 2px 8px rgba(15, 45, 77, 0.12), 0 1px 3px rgba(15, 45, 77, 0.08);
+            --sombra-hover: 0 8px 20px rgba(15, 45, 77, 0.16), 0 4px 8px rgba(15, 45, 77, 0.12);
+            --sombra-md: 0 4px 12px rgba(15, 45, 77, 0.14);
+
+            /* Tipografía */
+            --font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background: linear-gradient(135deg, var(--azul-suave) 0%, #F0F8FC 100%);
+            color: var(--navy);
+            min-height: 100vh;
+            line-height: 1.6;
+            scroll-behavior: smooth;
+            position: relative;
+        }
+
+        /* Grain overlay texture (premium feel) */
+        body::after {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' /%3E%3CfeColorMatrix type='saturate' values='0.3'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 1;
+            mix-blend-mode: overlay;
+        }
+
+        /* ============ SCROLL REVEAL ANIMATIONS ============ */
+        @keyframes revealUp {
+            from {
+                opacity: 0;
+                transform: translateY(24px);
+                filter: blur(8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+                filter: blur(0);
+            }
+        }
+
+        @keyframes revealLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes revealScale {
+            from {
+                opacity: 0;
+                transform: scale(0.92);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .categoria-titulo {
+            animation: revealLeft 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .producto {
+            animation: revealUp 0.6s var(--ease-spring) backwards;
+        }
+
+        .producto:nth-child(1) {
+            animation-delay: 0ms;
+        }
+
+        .producto:nth-child(2) {
+            animation-delay: 60ms;
+        }
+
+        .producto:nth-child(3) {
+            animation-delay: 120ms;
+        }
+
+        .producto:nth-child(4) {
+            animation-delay: 180ms;
+        }
+
+        .producto:nth-child(5) {
+            animation-delay: 240ms;
+        }
+
+        .producto:nth-child(6) {
+            animation-delay: 300ms;
+        }
+
+        .producto:nth-child(n+7) {
+            animation-delay: 360ms;
+        }
+
+        .banner-hero {
+            animation: revealScale 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .info-bar {
+            animation: revealUp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        /* ============ SPRING PHYSICS EASING ============ */
+        :root {
+            --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+            --ease-smooth: cubic-bezier(0.2, 0.3, 0.25, 0.46);
+            --ease-back: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* ============ HEADER ============ */
+        header {
+            background: var(--blanco);
+            padding: var(--space-lg) var(--space-lg);
+            min-height: var(--header-height);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--sombra);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--navy);
+            letter-spacing: -0.8px;
+            text-transform: uppercase;
+            tracking: tight;
+        }
+
+        .logo span {
+            color: var(--cian);
+        }
+
+        .carrito-btn {
+            position: relative;
+            background: var(--navy);
+            color: var(--blanco);
+            border: none;
+            padding: 10px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.35s var(--ease-spring);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .carrito-btn i {
+            font-size: 16px;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .carrito-label {
+            display: inline;
+        }
+
+        .carrito-btn:hover {
+            background: #0F1629;
+            transform: translateY(-3px);
+            box-shadow: var(--sombra-hover);
+        }
+
+        .carrito-btn:active {
+            transform: translateY(-1px);
+            box-shadow: var(--sombra-md);
+        }
+
+        .carrito-contador {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--cian);
+            color: var(--navy);
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        /* ============ BARRA INFORMATIVA ============ */
+        .info-bar {
+            background: var(--navy);
+            color: var(--blanco);
+            padding: var(--space-md) var(--space-lg);
+            overflow: hidden;
+            font-size: 13px;
+            font-weight: 500;
+            letter-spacing: 0.4px;
+            line-height: 1.5;
+        }
+
+        .info-bar-track {
+            display: flex;
+            width: max-content;
+            animation: infoBarScroll 28s linear infinite;
+        }
+
+        .info-bar-grupo {
+            display: flex;
+            flex: 0 0 max-content;
+            align-items: center;
+            justify-content: space-around;
+            gap: clamp(20px, 3vw, 48px);
+            min-width: 100vw;
+            padding: 0 var(--space-xl);
+            box-sizing: border-box;
+        }
+
+        .info-bar-grupo>span {
+            flex: none;
+            white-space: nowrap;
+        }
+
+        @keyframes infoBarScroll {
+            to {
+                transform: translateX(-50%);
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .info-bar-track {
+                animation: none;
+            }
+        }
+
+        .info-bar strong {
+            color: var(--cian);
+            font-weight: 700;
+        }
+
+        /* ============ CATEGORÍAS STICKY ============ */
+        .categorias-container {
+            background: linear-gradient(180deg, var(--blanco) 0%, rgba(232, 244, 248, 0.2) 100%);
+            padding: var(--space-sm) 0;
+            position: sticky;
+            top: var(--header-height);
+            z-index: 101;
+            box-shadow: 0 2px 12px rgba(26, 31, 58, 0.08);
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            border-bottom: 1px solid rgba(26, 31, 58, 0.06);
+        }
+
+        .categorias {
+            display: flex;
+            gap: var(--space-sm);
+            padding: 0 var(--space-lg);
+            min-width: min-content;
+            justify-content: center;
+        }
+
+        .categoria-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--space-xs);
+            background: none;
+            border: none;
+            color: var(--navy);
+            font-weight: 600;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s var(--ease-spring);
+            flex: 0 0 88px;
+            width: 88px;
+            min-width: 0;
+            flex-shrink: 0;
+            white-space: normal;
+            padding: var(--space-xs) var(--space-xs);
+            position: relative;
+        }
+
+        .categoria-btn::before {
+            content: '';
+            width: 44px;
+            height: 44px;
+            background: var(--blanco);
+            border: 2px solid var(--azul-suave);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s var(--ease-spring);
+            position: absolute;
+            top: var(--space-xs);
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .categoria-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .categoria-btn:hover::before {
+            border-color: var(--cian);
+            background: #F0F9FF;
+            box-shadow: 0 4px 16px rgba(6, 182, 212, 0.2);
+        }
+
+        .categoria-btn:active {
+            transform: translateY(-2px);
+        }
+
+        .categoria-btn.activa {
+            color: var(--navy);
+        }
+
+        .categoria-btn.activa::before {
+            background: linear-gradient(135deg, var(--navy) 0%, #2A3F5F 100%);
+            border-color: var(--cian);
+            box-shadow: 0 6px 20px rgba(26, 31, 58, 0.25);
+        }
+
+        .categoria-btn.activa>i {
+            color: var(--cian);
+        }
+
+        .categoria-btn>i {
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 2;
+            font-size: 18px;
+        }
+
+        .categoria-btn>div {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            min-height: 26px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            line-height: 1.2;
+            text-align: center;
+            overflow-wrap: anywhere;
+        }
+
+        /* ============ CONTENEDOR PRINCIPAL ============ */
+        .contenedor-principal {
+            display: flex;
+            gap: var(--space-xl);
+            padding: var(--space-xl);
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .productos-section {
+            flex: 1;
+            min-width: 0;
+        }
+
+        /* ============ GRID DE PRODUCTOS ============ */
+        .productos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: var(--space-lg);
+            margin-bottom: var(--space-4xl);
+        }
+
+        .categoria-titulo {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--navy);
+            margin: 0;
+            padding: 0;
+            letter-spacing: -0.5px;
+            scroll-margin-top: calc(var(--header-height) + var(--category-nav-height) + var(--space-lg));
+        }
+
+        .categoria-seccion {
+            padding: var(--space-2xl) 0 var(--space-3xl);
+            border-bottom: 3px solid #06B6D4;
+            margin-bottom: var(--space-xl);
+        }
+
+        .categoria-seccion:last-child {
+            border-bottom: 0;
+        }
+
+        .categoria-cabecera {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: var(--space-lg);
+            margin-bottom: var(--space-lg);
+            padding-bottom: var(--space-md);
+        }
+
+        .categoria-controles {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            flex: 0 1 auto;
+            color: var(--navy);
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .categoria-controles select {
+            max-width: 100%;
+            min-height: 40px;
+            padding: var(--space-sm) var(--space-md);
+            border: 1px solid rgba(15, 45, 77, 0.25);
+            border-radius: 6px;
+            background: var(--blanco);
+            color: var(--navy);
+            font: inherit;
+            cursor: pointer;
+        }
+
+        .categoria-controles select:focus-visible {
+            outline: 3px solid rgba(6, 182, 212, 0.45);
+            outline-offset: 2px;
+        }
+
+        .producto {
+            background: linear-gradient(135deg, var(--blanco) 0%, rgba(232, 244, 248, 0.4) 100%);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.35s var(--ease-spring);
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(15, 45, 77, 0.1), 0 1px 3px rgba(15, 45, 77, 0.06);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            border: none;
+        }
+
+        .producto::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.5) 0%, transparent 50%);
+            opacity: 0;
+            transition: opacity 0.4s var(--ease-spring);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .producto:hover::before {
+            opacity: 1;
+        }
+
+        .producto:hover {
+            transform: translateY(-14px) scale(1.04) rotate(0.5deg);
+            box-shadow: 0 16px 36px rgba(6, 182, 212, 0.18), 0 4px 12px rgba(6, 182, 212, 0.1);
+            background: linear-gradient(135deg, var(--blanco) 0%, rgba(232, 244, 248, 0.6) 100%);
+        }
+
+        .producto:active {
+            transform: translateY(-6px) scale(1.01);
+        }
+
+        .producto-imagen {
+            width: 100%;
+            height: 160px;
+            background: linear-gradient(135deg, var(--azul-suave) 0%, #F0F8FC 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 52px;
+            color: var(--navy);
+            opacity: 0.85;
+            transition: all 0.4s var(--ease-spring);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .producto-imagen::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:rgba(6,182,212,0.03);stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:rgba(15,45,77,0.02);stop-opacity:1' /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='60' height='60' fill='url(%23grad)'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .producto:hover .producto-imagen {
+            opacity: 1;
+            background: linear-gradient(135deg, #A8C8E1 0%, #E0EFFE 100%);
+            transform: scale(1.08);
+        }
+
+        .producto-badge {
+            position: absolute;
+            top: var(--space-md);
+            right: var(--space-md);
+            background: linear-gradient(135deg, var(--cian) 0%, #0891B2 100%);
+            color: var(--navy);
+            padding: var(--space-sm) var(--space-md);
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 0.3px;
+            z-index: 2;
+            box-shadow: 0 2px 8px rgba(6, 182, 212, 0.3);
+            animation: badgeBounce 0.6s var(--ease-spring), badgePulse 2s ease-in-out 0.8s infinite;
+        }
+
+        @keyframes badgeBounce {
+            0% {
+                transform: scale(0) translateY(-20px);
+                opacity: 0;
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1) translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes badgePulse {
+            0%, 100% {
+                box-shadow: 0 2px 8px rgba(6, 182, 212, 0.3);
+                transform: scale(1);
+            }
+
+            50% {
+                box-shadow: 0 4px 16px rgba(6, 182, 212, 0.5);
+                transform: scale(1.05);
+            }
+        }
+
+        .producto:hover .producto-badge {
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(6, 182, 212, 0.5);
+        }
+
+        .producto-info {
+            padding: var(--space-lg);
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            justify-content: space-between;
+        }
+
+        .producto-nombre {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--navy);
+            margin-bottom: var(--space-md);
+            line-height: 1.4;
+            min-height: 26px;
+            letter-spacing: -0.2px;
+        }
+
+        .producto-precio {
+            font-size: 16px;
+            color: var(--cian);
+            font-weight: 800;
+            margin-bottom: var(--space-lg);
+            letter-spacing: -0.3px;
+        }
+
+        .producto-agregar {
+            width: 100%;
+            padding: var(--space-md) var(--space-md);
+            background: linear-gradient(135deg, var(--cian) 0%, #0891B2 100%);
+            color: var(--navy);
+            border: none;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 12px;
+            letter-spacing: 0.3px;
+            cursor: pointer;
+            transition: all 0.3s var(--ease-spring);
+            margin-top: auto;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(6, 182, 212, 0.2);
+        }
+
+        .producto-agregar::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.5s var(--ease-smooth);
+        }
+
+        .producto-agregar:hover::after {
+            transform: translateX(100%);
+        }
+
+        .producto-agregar:hover {
+            background: linear-gradient(135deg, #00D9FF 0%, #0E7490 100%);
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 20px rgba(6, 182, 212, 0.3);
+        }
+
+        .producto-agregar:active {
+            transform: translateY(0px) scale(0.98);
+        }
+
+        /* ============ MICRO-INTERACTIONS ============ */
+        @keyframes checkmark {
+            0% {
+                opacity: 0;
+                transform: scale(0) rotate(-90deg);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1.15);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1) rotate(0deg);
+            }
+        }
+
+        @keyframes pulse-ring {
+            0% {
+                box-shadow: 0 0 0 0 rgba(6, 182, 212, 0.7);
+            }
+
+            70% {
+                box-shadow: 0 0 0 15px rgba(6, 182, 212, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(6, 182, 212, 0);
+            }
+        }
+
+        .producto-agregar.agregado::after {
+            content: "✓";
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            animation: checkmark 0.6s var(--ease-spring) forwards;
+            font-weight: 800;
+            font-size: 16px;
+            color: #06B6D4;
+        }
+
+        .btn-whatsapp.activo {
+            animation: pulse-ring 0.6s ease-out;
+        }
+
+        /* Loading skeleton state */
+        @keyframes shimmer {
+            0% {
+                background-position: -1000px 0;
+            }
+
+            100% {
+                background-position: 1000px 0;
+            }
+        }
+
+        .producto-agregar:disabled {
+            background: linear-gradient(90deg,
+                    var(--gris-oscuro) 25%,
+                    #D0D0D0 50%,
+                    var(--gris-oscuro) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            cursor: not-allowed;
+        }
+
+        /* ============ CARRITO MODAL ============ */
+        .carrito-modal {
+            position: fixed;
+            right: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .carrito-modal.activo {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .carrito-contenido {
+            background: var(--blanco);
+            width: 100%;
+            max-width: 420px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            margin-left: auto;
+            animation: slideInRight 0.4s var(--ease-spring);
+            box-shadow: -4px 0 24px rgba(26, 31, 58, 0.2);
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOutRight {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+
+        .carrito-modal:not(.activo) .carrito-contenido {
+            animation: slideOutRight 0.3s var(--ease-smooth);
+        }
+
+        .carrito-header {
+            padding: var(--space-xl);
+            background: var(--navy);
+            color: var(--blanco);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .carrito-header h2 {
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .carrito-cerrar {
+            background: none;
+            border: none;
+            color: var(--blanco);
+            font-size: 28px;
+            cursor: pointer;
+            transition: transform 0.2s cubic-bezier(0.2, 0.3, 0.25, 0.46);
+            padding: 0;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .carrito-cerrar:hover {
+            transform: scale(1.15) rotate(90deg);
+        }
+
+        .carrito-cerrar:active {
+            transform: scale(1.05) rotate(90deg);
+        }
+
+        .carrito-items {
+            flex: 1;
+            overflow-y: auto;
+            padding: var(--space-lg);
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-md);
+        }
+
+        .carrito-vacio {
+            text-align: center;
+            color: #999;
+            padding: var(--space-3xl) var(--space-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+        }
+
+        .carrito-item {
+            background: var(--gris);
+            padding: var(--space-lg);
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: var(--space-lg);
+            transition: all 0.25s var(--ease-smooth);
+            box-shadow: var(--sombra);
+            animation: revealUp 0.4s var(--ease-spring) backwards;
+        }
+
+        .carrito-item:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .carrito-item:nth-child(2) {
+            animation-delay: 0.15s;
+        }
+
+        .carrito-item:nth-child(3) {
+            animation-delay: 0.2s;
+        }
+
+        .carrito-item:nth-child(4) {
+            animation-delay: 0.25s;
+        }
+
+        .carrito-item:nth-child(n+5) {
+            animation-delay: 0.3s;
+        }
+
+        .carrito-item:hover {
+            background: #EFEFEF;
+            box-shadow: var(--sombra-md);
+            transform: translateX(4px);
+        }
+
+        .carrito-item-info {
+            flex: 1;
+        }
+
+        .carrito-item-nombre {
+            font-weight: 700;
+            font-size: 13px;
+            color: var(--navy);
+            margin-bottom: var(--space-sm);
+            letter-spacing: -0.3px;
+        }
+
+        .carrito-item-cantidad {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .carrito-item-precio {
+            font-weight: 800;
+            color: var(--cian);
+            font-size: 14px;
+        }
+
+        .carrito-item-btn-eliminar {
+            background: #FF6B6B;
+            color: white;
+            border: none;
+            padding: var(--space-sm) var(--space-md);
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 700;
+            transition: all 0.2s cubic-bezier(0.2, 0.3, 0.25, 0.46);
+        }
+
+        .carrito-item-btn-eliminar:hover {
+            background: #E63946;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(230, 57, 70, 0.3);
+        }
+
+        .carrito-item-btn-eliminar:active {
+            transform: translateY(0px);
+        }
+
+        .carrito-item-cantidad-controls {
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+            background: var(--blanco);
+            border-radius: 6px;
+            border: 2px solid var(--navy);
+            padding: 2px;
+            transition: all 0.2s cubic-bezier(0.2, 0.3, 0.25, 0.46);
+        }
+
+        .carrito-item-cantidad-controls:hover {
+            border-color: var(--cian);
+            box-shadow: 0 2px 8px rgba(26, 31, 58, 0.1);
+        }
+
+        .btn-cantidad {
+            background: none;
+            border: none;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-weight: 800;
+            color: var(--navy);
+            transition: all 0.2s cubic-bezier(0.2, 0.3, 0.25, 0.46);
+            border-radius: 4px;
+        }
+
+        .btn-cantidad:hover {
+            background: var(--gris);
+            color: var(--cian);
+        }
+
+        .btn-cantidad:active {
+            transform: scale(0.9);
+        }
+
+        .cantidad-valor {
+            min-width: 24px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 13px;
+            color: var(--navy);
+        }
+
+        /* ============ BANNER HERO ============ */
+        .banner-hero {
+            background: linear-gradient(135deg, var(--navy) 0%, #2A3F5F 50%, #0F2D4D 100%);
+            color: var(--blanco);
+            padding: var(--space-4xl) var(--space-lg);
+            margin: 0;
+            position: relative;
+            overflow: hidden;
+            min-height: 600px;
+        }
+
+        .banner-hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' result='noise' /%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+            opacity: 0.02;
+            pointer-events: none;
+            z-index: 1;
+            mix-blend-mode: overlay;
+        }
+
+        
+
+        /* Wrapper del banner - 2 columnas */
+        .banner-hero-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: var(--space-4xl);
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Columna izquierda - Información */
+        .banner-hero-contenido {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding-right: var(--space-2xl);
+            padding: var(--space-2xl) var(--space-2xl) var(--space-2xl) 0;
+        }
+
+        .banner-hero h1 {
+            font-size: clamp(32px, 5vw, 52px);
+            font-weight: 800;
+            margin-bottom: var(--space-md);
+            letter-spacing: -1.2px;
+            line-height: 1.05;
+            color: #FFFFFF;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5), 0 4px 12px rgba(0, 0, 0, 0.3);
+            text-wrap: balance;
+        }
+
+        .banner-hero-subtitle {
+            font-size: clamp(16px, 2vw, 18px);
+            font-weight: 600;
+            color: #06B6D4;
+            margin-bottom: var(--space-xl);
+            letter-spacing: 0.5px;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+        }
+
+        .banner-hero p {
+            font-size: clamp(16px, 2vw, 18px);
+            margin-bottom: var(--space-2xl);
+            opacity: 1;
+            line-height: 1.8;
+            font-weight: 500;
+            color: #F0F9FF;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+        }
+
+        .banner-hero-highlight {
+            background: rgba(6, 182, 212, 0.25);
+            color: #FFFFFF;
+            padding: var(--space-md) var(--space-lg);
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 14px;
+            display: inline-block;
+            margin-bottom: var(--space-2xl);
+            border: 2px solid rgba(6, 182, 212, 0.6);
+            backdrop-filter: blur(10px);
+            letter-spacing: 0.3px;
+            box-shadow: 0 4px 12px rgba(6, 182, 212, 0.2);
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        .banner-hero-botones {
+            display: flex;
+            gap: var(--space-lg);
+            flex-wrap: wrap;
+        }
+
+        .banner-hero-cta {
+            background: var(--cian);
+            color: var(--navy);
+            padding: var(--space-lg) var(--space-2xl);
+            border: none;
+            border-radius: 8px;
+            font-weight: 800;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.3s var(--ease-spring);
+            letter-spacing: -0.3px;
+            box-shadow: 0 8px 24px rgba(6, 182, 212, 0.25);
+            min-height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .banner-hero-cta i {
+            font-size: 16px;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .banner-hero-cta span {
+            display: inline;
+        }
+
+        .banner-hero-cta:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 12px 32px rgba(6, 182, 212, 0.35);
+            background: #0891B2;
+        }
+
+        .banner-hero-cta:active {
+            transform: translateY(-1px) scale(0.98);
+        }
+
+        .banner-hero-cta-secundario {
+            background: rgba(6, 182, 212, 0.15);
+            color: var(--blanco);
+            padding: var(--space-lg) var(--space-2xl);
+            border: 2px solid var(--cian);
+            border-radius: 8px;
+            font-weight: 800;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.3s var(--ease-spring);
+            letter-spacing: -0.3px;
+            min-height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 16px rgba(6, 182, 212, 0.15);
+        }
+
+        .banner-hero-cta-secundario i {
+            font-size: 16px;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .banner-hero-cta-secundario span {
+            display: inline;
+        }
+
+        .banner-hero-cta-secundario:hover {
+            background: var(--cian);
+            color: var(--navy);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 8px 24px rgba(6, 182, 212, 0.3);
+        }
+
+        .banner-hero-cta-secundario:active {
+            transform: translateY(-1px) scale(0.98);
+        }
+
+        .banner-hero-cta-secundario:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-3px);
+        }
+
+        .banner-hero-cta-secundario:active {
+            transform: translateY(-1px);
+        }
+
+        /* Columna derecha - Burbuja principal */
+        .banner-hero-burbuja-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 400px;
+            position: relative;
+        }
+
+        /* Burbuja principal grande */
+        .burbuja-principal {
+            position: relative;
+            width: 350px;
+            height: 350px;
+            border-radius: 50%;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.1) 100%);
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+            color: var(--blanco);
+            box-shadow:
+                inset 0 1px 2px rgba(255, 255, 255, 0.6),
+                inset 0 -1px 2px rgba(0, 0, 0, 0.2),
+                0 8px 32px rgba(0, 0, 0, 0.1);
+            animation: bubbleRiseGrow 1s var(--ease-spring) forwards;
+            z-index: 2;
+            transition: all 0.4s var(--ease-spring);
+        }
+
+        .burbuja-principal::after {
+            content: '';
+            position: absolute;
+            inset: 3px;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .burbuja-principal:hover {
+            transform: scale(1.04) translateZ(0);
+            box-shadow:
+                inset 0 1px 2px rgba(255, 255, 255, 0.7),
+                inset 0 -1px 2px rgba(0, 0, 0, 0.15),
+                0 12px 48px rgba(6, 182, 212, 0.25),
+                0 0 30px rgba(6, 182, 212, 0.15);
+            backdrop-filter: blur(12px);
+        }
+
+        .burbuja-imagen {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            object-position: center;
+            z-index: 1;
+        }
+
+        .burbuja-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(15, 45, 77, 0.4) 0%, rgba(15, 45, 77, 0.6) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+            border-radius: 50%;
+        }
+
+        .burbuja-fallback {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1;
+            background: linear-gradient(135deg, #B8D8F0 0%, #E0EFFE 100%);
+            border-radius: 50%;
+        }
+
+        .burbuja-fallback-emoji {
+            font-size: 64px;
+            margin-bottom: var(--space-md);
+            opacity: 0.8;
+        }
+
+        .burbuja-fallback-text {
+            font-size: 12px;
+            color: var(--navy);
+            text-align: center;
+            font-weight: 600;
+            opacity: 0.7;
+            width: 80%;
+        }
+
+        .burbuja-principal.pop {
+            animation: bubblePop 0.8s var(--ease-spring) forwards !important;
+        }
+
+        .burbuja-contenido {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--space-lg);
+        }
+
+        .burbuja-emoji {
+            font-size: 80px;
+            display: block;
+            margin-bottom: var(--space-md);
+        }
+
+        .burbuja-icon {
+            font-size: 60px;
+            display: block;
+            color: var(--cian);
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .burbuja-categoria {
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+        }
+
+        /* ============ RESPONSIVE MOBILE ============ */
+        @media (max-width: 768px) {
+            .banner-hero {
+                min-height: auto;
+                padding: var(--space-3xl) var(--space-lg);
+            }
+
+            .banner-hero-wrapper {
+                flex-direction: column;
+                gap: var(--space-2xl);
+            }
+
+            .banner-hero-contenido {
+                text-align: center;
+                padding-right: 0;
+                padding: var(--space-xl) var(--space-lg);
+            }
+
+            .banner-hero h1 {
+                font-size: 32px;
+            }
+
+            .banner-hero-subtitle {
+                font-size: 15px;
+            }
+
+            .banner-hero-botones {
+                justify-content: center;
+            }
+
+            .banner-hero-burbuja-container {
+                min-height: 300px;
+            }
+
+            .burbuja-principal {
+                width: 280px;
+                height: 280px;
+            }
+
+            .burbuja-principal,
+            .burbuja-principal.pop {
+                animation: none !important;
+                transform: none;
+                opacity: 1;
+            }
+
+            .burbuja-emoji {
+                font-size: 60px;
+            }
+
+            .burbuja-categoria {
+                font-size: 16px;
+            }
+        }
+
+        /* ============ FOOTER ============ */
+        footer {
+            background: linear-gradient(135deg, var(--navy) 0%, #16172a 100%);
+            color: var(--blanco);
+            padding: var(--space-3xl) var(--space-lg) var(--space-lg);
+            margin-top: var(--space-4xl);
+            border-top: 1px solid rgba(6, 182, 212, 0.15);
+        }
+
+        .footer-contenido {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--space-3xl);
+            margin-bottom: var(--space-2xl);
+        }
+
+        .footer-seccion h3 {
+            font-size: 16px;
+            font-weight: 800;
+            margin-bottom: var(--space-lg);
+            color: var(--cian);
+            letter-spacing: -0.3px;
+        }
+
+        .footer-seccion ul {
+            list-style: none;
+        }
+
+        .footer-seccion li {
+            margin-bottom: var(--space-md);
+        }
+
+        .footer-seccion a {
+            color: rgba(255, 255, 255, 0.85);
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.25s var(--ease-spring);
+            cursor: pointer;
+            font-weight: 500;
+            display: inline-block;
+        }
+
+        .footer-seccion a:hover {
+            color: var(--cian);
+            transform: translateX(3px);
+        }
+
+        .footer-redes {
+            display: flex;
+            gap: var(--space-md);
+            margin-top: var(--space-lg);
+        }
+
+        .footer-redes a {
+            width: 40px;
+            height: 40px;
+            background: rgba(6, 182, 212, 0.08);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            transition: all 0.3s var(--ease-spring);
+            border: 1.5px solid rgba(6, 182, 212, 0.2);
+        }
+
+        .footer-redes a:hover {
+            background: var(--cian);
+            color: var(--navy);
+            border-color: var(--cian);
+            transform: translateY(-4px) scale(1.1);
+            box-shadow: 0 6px 16px rgba(6, 182, 212, 0.25);
+        }
+
+        .footer-info {
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .footer-info p {
+            margin-bottom: var(--space-md);
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        .footer-divider {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: var(--space-2xl);
+            padding-top: var(--space-xl);
+            text-align: center;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+            letter-spacing: 0.3px;
+        }
+
+        /* ============ MODALES (FAQ, POLÍTICA, TÉRMINOS) ============ */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-lg);
+            animation: fadeIn 0.25s ease;
+            backdrop-filter: blur(2px);
+        }
+
+        .modal.activo {
+            display: flex;
+        }
+
+        @keyframes fadeInBackdrop {
+            from {
+                background: rgba(0, 0, 0, 0);
+                backdrop-filter: blur(0px);
+            }
+
+            to {
+                background: rgba(0, 0, 0, 0.6);
+                backdrop-filter: blur(2px);
+            }
+        }
+
+        .modal.activo {
+            animation: fadeInBackdrop 0.3s ease;
+        }
+
+        .modal-contenido {
+            background: var(--blanco);
+            border-radius: 12px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            padding: var(--space-2xl);
+            position: relative;
+            animation: modalEnter 0.4s var(--ease-spring);
+            box-shadow: 0 20px 60px rgba(26, 31, 58, 0.25);
+        }
+
+        @keyframes modalEnter {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .modal-cerrar {
+            position: absolute;
+            top: var(--space-lg);
+            right: var(--space-lg);
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: var(--navy);
+            transition: all 0.25s var(--ease-spring);
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-cerrar:hover {
+            transform: scale(1.15) rotate(90deg);
+            color: var(--cian);
+        }
+
+        .modal-cerrar:active {
+            transform: scale(1.05) rotate(90deg);
+        }
+
+        .modal-titulo {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--navy);
+            margin-bottom: var(--space-xl);
+            padding-right: var(--space-2xl);
+            letter-spacing: -0.5px;
+            animation: revealLeft 0.5s var(--ease-spring) 0.1s backwards;
+        }
+
+        .faq-item {
+            margin-bottom: var(--space-xl);
+            animation: revealUp 0.5s var(--ease-spring) backwards;
+        }
+
+        .faq-item:nth-child(1) {
+            animation-delay: 0.2s;
+        }
+
+        .faq-item:nth-child(2) {
+            animation-delay: 0.25s;
+        }
+
+        .faq-item:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        .faq-item:nth-child(4) {
+            animation-delay: 0.35s;
+        }
+
+        .faq-item:nth-child(5) {
+            animation-delay: 0.4s;
+        }
+
+        .faq-pregunta {
+            font-weight: 700;
+            color: var(--navy);
+            margin-bottom: var(--space-md);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            transition: all 0.2s var(--ease-smooth);
+            letter-spacing: -0.3px;
+        }
+
+        .faq-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            color: var(--cian);
+            flex-shrink: 0;
+        }
+
+        .faq-icon i {
+            font-size: 18px;
+            transition: transform 0.3s var(--ease-spring);
+        }
+
+        .faq-pregunta:hover {
+            color: var(--cian);
+            transform: translateX(4px);
+        }
+
+        .faq-pregunta:hover .faq-icon i {
+            transform: scale(1.15);
+        }
+
+        .faq-respuesta {
+            color: #555;
+            font-size: 14px;
+            line-height: 1.7;
+            margin-left: var(--space-2xl);
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s var(--ease-spring), opacity 0.4s ease;
+            opacity: 0;
+        }
+
+        .faq-respuesta.visible {
+            max-height: 500px;
+            opacity: 1;
+        }
+
+        .modal-contenido h4 {
+            color: var(--cian);
+            font-size: 16px;
+            font-weight: 700;
+            margin-top: var(--space-xl);
+            margin-bottom: var(--space-lg);
+            letter-spacing: -0.3px;
+        }
+
+        .modal-contenido p,
+        .modal-contenido li {
+            color: #555;
+            font-size: 14px;
+            line-height: 1.7;
+            margin-bottom: var(--space-md);
+        }
+
+        .modal-contenido ul {
+            margin-left: var(--space-2xl);
+            margin-bottom: var(--space-lg);
+        }
+
+        /* ============ MODAL GALERÍA PRODUCTO ============ */
+        .modal-galeria-contenido {
+            max-width: 700px;
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-2xl);
+        }
+
+        .galeria-imagenes {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-lg);
+        }
+
+        .galeria-principal {
+            width: 100%;
+            height: 320px;
+            background: linear-gradient(135deg, var(--azul-suave) 0%, rgba(232, 244, 248, 0.5) 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 120px;
+            position: relative;
+            overflow: hidden;
+            animation: revealScale 0.6s var(--ease-spring);
+        }
+
+        .galeria-thumbnails {
+            display: flex;
+            gap: var(--space-md);
+            justify-content: center;
+        }
+
+        .galeria-thumb {
+            width: 70px;
+            height: 70px;
+            background: var(--gris);
+            border: 2px solid transparent;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            cursor: pointer;
+            transition: all 0.25s var(--ease-spring);
+        }
+
+        .galeria-thumb:hover {
+            border-color: var(--cian);
+            transform: scale(1.08);
+        }
+
+        .galeria-thumb.activo {
+            background: linear-gradient(135deg, var(--navy) 0%, #2A3F5F 100%);
+            border-color: var(--cian);
+            color: var(--blanco);
+        }
+
+        .producto-info {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-lg);
+        }
+
+        .producto-info h2 {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--navy);
+            letter-spacing: -0.5px;
+        }
+
+        .producto-descripcion {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.8;
+            padding: var(--space-lg);
+            background: var(--gris);
+            border-radius: 8px;
+            border-left: 4px solid var(--cian);
+        }
+
+        .producto-precio-section {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: var(--space-lg);
+            background: linear-gradient(135deg, var(--azul-suave) 0%, rgba(232, 244, 248, 0.3) 100%);
+            border-radius: 8px;
+        }
+
+        .producto-precio {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-sm);
+        }
+
+        .producto-precio label {
+            font-size: 12px;
+            color: var(--navy);
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+        }
+
+        .producto-precio-monto {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--navy);
+        }
+
+        .producto-precio-monto sup {
+            font-size: 16px;
+            margin-right: 2px;
+        }
+
+        .btn-agregar-galeria {
+            padding: var(--space-lg) var(--space-2xl);
+            background: linear-gradient(135deg, var(--navy) 0%, #2A3F5F 100%);
+            color: var(--blanco);
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s var(--ease-spring);
+            min-height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-md);
+        }
+
+        .btn-agregar-galeria:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(26, 31, 58, 0.2);
+        }
+
+        .btn-agregar-galeria:active {
+            transform: scale(0.98);
+        }
+
+        /* ============ SELECTOR PROVINCIA ============ */
+        .provincia-selector {
+            padding: var(--space-lg);
+            background: linear-gradient(135deg, var(--azul-suave) 0%, rgba(232, 244, 248, 0.5) 100%);
+            border-radius: 8px;
+            margin: 0 var(--space-lg);
+            border: 1px solid rgba(26, 31, 58, 0.08);
+        }
+
+        .provincia-selector label {
+            display: block;
+            font-weight: 700;
+            font-size: 13px;
+            margin-bottom: var(--space-md);
+            color: var(--navy);
+            letter-spacing: -0.2px;
+        }
+
+        .provincia-selector select {
+            width: 100%;
+            padding: var(--space-md) var(--space-lg);
+            border: 2px solid var(--navy);
+            border-radius: 6px;
+            font-size: 13px;
+            color: var(--navy);
+            background: var(--blanco);
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.25s var(--ease-spring);
+            letter-spacing: -0.2px;
+        }
+
+        .provincia-selector select:hover {
+            border-color: var(--cian);
+            box-shadow: 0 4px 12px rgba(26, 31, 58, 0.12);
+            transform: translateY(-1px);
+        }
+
+        .provincia-selector select:focus {
+            outline: none;
+            border-color: var(--cian);
+            box-shadow: 0 0 0 4px rgba(6, 182, 212, 0.15);
+            transform: translateY(-2px);
+        }
+
+        /* ============ INDICADOR ENVÍO ============ */
+        .envio-indicador {
+            padding: var(--space-lg);
+            margin: var(--space-lg) var(--space-lg) var(--space-xl);
+            background: var(--cian);
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 13px;
+            color: var(--navy);
+            display: none;
+            letter-spacing: -0.3px;
+            box-shadow: 0 4px 12px rgba(6, 182, 212, 0.25);
+            transition: all 0.3s cubic-bezier(0.2, 0.3, 0.25, 0.46);
+        }
+
+        .envio-indicador.mostrar {
+            display: block;
+            animation: slideDown 0.4s cubic-bezier(0.2, 0.3, 0.25, 0.46);
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes bounceIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.3);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1.05);
+            }
+
+            70% {
+                transform: scale(0.9);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        @keyframes floatUp {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes rotateSpin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes glow {
+
+            0%,
+            100% {
+                box-shadow: 0 0 8px rgba(6, 182, 212, 0.3);
+            }
+
+            50% {
+                box-shadow: 0 0 16px rgba(6, 182, 212, 0.6);
+            }
+        }
+
+        /* ============ BURBUJAS ANIMADAS ============ */
+        @keyframes bubbleRiseGrow {
+            0% {
+                transform: translateY(100px) scale(0.1);
+                opacity: 0;
+            }
+
+            20% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes bubblePop {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(0);
+                opacity: 0;
+            }
+        }
+
+        
+
+        .envio-gratis {
+            background: #27AE60 !important;
+            color: var(--blanco) !important;
+            box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3) !important;
+        }
+
+        /* ============ RESUMEN CARRITO ============ */
+        .carrito-resumen {
+            padding: var(--space-lg);
+            border-top: 2px solid var(--gris);
+            background: var(--gris);
+        }
+
+        .resumen-fila {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: var(--space-md);
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: -0.2px;
+        }
+
+        .resumen-fila.total {
+            font-size: 16px;
+            font-weight: 800;
+            color: var(--cian);
+            border-top: 2px solid var(--blanco);
+            padding-top: var(--space-lg);
+            margin-top: var(--space-lg);
+            letter-spacing: -0.3px;
+        }
+
+        .resumen-fila label {
+            color: #666;
+            font-weight: 600;
+        }
+
+        .resumen-fila span {
+            color: var(--navy);
+            font-weight: 700;
+        }
+
+        .resumen-fila.total span {
+            color: var(--cian);
+        }
+
+        /* ============ BOTONES CARRITO ============ */
+        .carrito-botones {
+            padding: var(--space-lg);
+            display: flex;
+            gap: var(--space-lg);
+        }
+
+        .carrito-botones button {
+            flex: 1;
+            padding: var(--space-lg) var(--space-md);
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.2, 0.3, 0.25, 0.46);
+            letter-spacing: -0.2px;
+            min-height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .carrito-botones button:active {
+            transform: scale(0.98);
+        }
+
+        .btn-limpiar {
+            background: var(--cian);
+            color: var(--navy);
+            transition: all 0.25s cubic-bezier(0.2, 0.3, 0.25, 0.46);
+        }
+
+        .btn-limpiar:hover {
+            background: #FF9500;
+            transform: translateY(-2px);
+            box-shadow: var(--sombra-md);
+        }
+
+        .btn-limpiar:active {
+            transform: translateY(0px);
+        }
+
+        .btn-whatsapp {
+            background: #25D366;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-sm);
+            transition: all 0.25s cubic-bezier(0.2, 0.3, 0.25, 0.46);
+        }
+
+        .btn-whatsapp:hover {
+            background: #20BA58;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(37, 211, 102, 0.35);
+        }
+
+        .btn-whatsapp:active {
+            transform: translateY(0px);
+        }
+
+        .btn-whatsapp:disabled {
+            background: var(--gris-oscuro);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: var(--sombra);
+        }
+
+        /* ============ BOTÓN FLOTANTE WHATSAPP ============ */
+        .whatsapp-flotante {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 56px;
+            height: 56px;
+            background: #25D366;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 16px rgba(37, 211, 102, 0.4);
+            transition: all 0.3s var(--ease-spring);
+            z-index: 3000;
+            font-size: 28px;
+            user-select: none;
+            animation: glow 2.5s ease-in-out infinite;
+            border: 2px solid rgba(37, 211, 102, 0.2);
+        }
+
+        .whatsapp-flotante i {
+            color: #FFFFFF;
+        }
+
+        .whatsapp-flotante:hover {
+            transform: scale(1.15);
+            box-shadow: 0 8px 28px rgba(37, 211, 102, 0.6);
+            animation: none;
+        }
+
+        .whatsapp-flotante:active {
+            transform: scale(1.08);
+        }
+
+        /* ============ BANNERS PUBLICIDAD (Desktop) ============ */
+        .banner-lado {
+            width: 300px;
+            display: none;
+        }
+
+        @media (min-width: 1200px) {
+            .banner-lado {
+                display: flex;
+                flex-direction: column;
+                gap: var(--space-xl);
+                position: sticky;
+                top: calc(var(--header-height) + var(--category-nav-height) + var(--space-lg));
+                align-self: flex-start;
+                height: max-content;
+                padding: var(--space-xl) 0px;
+            }
+
+            .banner {
+                background: var(--blanco);
+                border-radius: 12px;
+                padding: var(--space-xl);
+                text-align: center;
+                box-shadow: var(--sombra);
+                min-height: 300px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: all 0.3s cubic-bezier(0.2, 0.3, 0.25, 0.46);
+                border: 1px solid rgba(26, 31, 58, 0.05);
+                position: relative;
+                overflow: hidden;
+            }
+
+            .banner img {
+                display: block;
+                width: 100%;
+                height: auto;
+            }
+
+            .banner-anuncio {
+                padding: 0;
+                min-height: 0;
+            }
+
+            .banner-anuncio .banner-placeholder,
+            .banner-anuncio a {
+                display: block;
+                width: 100%;
+            }
+
+            .banner::before {
+                content: "";
+                position: absolute;
+                inset: 0;
+                background: radial-gradient(circle at 50% 50%, rgba(232, 244, 248, 0.4) 0%, transparent 70%);
+                pointer-events: none;
+            }
+
+            .banner:hover {
+                transform: translateY(-4px);
+                box-shadow: var(--sombra-hover);
+            }
+
+            .banner-placeholder {
+                color: #999;
+                font-size: 13px;
+                font-weight: 600;
+                position: relative;
+                z-index: 1;
+                letter-spacing: 0.3px;
+            }
+        }
+
+        /* ============ RESPONSIVE ============ */
+        @media (max-width: 768px) {
+            .contenedor-principal {
+                flex-direction: column;
+                padding: var(--space-lg);
+                gap: var(--space-lg);
+            }
+
+            .productos-grid {
+                grid-template-columns: repeat(auto-fill, minmax(145px, 1fr));
+                gap: var(--space-lg);
+            }
+
+            .carrito-contenido {
+                max-width: 100%;
+                width: 100%;
+            }
+
+            .categoria-titulo {
+                font-size: 18px;
+                margin: 0;
+            }
+
+            .producto-imagen {
+                height: 140px;
+                font-size: 42px;
+            }
+
+            .whatsapp-flotante {
+                width: 48px;
+                height: 48px;
+                font-size: 24px;
+                bottom: 16px;
+                right: 16px;
+            }
+
+            .info-bar {
+                font-size: 12px;
+                padding: var(--space-sm) var(--space-lg);
+            }
+
+            .categorias {
+                padding: 0 var(--space-lg);
+                gap: var(--space-xs);
+            }
+
+            .categoria-btn {
+                flex-basis: 72px;
+                width: 72px;
+                padding: var(--space-xs);
+            }
+
+            .banner-hero h1 {
+                font-size: 28px;
+            }
+
+            .banner-hero p {
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            :root {
+                --header-height: 60px;
+            }
+
+            header {
+                padding: var(--space-md) var(--space-lg);
+            }
+
+            .logo {
+                font-size: 20px;
+                font-weight: 700;
+            }
+
+            .carrito-btn {
+                padding: 8px 12px;
+                font-size: 12px;
+            }
+
+            .productos-grid {
+                grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            }
+
+            .categoria-controles {
+                align-items: flex-start;
+                flex-direction: column;
+                gap: var(--space-xs);
+            }
+
+            .categoria-cabecera {
+                align-items: flex-start;
+                flex-direction: column;
+                gap: var(--space-md);
+            }
+
+            .categoria-controles select {
+                width: 100%;
+            }
+
+            .producto-imagen {
+                height: 120px;
+                font-size: 36px;
+            }
+
+            .producto-info {
+                padding: var(--space-md);
+            }
+
+            .producto-nombre {
+                font-size: 12px;
+                min-height: 24px;
+            }
+
+            .banner-hero {
+                padding: var(--space-2xl) var(--space-lg);
+            }
+
+            .banner-hero h1 {
+                font-size: 24px;
+            }
+
+            .banner-hero-cta {
+                padding: 14px 28px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ============ HEADER ============ -->
+    <header>
+        <div class="logo">Bubble<span>Shop</span></div>
+        <button class="carrito-btn" id="abrirCarrito">
+            <i class="fas fa-shopping-cart"></i>
+            <span class="carrito-label">Carrito</span>
+            <span class="carrito-contador" id="cartCounter">0</span>
+        </button>
+    </header>
+
+    <!-- ============ BARRA INFORMATIVA ============ -->
+    <div class="info-bar">
+        <div class="info-bar-track">
+            <div class="info-bar-grupo">
+                <span><i class="fas fa-truck" aria-hidden="true"></i> Envío <strong>GRATIS en compras
+                        &gt;$25</strong></span>
+                <span><i class="fas fa-map-pin" aria-hidden="true"></i> <strong>GRATIS en Riobamba</strong></span>
+                <span><i class="fas fa-comment-dots" aria-hidden="true"></i> Compra fácil por
+                    <strong>WhatsApp</strong></span>
+            </div>
+            <div class="info-bar-grupo" aria-hidden="true">
+                <span><i class="fas fa-truck"></i> Envío <strong>GRATIS en compras &gt;$25</strong></span>
+                <span><i class="fas fa-map-pin"></i> <strong>GRATIS en Riobamba</strong></span>
+                <span><i class="fas fa-comment-dots"></i> Compra fácil por <strong>WhatsApp</strong></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ BANNER HERO ============ -->
+    <section class="banner-hero">
+        <!-- BURBUJAS DE FONDO (z-index bajo, detrás de todo) -->
+        <div class="hero-burbujas-fondo" id="burbujasFondo"></div>
+
+        <!-- CONTENIDO PRINCIPAL (2 columnas) -->
+        <div class="banner-hero-wrapper">
+            <!-- COLUMNA IZQUIERDA: INFORMACIÓN -->
+            <div class="banner-hero-contenido">
+                <h1>Todo lo que buscas, en un solo lugar</h1>
+                <div class="banner-hero-subtitle">Descubre miles de productos con envío express</div>
+                <p>Explora nuestras colecciones en tecnología, hogar, belleza, mascotas y mucho más con calidad
+                    garantizada.</p>
+
+                <div class="banner-hero-highlight">
+                    <i class="fas fa-bolt"></i> Envío GRATIS en compras >$25
+                </div>
+
+                <div class="banner-hero-botones">
+                    <button class="banner-hero-cta"
+                        onclick="document.getElementById('categoriasNav').scrollIntoView({behavior: 'smooth'})">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span>Explorar Catálogo</span>
+                    </button>
+                    <button class="banner-hero-cta-secundario"
+                        onclick="document.getElementById('categoriasNav').scrollIntoView({behavior: 'smooth'})">
+                        <i class="fas fa-mobile-alt"></i>
+                        <span>Ver Ofertas</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- COLUMNA DERECHA: BURBUJA PRINCIPAL -->
+            <div class="banner-hero-burbuja-container">
+                <div class="burbuja-principal" id="burbujaPrincipal">
+                    <img class="burbuja-imagen" id="burbujaImagen"
+                        src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&h=400&fit=crop"
+                        alt="Categoría"
+                        onerror="this.style.display='none'; document.getElementById('burbujaFallback').style.display='flex'">
+                    <div class="burbuja-fallback" id="burbujaFallback" style="display: none;">
+                        <div class="burbuja-fallback-emoji">📸</div>
+                        <div class="burbuja-fallback-text">Imagen no disponible</div>
+                    </div>
+                    <div class="burbuja-overlay">
+                        <div class="burbuja-contenido">
+                            <i class="burbuja-icon" id="burbujaIcono" aria-hidden="true"></i>
+                            <div class="burbuja-categoria" id="burbujaTexto">Hogar</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ CATEGORÍAS STICKY ============ -->
+    <div class="categorias-container">
+        <div class="categorias" id="categoriasNav"></div>
+    </div>
+
+    <!-- ============ CONTENEDOR PRINCIPAL ============ -->
+    <div class="contenedor-principal">
+        <!-- Productos -->
+        <div class="productos-section" id="productosSection"></div>
+
+        <!-- Banners (Desktop) -->
+        <div class="banner-lado">
+            <div class="banner banner-anuncio">
+                <div class="banner-placeholder">
+                    <a href="https://www.neobux.com/?rh=676F6E726F746531333133" target="_blank" rel="noopener noreferrer">
+                        <img src="/assets/images/ads/ads_1_neobux.jpg" width="300" alt="Publicidad NeoBux" />
+                    </a>
+                </div>
+            </div>
+            <div class="banner">
+                <div class="banner-placeholder">Espacio para publicidad</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ CARRITO MODAL ============ -->
+    <div class="carrito-modal" id="carritoModal">
+        <div class="carrito-contenido">
+            <div class="carrito-header">
+                <h2>Tu Carrito</h2>
+                <button class="carrito-cerrar" id="cerrarCarrito">&times;</button>
+            </div>
+
+            <div class="carrito-items" id="carritoItems"></div>
+
+            <div class="carrito-resumen">
+                <!-- Selector Provincia -->
+                <div class="provincia-selector">
+                    <label for="provinciaSelect">Enviar a:</label>
+                    <select id="provinciaSelect">
+                        <option value="riobamba">Riobamba</option>
+                        <option value="otras">Otras provincias</option>
+                    </select>
+                </div>
+
+                <!-- Indicador Envío -->
+                <div class="envio-indicador" id="envioIndicador"></div>
+
+                <!-- Resumen -->
+                <div class="resumen-fila">
+                    <label>Subtotal:</label>
+                    <span id="subtotal">$0.00</span>
+                </div>
+                <div class="resumen-fila">
+                    <label>Envío:</label>
+                    <span id="envio">$0.00</span>
+                </div>
+                <div class="resumen-fila total">
+                    <label>TOTAL:</label>
+                    <span id="total">$0.00</span>
+                </div>
+            </div>
+
+            <div class="carrito-botones">
+                <button class="btn-limpiar" id="limpiarCarrito">Limpiar</button>
+                <button class="btn-whatsapp" id="enviarWhatsapp">📱 Comprar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ BOTÓN FLOTANTE WHATSAPP ============ -->
+    <div class="whatsapp-flotante" id="whatsappFlotante" title="Contáctanos por WhatsApp"><i
+            class="fab fa-whatsapp"></i></div>
+
+    <!-- ============ FOOTER ============ -->
+    <footer>
+        <div class="footer-contenido">
+            <!-- Contacto y Horarios -->
+            <div class="footer-seccion">
+                <h3>📞 Contacto</h3>
+                <div class="footer-info">
+                    <p><strong>Teléfono/WhatsApp:</strong></p>
+                    <p>📱 <a href="https://wa.me/593978691094">0978691094</a></p>
+                    <p style="margin-top: 16px;"><strong>Horarios de Atención:</strong></p>
+                    <p>⏰ Lunes a Domingo<br>8:00 AM - 6:00 PM</p>
+                    <p style="margin-top: 16px;"><strong>Forma de Pago:</strong></p>
+                    <p>💳 Pago contra entrega al recibir tu pedido</p>
+                </div>
+            </div>
+
+            <!-- Redes Sociales -->
+            <div class="footer-seccion">
+                <h3>📱 Síguenos</h3>
+                <p>Mantente conectado con nuestras últimas ofertas y promociones</p>
+                <div class="footer-redes">
+                    <a href="https://wa.me/593978691094" title="WhatsApp">📱</a>
+                    <a href="https://instagram.com/bubbleshop.ec" title="Instagram">📷</a>
+                    <a href="https://facebook.com/BubbleShopEC" title="Facebook">👍</a>
+                </div>
+            </div>
+
+            <!-- Información -->
+            <div class="footer-seccion">
+                <h3><i class="fas fa-info-circle"></i> Información</h3>
+                <ul>
+                    <li><a onclick="abrirModal('faqModal')"><i class="fas fa-question-circle"></i> Preguntas
+                            Frecuentes</a></li>
+                    <li><a onclick="abrirModal('politicaModal')"><i class="fas fa-lock"></i> Política de Privacidad</a>
+                    </li>
+                    <li><a onclick="abrirModal('terminosModal')"><i class="fas fa-file-contract"></i> Términos y
+                            Condiciones</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-divider">
+            <p>&copy; 2026 Bubble Shop. Todos los derechos reservados. | Compra segura y confiable <i
+                    class="fas fa-shield-alt"></i></p>
+        </div>
+    </footer>
+
+    <!-- ============ MODAL FAQ ============ -->
+    <div class="modal" id="faqModal">
+        <div class="modal-contenido">
+            <button class="modal-cerrar" onclick="cerrarModal('faqModal')">&times;</button>
+            <h2 class="modal-titulo"><i class="fas fa-question-circle"></i> Preguntas Frecuentes</h2>
+
+            <div class="faq-item">
+                <div class="faq-pregunta"
+                    onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'none' ? 'block' : 'none'">
+                    <span class="faq-icon"><i class="fas fa-plus-circle"></i></span> ¿Cómo realizo mi pedido?
+                </div>
+                <div class="faq-respuesta" style="display: none;">
+                    Selecciona los productos que deseas, agrega al carrito, elige tu provincia y presiona el botón
+                    "Comprar". Serás redirigido a WhatsApp donde confirmarás tu pedido con tu dirección y datos de
+                    contacto.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-pregunta"
+                    onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'none' ? 'block' : 'none'">
+                    <span class="faq-icon"><i class="fas fa-plus-circle"></i></span> ¿Cuál es el costo del envío?
+                </div>
+                <div class="faq-respuesta" style="display: none;">
+                    En Riobamba: envío gratis en compras mayores a $25, caso contrario $2.50. En otras provincias: envío
+                    gratis en compras mayores a $25, caso contrario $5.00. El costo se suma automáticamente en el
+                    carrito según tu selección.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-pregunta"
+                    onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'none' ? 'block' : 'none'">
+                    <span class="faq-icon"><i class="fas fa-plus-circle"></i></span> ¿Cuáles son los tiempos de entrega?
+                </div>
+                <div class="faq-respuesta" style="display: none;">
+                    Una vez confirmado tu pedido por WhatsApp, haremos la entrega en el plazo acordado. Riobamba: 1-2
+                    días. Otras provincias: 3-5 días hábiles aproximadamente.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-pregunta"
+                    onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'none' ? 'block' : 'none'">
+                    <span class="faq-icon"><i class="fas fa-plus-circle"></i></span> ¿Puedo cambiar o devolver un
+                    producto?
+                </div>
+                <div class="faq-respuesta" style="display: none;">
+                    Si el producto llega defectuoso o no corresponde a tu pedido, contáctanos inmediatamente por
+                    WhatsApp y gestionaremos tu cambio o devolución sin problemas.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-pregunta"
+                    onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'none' ? 'block' : 'none'">
+                    <span class="faq-icon"><i class="fas fa-plus-circle"></i></span> ¿Mi información está segura?
+                </div>
+                <div class="faq-respuesta" style="display: none;">
+                    Sí. Tus datos se comparten exclusivamente por WhatsApp con nuestro equipo para procesar tu pedido.
+                    No almacenamos información sensible en nuestro servidor.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ MODAL POLÍTICA DE PRIVACIDAD ============ -->
+    <div class="modal" id="politicaModal">
+        <div class="modal-contenido">
+            <button class="modal-cerrar" onclick="cerrarModal('politicaModal')">&times;</button>
+            <h2 class="modal-titulo"><i class="fas fa-lock"></i> Política de Privacidad</h2>
+
+            <h4>1. Información que Recopilamos</h4>
+            <p>Bubble Shop recopila únicamente la información que voluntariamente proporcionas a través de WhatsApp al
+                realizar un pedido: nombre, dirección, teléfono y correo electrónico.</p>
+
+            <h4>2. Uso de la Información</h4>
+            <p>Tu información se utiliza exclusivamente para:</p>
+            <ul>
+                <li>Procesar y entregar tu pedido</li>
+                <li>Comunicarnos contigo sobre el estado de tu compra</li>
+                <li>Resolver consultas o reclamos</li>
+                <li>Enviar promociones (solo si lo deseas)</li>
+            </ul>
+
+            <h4>3. Protección de Datos</h4>
+            <p>Tomamos la seguridad de tus datos en serio. No compartimos tu información con terceros sin tu
+                consentimiento, excepto con nuestros operadores de envío necesarios para entregar tu pedido.</p>
+
+            <h4>4. Cookies y Almacenamiento Local</h4>
+            <p>Nuestro sitio utiliza almacenamiento local del navegador (localStorage) para guardar tu carrito. Esto no
+                transmite datos a servidores externos.</p>
+
+            <h4>5. Cambios a Esta Política</h4>
+            <p>Nos reservamos el derecho de actualizar esta política de privacidad en cualquier momento. Los cambios
+                entrarán en vigencia inmediatamente.</p>
+
+            <h4>6. Contacto</h4>
+            <p>Si tienes preguntas sobre nuestra política de privacidad, contáctanos por WhatsApp: 0978691094</p>
+        </div>
+    </div>
+
+    <!-- ============ MODAL TÉRMINOS Y CONDICIONES ============ -->
+    <div class="modal" id="terminosModal">
+        <div class="modal-contenido">
+            <button class="modal-cerrar" onclick="cerrarModal('terminosModal')">&times;</button>
+            <h2 class="modal-titulo"><i class="fas fa-file-contract"></i> Términos y Condiciones</h2>
+
+            <h4>1. Aceptación de Términos</h4>
+            <p>Al utilizar Bubble Shop, aceptas estos términos y condiciones en su totalidad. Si no estás de acuerdo,
+                por favor no utilices nuestro sitio.</p>
+
+            <h4>2. Descripción del Servicio</h4>
+            <p>Bubble Shop es una tienda en línea que vende productos variados (hogar, tecnología, moda, belleza, etc.).
+                Los pedidos se realizan a través de WhatsApp y se pagan contra entrega.</p>
+
+            <h4>3. Disponibilidad de Productos</h4>
+            <p>Los productos mostrados están sujetos a disponibilidad. Si un producto agotado fue añadido al carrito, te
+                lo notificaremos antes de procesar tu pedido.</p>
+
+            <h4>4. Precios y Pagos</h4>
+            <p>Los precios mostrados incluyen IVA (donde aplique). El pago se realiza contra entrega. Aceptamos
+                únicamente pago en efectivo al recibir tu pedido.</p>
+
+            <h4>5. Envíos</h4>
+            <ul>
+                <li><strong>Riobamba:</strong> Envío gratis en compras >$25, caso contrario $2.50</li>
+                <li><strong>Otras provincias:</strong> Envío gratis en compras >$25, caso contrario $5.00</li>
+                <li>Riobamba: 1-2 días hábiles</li>
+                <li>Otras provincias: 3-5 días hábiles</li>
+            </ul>
+
+            <h4>6. Cambios y Devoluciones</h4>
+            <p>Si recibes un producto defectuoso o incorrecto, contáctanos dentro de 48 horas por WhatsApp.
+                Gestionaremos tu cambio o devolución sin cargo adicional.</p>
+
+            <h4>7. Limitación de Responsabilidad</h4>
+            <p>Bubble Shop no se responsabiliza por daños causados durante el transporte que estén fuera de nuestro
+                control. Sin embargo, gestionaremos todos los reclamos de buena fe.</p>
+
+            <h4>8. Conducta del Usuario</h4>
+            <p>Te comprometes a utilizar este sitio solo para propósitos legales y no para actividades fraudulentas,
+                ilícitas o que violen derechos de terceros.</p>
+
+            <h4>9. Modificación de Términos</h4>
+            <p>Nos reservamos el derecho de modificar estos términos en cualquier momento. Continuando el uso de nuestro
+                sitio aceptas los términos modificados.</p>
+
+            <h4>10. Contacto</h4>
+            <p>Para cualquier duda sobre estos términos, contáctanos por WhatsApp: 0978691094</p>
+        </div>
+    </div>
+
+    <!-- ============ MODAL GALERÍA PRODUCTO ============ -->
+    <div class="modal" id="galeriaModal">
+        <div class="modal-contenido modal-galeria-contenido">
+            <button class="modal-cerrar" onclick="cerrarModal('galeriaModal')">&times;</button>
+
+            <div class="galeria-imagenes">
+                <div class="galeria-principal" id="galeriaPrincipal">🍽️</div>
+                <div class="galeria-thumbnails" id="galeriaThumbnails">
+                    <!-- Se genera dinámicamente con JS -->
+                </div>
+            </div>
+
+            <div class="producto-info">
+                <h2 id="galeriaProductoNombre">Nombre del Producto</h2>
+
+                <div class="producto-descripcion" id="galeriaProductoDescripcion">
+                    Descripción del producto
+                </div>
+
+                <div class="producto-precio-section">
+                    <div class="producto-precio">
+                        <label>Precio</label>
+                        <div class="producto-precio-monto">
+                            <sup>$</sup><span id="galeriaProductoPrecio">0.00</span>
+                        </div>
+                    </div>
+                    <button class="btn-agregar-galeria" onclick="agregarAlCarritoDesdeGaleria()" id="btnAgregarGaleria">
+                        ✓ Agregar al Carrito
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ SCRIPT ============ -->
+    <script>
+        // ============ DATOS DE PRODUCTOS ============
+        const productos = {
+            'hogar-cocina': [
+                { id: 1, nombre: 'Juego de Platos 12 piezas', emoji: '🍽️', precio: 24.99, stock: true, imagenes: ['🍽️', '🥘', '🍴'], descripcion: 'Juego completo de platos de cerámica de alta calidad. Incluye 12 piezas: 4 platos grandes, 4 medianos y 4 pequeños. Perfectos para comidas familiares.' },
+                { id: 2, nombre: 'Olla de Presión 6L', emoji: '🍲', precio: 34.99, stock: true, imagenes: ['🍲', '🔥', '⏱️'], descripcion: 'Olla de presión con capacidad de 6 litros. Material de aluminio duradero. Incluye válvulas de seguridad. Ideal para cocinar rápido y ahorrar energía.' },
+                { id: 3, nombre: 'Set de Cucharas de Medida', emoji: '🥄', precio: 8.99, stock: true, imagenes: ['🥄', '📏', '🎯'], descripcion: 'Set de 4 cucharas medidoras en acero inoxidable. Perfectas para repostería y cocina. Incluye marcas en ml y onzas fluidas.' },
+                { id: 4, nombre: 'Tabla de Cortar Bambú', emoji: '🪵', precio: 15.99, stock: true },
+                { id: 5, nombre: 'Jarras de Vidrio 1L (3 piezas)', emoji: '🥛', precio: 18.99, stock: true },
+                { id: 6, nombre: 'Escurridor de Frutas', emoji: '🫒', precio: 12.99, stock: true },
+            ],
+            'ninos': [
+                { id: 7, nombre: 'Set de Construcción 100 bloques', emoji: '🧱', precio: 22.99, stock: true },
+                { id: 8, nombre: 'Puzzle Infantil 48 piezas', emoji: '🧩', precio: 14.99, stock: true },
+                { id: 9, nombre: 'Patineta para Niños', emoji: '🛹', precio: 39.99, stock: true },
+                { id: 10, nombre: 'Mochilas Escolares', emoji: '🎒', precio: 19.99, stock: true },
+                { id: 11, nombre: 'Colores Pastel 24 colores', emoji: '✏️', precio: 9.99, stock: true },
+            ],
+            'pijama-mujer': [
+                { id: 12, nombre: 'Pijama Algodón Rosa', emoji: '👕', precio: 28.99, stock: true },
+                { id: 13, nombre: 'Pijama Térmico Gris', emoji: '👖', precio: 32.99, stock: true },
+                { id: 14, nombre: 'Conjunto Lencería Elegante', emoji: '💗', precio: 24.99, stock: true },
+                { id: 15, nombre: 'Bata de Baño Suave', emoji: '🧴', precio: 21.99, stock: true },
+                { id: 16, nombre: 'Pijama Estampado Flores', emoji: '🌸', precio: 26.99, stock: true },
+            ],
+            'tecnologia': [
+                { id: 17, nombre: 'Cable USB-C 2m', emoji: '🔌', precio: 9.99, stock: true },
+                { id: 18, nombre: 'Protector Pantalla Vidrio Templado', emoji: '📱', precio: 7.99, stock: true },
+                { id: 19, nombre: 'Power Bank 20000mAh', emoji: '🔋', precio: 29.99, stock: true },
+                { id: 20, nombre: 'Auriculares Bluetooth', emoji: '🎧', precio: 34.99, stock: true },
+                { id: 21, nombre: 'Funda Protectora para Celular', emoji: '🛡️', precio: 12.99, stock: true },
+            ],
+            'electrodomesticos': [
+                { id: 22, nombre: 'Licuadora 5 Velocidades', emoji: '🍹', precio: 44.99, stock: true },
+                { id: 23, nombre: 'Tostador 2 ranuras', emoji: '🍞', precio: 36.99, stock: true },
+                { id: 24, nombre: 'Ventilador de Torre 80W', emoji: '🌀', precio: 52.99, stock: true },
+                { id: 25, nombre: 'Microondas Compacto', emoji: '📻', precio: 89.99, stock: true },
+                { id: 26, nombre: 'Cafetera Automática', emoji: '☕', precio: 42.99, stock: true },
+            ],
+            'mascotas': [
+                { id: 27, nombre: 'Collar Ajustable Perro', emoji: '🐕', precio: 11.99, stock: true },
+                { id: 28, nombre: 'Juguete Cuerda Mascotas', emoji: '🧸', precio: 8.99, stock: true },
+                { id: 29, nombre: 'Comedero Gato Cerámica', emoji: '🐈', precio: 14.99, stock: true },
+                { id: 30, nombre: 'Cama Felpa para Perro', emoji: '🛏️', precio: 28.99, stock: true },
+                { id: 31, nombre: 'Bolsa Viaje Mascota', emoji: '🎒', precio: 19.99, stock: true },
+            ],
+            'belleza': [
+                { id: 32, nombre: 'Mascarilla Facial Carbón', emoji: '✨', precio: 16.99, stock: true },
+                { id: 33, nombre: 'Set de Brochas Maquillaje 10pz', emoji: '🪮', precio: 21.99, stock: true },
+                { id: 34, nombre: 'Crema Hidratante 200ml', emoji: '🧴', precio: 19.99, stock: true },
+                { id: 35, nombre: 'Sérum Vitamina C', emoji: '💧', precio: 24.99, stock: true },
+                { id: 36, nombre: 'Espejo LED Maquillaje', emoji: '🪞', precio: 32.99, stock: true },
+            ],
+            'herramientas': [
+                { id: 37, nombre: 'Kit Destornilladores 12 piezas', emoji: '🔧', precio: 17.99, stock: true },
+                { id: 38, nombre: 'Martillo Acero 500g', emoji: '🔨', precio: 14.99, stock: true },
+                { id: 39, nombre: 'Taladro Manual', emoji: '⚙️', precio: 28.99, stock: true },
+                { id: 40, nombre: 'Cinta Métrica 5m', emoji: '📏', precio: 9.99, stock: true },
+                { id: 41, nombre: 'Nivel Burbuja 60cm', emoji: '📐', precio: 12.99, stock: true },
+            ],
+            'bebes': [
+                { id: 42, nombre: 'Chupete Silicona Suave', emoji: '👶', precio: 7.99, stock: true },
+                { id: 43, nombre: 'Toallas Bebé Suaves', emoji: '🧼', precio: 21.99, stock: true },
+                { id: 44, nombre: 'Set Mamadera Vidrio 3piezas', emoji: '🍼', precio: 18.99, stock: true },
+                { id: 45, nombre: 'Pañales Desechables 40 unidades', emoji: '👼', precio: 23.99, stock: true },
+                { id: 46, nombre: 'Mudador Portátil', emoji: '📦', precio: 15.99, stock: true },
+            ],
+        };
+
+        const categorias = {
+            'hogar-cocina': 'Hogar y Cocina',
+            'ninos': 'Niños',
+            'pijama-mujer': 'Pijama Mujer',
+            'tecnologia': 'Tecnología',
+            'electrodomesticos': 'Electrodomésticos',
+            'mascotas': 'Mascotas',
+            'belleza': 'Belleza',
+            'herramientas': 'Herramientas',
+            'bebes': 'Bebés',
+        };
+
+        // ============ ESTADO DEL CARRITO ============
+        let carrito = [];
+        let provinciaSeleccionada = 'riobamba';
+
+        // ============ BURBUJAS ANIMADAS ============
+        // El sistema de burbujas dinámicas se inicializa automáticamente desde bubble-animation-system.js
+        // Configuración disponible via window.bubbleSystem
+        const categoriasBurbuja = [
+            {
+                nombre: 'Hogar',
+                imagen: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&h=400&fit=crop',
+                icono: 'fas fa-couch',
+            },
+            {
+                nombre: 'Tecnología',
+                imagen: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=400&h=400&fit=crop',
+                icono: 'fas fa-laptop',
+            },
+            {
+                nombre: 'Belleza',
+                imagen: 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=400&h=400&fit=crop',
+                icono: 'fas fa-sparkles',
+            },
+            {
+                nombre: 'Juguetes',
+                imagen: 'https://images.unsplash.com/photo-1596461404969-9ae70f2830c1?w=400&h=400&fit=crop',
+                icono: 'fas fa-cube',
+            }
+        ];
+
+        // ============ MODALES ============
+        function abrirModal(modalId) {
+            document.getElementById(modalId).classList.add('activo');
+
+            // Agregar event listeners a las preguntas FAQ
+            if (modalId === 'faqModal') {
+                document.querySelectorAll('.faq-pregunta').forEach(pregunta => {
+                    pregunta.addEventListener('click', function () {
+                        const respuesta = this.nextElementSibling;
+                        respuesta.classList.toggle('visible');
+
+                        // Cambiar icono de + a - (Font Awesome)
+                        const iconoSpan = this.querySelector('.faq-icon i');
+                        if (iconoSpan) {
+                            if (respuesta.style.display === 'none' || respuesta.style.display === '') {
+                                iconoSpan.className = 'fas fa-minus-circle';
+                                respuesta.style.display = 'block';
+                            } else {
+                                iconoSpan.className = 'fas fa-plus-circle';
+                                respuesta.style.display = 'none';
+                            }
+                        }
+                    });
+                });
+            }
+        }
+
+        function cerrarModal(modalId) {
+            document.getElementById(modalId).classList.remove('activo');
+        }
+
+        // ============ GALERÍA PRODUCTO ============
+        let productoActualGaleria = null;
+        let imagenActualIndex = 0;
+
+        function abrirGaleriaProducto(id, categoria) {
+            const producto = productos[categoria].find(p => p.id === id);
+
+            if (!producto) return;
+
+            productoActualGaleria = producto;
+            imagenActualIndex = 0;
+
+            // Actualizar información del producto
+            document.getElementById('galeriaProductoNombre').textContent = producto.nombre;
+            document.getElementById('galeriaProductoDescripcion').textContent =
+                producto.descripcion || 'Producto de alta calidad disponible en Bubble Shop.';
+            document.getElementById('galeriaProductoPrecio').textContent = producto.precio.toFixed(2);
+
+            // Mostrar imágenes
+            if (producto.imagenes && producto.imagenes.length > 0) {
+                mostrarImagenGaleria(0);
+                renderizarThumbnails(producto.imagenes);
+            } else {
+                // Si no hay imágenes, mostrar emoji del producto
+                document.getElementById('galeriaPrincipal').textContent = producto.emoji;
+                document.getElementById('galeriaThumbnails').innerHTML =
+                    `<div class="galeria-thumb activo">${producto.emoji}</div>`;
+            }
+
+            // Abrir modal
+            abrirModal('galeriaModal');
+        }
+
+        function mostrarImagenGaleria(index) {
+            if (!productoActualGaleria) return;
+
+            const imagenes = productoActualGaleria.imagenes || [productoActualGaleria.emoji];
+            imagenActualIndex = index;
+
+            document.getElementById('galeriaPrincipal').textContent = imagenes[index];
+
+            // Actualizar thumbnail activo
+            document.querySelectorAll('.galeria-thumb').forEach((thumb, i) => {
+                if (i === index) {
+                    thumb.classList.add('activo');
+                } else {
+                    thumb.classList.remove('activo');
+                }
+            });
+        }
+
+        function renderizarThumbnails(imagenes) {
+            const container = document.getElementById('galeriaThumbnails');
+            container.innerHTML = imagenes.map((img, index) =>
+                `<div class="galeria-thumb ${index === 0 ? 'activo' : ''}" 
+                     onclick="mostrarImagenGaleria(${index})">${img}</div>`
+            ).join('');
+        }
+
+        function agregarAlCarritoDesdeGaleria() {
+            if (!productoActualGaleria) return;
+
+            const id = productoActualGaleria.id;
+            const nombre = productoActualGaleria.nombre;
+            const precio = productoActualGaleria.precio;
+
+            const existeItem = carrito.find(item => item.id === id);
+
+            if (existeItem) {
+                existeItem.cantidad++;
+            } else {
+                carrito.push({ id, nombre, precio, cantidad: 1 });
+            }
+
+            guardarCarrito();
+            actualizarCarrito();
+
+            // Mostrar feedback visual
+            const boton = document.getElementById('btnAgregarGaleria');
+            const originalText = boton.textContent;
+            boton.textContent = '✓ ¡Agregado!';
+            boton.style.background = 'linear-gradient(135deg, #27AE60 0%, #229954 100%)';
+
+            setTimeout(() => {
+                boton.textContent = originalText;
+                boton.style.background = '';
+            }, 1500);
+
+            // Cerrar modal después de agregar
+            setTimeout(() => {
+                cerrarModal('galeriaModal');
+            }, 800);
+        }
+
+        // Cerrar modales al hacer click fuera
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) {
+                        modal.classList.remove('activo');
+                    }
+                });
+            });
+        });
+
+        // ============ FEEDBACK ANIMATIONS ============
+        function agregarAlCarrito(id, nombre, precio) {
+            const existeItem = carrito.find(item => item.id === id);
+
+            if (existeItem) {
+                existeItem.cantidad++;
+            } else {
+                carrito.push({ id, nombre, precio, cantidad: 1 });
+            }
+
+            guardarCarrito();
+            actualizarCarrito();
+
+            // Mostrar feedback visual
+            const boton = event.target;
+            const originalText = boton.textContent;
+            boton.textContent = '✓ Agregado';
+            boton.classList.add('agregado');
+
+            // Agregar pulso visual
+            const rect = boton.getBoundingClientRect();
+            const pulse = document.createElement('div');
+            pulse.style.position = 'fixed';
+            pulse.style.left = rect.left + rect.width / 2 + 'px';
+            pulse.style.top = rect.top + rect.height / 2 + 'px';
+            pulse.style.width = '20px';
+            pulse.style.height = '20px';
+            pulse.style.border = '2px solid #25D366';
+            pulse.style.borderRadius = '50%';
+            pulse.style.pointerEvents = 'none';
+            pulse.style.animation = 'pulse-ring 0.6s ease-out forwards';
+            pulse.style.zIndex = '9999';
+            document.body.appendChild(pulse);
+
+            setTimeout(() => {
+                pulse.remove();
+                boton.textContent = originalText;
+                boton.classList.remove('agregado');
+            }, 600);
+        }
+
+        // ============ INICIALIZACIÓN ============
+        function init() {
+            cargarCarritoGuardado();
+            renderizarCategorias();
+            renderizarProductos();
+            setupEventListeners();
+            actualizarCarrito();
+        }
+
+        // ============ GUARDAR/CARGAR CARRITO ============
+        function guardarCarrito() {
+            localStorage.setItem('bubble-shop-carrito', JSON.stringify(carrito));
+            localStorage.setItem('bubble-shop-provincia', provinciaSeleccionada);
+        }
+
+        function cargarCarritoGuardado() {
+            const carritoGuardado = localStorage.getItem('bubble-shop-carrito');
+            const provinciaGuardada = localStorage.getItem('bubble-shop-provincia');
+
+            if (carritoGuardado) {
+                carrito = JSON.parse(carritoGuardado);
+            }
+            if (provinciaGuardada) {
+                provinciaSeleccionada = provinciaGuardada;
+            }
+        }
+
+        // ============ RENDERIZAR CATEGORÍAS ============
+        function renderizarCategorias() {
+            const nav = document.getElementById('categoriasNav');
+            nav.innerHTML = '';
+
+            const iconosPorCategoria = {
+                'hogar-cocina': 'fa-utensils',
+                'ninos': 'fa-child',
+                'pijama-mujer': 'fa-shirt',
+                'tecnologia': 'fa-laptop',
+                'electrodomesticos': 'fa-blender',
+                'mascotas': 'fa-paw',
+                'belleza': 'fa-wand-magic-sparkles',
+                'herramientas': 'fa-screwdriver-wrench',
+                'bebes': 'fa-baby'
+            };
+
+            Object.entries(categorias).forEach(([key, nombre], index) => {
+                const btn = document.createElement('button');
+                btn.className = 'categoria-btn' + (index === 0 ? ' activa' : '');
+                btn.setAttribute('aria-label', `Ver categoría: ${nombre}`);
+                btn.setAttribute('aria-pressed', index === 0 ? 'true' : 'false');
+                const icono = iconosPorCategoria[key] || 'fa-tag';
+                btn.innerHTML = `<i class="fas ${icono}" aria-hidden="true"></i><div>${nombre}</div>`;
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.categoria-btn').forEach(b => {
+                        b.classList.remove('activa');
+                        b.setAttribute('aria-pressed', 'false');
+                    });
+                    btn.classList.add('activa');
+                    btn.setAttribute('aria-pressed', 'true');
+                    document.getElementById(`seccion-${key}`).scrollIntoView({ behavior: 'smooth', block: 'start' });
+                });
+                nav.appendChild(btn);
+            });
+        }
+
+        // ============ RENDERIZAR PRODUCTOS ============
+        function renderizarProductos() {
+            const section = document.getElementById('productosSection');
+            section.innerHTML = '';
+
+            Object.entries(productos).forEach(([key, items]) => {
+                const categoriaSeccion = document.createElement('section');
+                categoriaSeccion.className = 'categoria-seccion';
+
+                const cabecera = document.createElement('div');
+                cabecera.className = 'categoria-cabecera';
+
+                // Título categoría
+                const titulo = document.createElement('h3');
+                titulo.className = 'categoria-titulo';
+                titulo.id = `seccion-${key}`;
+                titulo.textContent = categorias[key];
+                cabecera.appendChild(titulo);
+
+                const controles = document.createElement('div');
+                controles.className = 'categoria-controles';
+                const etiquetaOrden = document.createElement('label');
+                const selectorOrden = document.createElement('select');
+                selectorOrden.id = `orden-${key}`;
+                selectorOrden.setAttribute('aria-label', `Ordenar productos de ${categorias[key]}`);
+                etiquetaOrden.htmlFor = selectorOrden.id;
+                etiquetaOrden.textContent = 'Ordenar:';
+                selectorOrden.innerHTML = `
+                    <option value="original">Orden original</option>
+                    <option value="precio-asc">Precio: menor a mayor</option>
+                    <option value="precio-desc">Precio: mayor a menor</option>
+                    <option value="nombre-asc">Nombre: A-Z</option>
+                    <option value="nombre-desc">Nombre: Z-A</option>
+                `;
+                controles.append(etiquetaOrden, selectorOrden);
+                cabecera.appendChild(controles);
+                categoriaSeccion.appendChild(cabecera);
+
+                // Grid de productos
+                const grid = document.createElement('div');
+                grid.className = 'productos-grid';
+
+                const renderizarTarjetas = (orden) => {
+                    const itemsOrdenados = [...items];
+                    if (orden === 'precio-asc') {
+                        itemsOrdenados.sort((a, b) => a.precio - b.precio);
+                    } else if (orden === 'precio-desc') {
+                        itemsOrdenados.sort((a, b) => b.precio - a.precio);
+                    } else if (orden === 'nombre-asc') {
+                        itemsOrdenados.sort((a, b) => a.nombre.localeCompare(b.nombre, 'es'));
+                    } else if (orden === 'nombre-desc') {
+                        itemsOrdenados.sort((a, b) => b.nombre.localeCompare(a.nombre, 'es'));
+                    }
+
+                    grid.replaceChildren();
+                    itemsOrdenados.forEach(producto => {
+                        const card = document.createElement('div');
+                        card.className = 'producto';
+                        card.style.cursor = 'pointer';
+                        card.innerHTML = `
+                        <div class="producto-imagen">${producto.emoji}</div>
+                        ${producto.stock ? '' : '<div class="producto-badge">Sin Stock</div>'}
+                        <div class="producto-info">
+                            <div class="producto-nombre">${producto.nombre}</div>
+                            <div class="producto-precio">$${producto.precio.toFixed(2)}</div>
+                            <button class="producto-agregar" ${!producto.stock ? 'disabled' : ''} 
+                                onclick="event.stopPropagation(); abrirGaleriaProducto(${producto.id}, '${key}')">
+                                ${producto.stock ? 'Ver Detalles' : 'No disponible'}
+                            </button>
+                        </div>
+                    `;
+                        card.addEventListener('click', () => {
+                            if (producto.stock) {
+                                abrirGaleriaProducto(producto.id, key);
+                            }
+                        });
+                        grid.appendChild(card);
+                    });
+                };
+
+                selectorOrden.addEventListener('change', () => renderizarTarjetas(selectorOrden.value));
+                renderizarTarjetas(selectorOrden.value);
+
+                categoriaSeccion.appendChild(grid);
+                section.appendChild(categoriaSeccion);
+            });
+        }
+
+        // ============ CARRITO - AGREGAR PRODUCTO ============ (La función está arriba con feedback animations)
+
+        // ============ CARRITO - ELIMINAR PRODUCTO ============
+        function eliminarDelCarrito(id) {
+            carrito = carrito.filter(item => item.id !== id);
+            guardarCarrito();
+            actualizarCarrito();
+        }
+
+        // ============ CARRITO - AUMENTAR CANTIDAD ============
+        function aumentarCantidad(id) {
+            const item = carrito.find(item => item.id === id);
+            if (item) {
+                item.cantidad++;
+                guardarCarrito();
+                actualizarCarrito();
+            }
+        }
+
+        // ============ CARRITO - DISMINUIR CANTIDAD ============
+        function disminuirCantidad(id) {
+            const item = carrito.find(item => item.id === id);
+            if (item) {
+                if (item.cantidad > 1) {
+                    item.cantidad--;
+                } else {
+                    eliminarDelCarrito(id);
+                    return;
+                }
+                guardarCarrito();
+                actualizarCarrito();
+            }
+        }
+
+        // ============ CALCULAR TOTALES ============
+        function calcularTotales() {
+            const subtotal = carrito.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
+            let envio = 0;
+
+            if (carrito.length > 0) {
+                if (provinciaSeleccionada === 'riobamba') {
+                    envio = subtotal >= 25 ? 0 : 2.50;
+                } else {
+                    envio = subtotal >= 25 ? 0 : 5.00;
+                }
+            }
+
+            const total = subtotal + envio;
+
+            return { subtotal, envio, total };
+        }
+
+        // ============ ACTUALIZAR CARRITO ============
+        function actualizarCarrito() {
+            const carritoItems = document.getElementById('carritoItems');
+            const contador = document.getElementById('cartCounter');
+            const { subtotal, envio, total } = calcularTotales();
+
+            // Contador
+            const totalItems = carrito.reduce((sum, item) => sum + item.cantidad, 0);
+            contador.textContent = totalItems;
+
+            // Items
+            if (carrito.length === 0) {
+                carritoItems.innerHTML = '<div class="carrito-vacio">Tu carrito está vacío 📦</div>';
+            } else {
+                carritoItems.innerHTML = carrito.map(item => `
+                    <div class="carrito-item">
+                        <div class="carrito-item-info">
+                            <div class="carrito-item-nombre">${item.nombre}</div>
+                            <div style="display: flex; align-items: center; gap: 10px; margin-top: 8px;">
+                                <div class="carrito-item-cantidad-controls">
+                                    <button class="btn-cantidad" onclick="disminuirCantidad(${item.id})">−</button>
+                                    <span class="cantidad-valor">${item.cantidad}</span>
+                                    <button class="btn-cantidad" onclick="aumentarCantidad(${item.id})">+</button>
+                                </div>
+                                <span style="font-size: 12px; color: #666;">x $${item.precio.toFixed(2)}</span>
+                            </div>
+                        </div>
+                        <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 8px;">
+                            <div class="carrito-item-precio">$${(item.precio * item.cantidad).toFixed(2)}</div>
+                            <button class="carrito-item-btn-eliminar" onclick="eliminarDelCarrito(${item.id})">✕ Eliminar</button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            // Provincia
+            document.getElementById('provinciaSelect').value = provinciaSeleccionada;
+
+            // Indicador envío gratis
+            const indicador = document.getElementById('envioIndicador');
+            if (carrito.length > 0) {
+                if (subtotal >= 25) {
+                    indicador.textContent = '🎉 ¡Tu pedido tiene envío GRATIS!';
+                    indicador.classList.add('envio-gratis', 'mostrar');
+                } else {
+                    const faltante = 25 - subtotal;
+                    indicador.textContent = `Te faltan $${faltante.toFixed(2)} para obtener envío GRATIS 🎉`;
+                    indicador.classList.remove('envio-gratis');
+                    indicador.classList.add('mostrar');
+                }
+            } else {
+                indicador.classList.remove('mostrar');
+            }
+
+            // Resumen
+            document.getElementById('subtotal').textContent = `$${subtotal.toFixed(2)}`;
+            document.getElementById('envio').textContent = `$${envio.toFixed(2)}`;
+            document.getElementById('total').textContent = `$${total.toFixed(2)}`;
+
+            // Botones
+            document.getElementById('limpiarCarrito').disabled = carrito.length === 0;
+            document.getElementById('enviarWhatsapp').disabled = carrito.length === 0;
+        }
+
+        // ============ EVENTOS ============
+        function setupEventListeners() {
+            // Abrir/cerrar carrito
+            document.getElementById('abrirCarrito').addEventListener('click', () => {
+                document.getElementById('carritoModal').classList.add('activo');
+            });
+
+            document.getElementById('cerrarCarrito').addEventListener('click', () => {
+                document.getElementById('carritoModal').classList.remove('activo');
+            });
+
+            document.getElementById('carritoModal').addEventListener('click', (e) => {
+                if (e.target.id === 'carritoModal') {
+                    document.getElementById('carritoModal').classList.remove('activo');
+                }
+            });
+
+            // Provincia
+            document.getElementById('provinciaSelect').addEventListener('change', (e) => {
+                provinciaSeleccionada = e.target.value;
+                guardarCarrito();
+                actualizarCarrito();
+            });
+
+            // Limpiar carrito
+            document.getElementById('limpiarCarrito').addEventListener('click', () => {
+                if (confirm('¿Seguro que deseas vaciar el carrito?')) {
+                    carrito = [];
+                    guardarCarrito();
+                    actualizarCarrito();
+                }
+            });
+
+            // Enviar WhatsApp
+            document.getElementById('enviarWhatsapp').addEventListener('click', enviarWhatsapp);
+
+            // WhatsApp flotante
+            document.getElementById('whatsappFlotante').addEventListener('click', () => {
+                window.open('https://wa.me/593978691094', '_blank');
+            });
+        }
+
+        // ============ GENERAR MENSAJE WHATSAPP ============
+        function enviarWhatsapp() {
+            if (carrito.length === 0) return;
+
+            const { subtotal, envio, total } = calcularTotales();
+            const provincia = provinciaSeleccionada === 'riobamba' ? 'Riobamba' : 'Otras provincias';
+
+            let mensaje = `*🛍️ PEDIDO BUBBLE SHOP*\n\n`;
+            mensaje += `*Productos:*\n`;
+
+            carrito.forEach(item => {
+                mensaje += `• ${item.nombre}\n`;
+                mensaje += `  Cantidad: ${item.cantidad} x $${item.precio.toFixed(2)}\n`;
+                mensaje += `  Subtotal: $${(item.precio * item.cantidad).toFixed(2)}\n\n`;
+            });
+
+            mensaje += `*Resumen del Pedido:*\n`;
+            mensaje += `Subtotal: $${subtotal.toFixed(2)}\n`;
+            mensaje += `Envío a ${provincia}: $${envio.toFixed(2)}\n`;
+            mensaje += `*TOTAL: $${total.toFixed(2)}*\n\n`;
+            mensaje += `Por favor, confirma tu dirección y datos de contacto.`;
+
+            const urlWhatsapp = `https://wa.me/593978691094?text=${encodeURIComponent(mensaje)}`;
+            window.open(urlWhatsapp, '_blank');
+        }
+
+// ============ INICIAR ============
+        init();
+    </script>
+    <!-- Bubble Animation System -->
+    <script src="bubble-animation-system.js"></script>
+</body>
+
+</html>
