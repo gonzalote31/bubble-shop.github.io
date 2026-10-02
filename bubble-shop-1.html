@@ -7,7 +7,7 @@
     <meta name="description"
         content="Bubble Shop — miles de productos de tecnología, hogar, belleza y mascotas con envío gratis desde $25 y compra fácil por WhatsApp.">
     <meta name="theme-color" content="#0369A1">
-    <title>Bubble Shop — Todo lo que buscas, en un solo lugar</title>
+    <title>Bubble Shop — Hero Banner v1 (bubble-shop-1)</title>
     <!-- ============ GOOGLE FONTS (Design System: Rubik + Nunito Sans) ============ -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -3010,6 +3010,261 @@
                 padding: var(--space-2xl);
             }
         }
+
+        /* ============================================================
+           HERO BANNER V2 — bubble-shop-1.html
+           Gradiente firma #04FAFD → #119DFF → #030423 mejorado con
+           glow radial, scrim de contraste y burbujas que suben desde
+           abajo y revientan en la mitad superior (BubbleSystem).
+           ============================================================ */
+        .hero-v2 {
+            background:
+                radial-gradient(120% 70% at 50% -10%, rgba(255, 255, 255, 0.55) 0%, rgba(255, 255, 255, 0) 45%),
+                radial-gradient(80% 55% at 88% 108%, rgba(3, 4, 35, 0.55) 0%, rgba(3, 4, 35, 0) 60%),
+                linear-gradient(180deg, #04FAFD 5%, #119DFF 50%, #030423 100%);
+            min-height: 660px;
+            padding: clamp(72px, 12vh, 130px) var(--space-lg) clamp(96px, 14vh, 140px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        /* Scrim: garantiza contraste 4.5:1 del texto blanco sobre el gradiente */
+        .hero-v2::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(68% 62% at 50% 62%, rgba(3, 4, 35, 0.62) 0%, rgba(3, 4, 35, 0.25) 55%, rgba(3, 4, 35, 0) 78%);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .hero-v2 .hero-burbujas-fondo {
+            z-index: 2;
+        }
+
+        .hero-v2 .banner-hero-wrapper {
+            justify-content: center;
+            z-index: 3;
+        }
+
+        .hero-v2-contenido {
+            max-width: 920px;
+            margin: 0 auto;
+            padding: 0 var(--space-md);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .hero-v2-eyebrow {
+            align-self: center;
+            background: rgba(3, 4, 35, 0.5);
+            border-color: rgba(255, 255, 255, 0.45);
+            box-shadow: 0 6px 18px rgba(3, 4, 35, 0.35);
+        }
+
+        .hero-v2-titulo {
+            font-size: clamp(34px, 6.2vw, 66px);
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            word-spacing: 2px;
+            line-height: 1.02;
+            color: #FFFFFF;
+            margin-bottom: var(--space-lg);
+            text-shadow: 0 3px 18px rgba(3, 4, 35, 0.55), 0 1px 4px rgba(3, 4, 35, 0.45);
+            text-wrap: balance;
+        }
+
+        .hero-v2-titulo-acento {
+            display: block;
+            background: linear-gradient(92deg, #FFF7D6 0%, #FBBF24 55%, #7DE8FA 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: none;
+        }
+
+        .hero-v2-subtitulo {
+            font-size: clamp(15px, 1.8vw, 19px);
+            font-weight: 600;
+            color: #EAF9FF;
+            max-width: 62ch;
+            line-height: 1.7;
+            margin-bottom: var(--space-2xl);
+            text-shadow: 0 1px 8px rgba(3, 4, 35, 0.55);
+        }
+
+        .hero-v2-botones {
+            justify-content: center;
+            margin-bottom: var(--space-2xl);
+        }
+
+        .hero-v2-stats {
+            justify-content: center;
+            gap: clamp(16px, 3vw, 40px);
+        }
+
+        .hero-v2-stats li {
+            align-items: center;
+            text-align: center;
+        }
+
+        /* Chips flotantes del hero */
+        .hero-v2-chip {
+            z-index: 4;
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .hero-v2-chip-a {
+            top: 14%;
+            left: 7%;
+            animation-delay: -1.2s;
+        }
+
+        .hero-v2-chip-b {
+            top: 22%;
+            right: 8%;
+            animation-delay: -3s;
+        }
+
+        .hero-v2-chip-b i {
+            color: var(--color-highlight);
+        }
+
+        .hero-v2-chip-c {
+            bottom: 16%;
+            left: 11%;
+            animation-delay: -4.2s;
+        }
+
+        /* Indicador de scroll */
+        .hero-v2-scroll {
+            position: absolute;
+            left: 50%;
+            bottom: 76px;
+            transform: translateX(-50%);
+            z-index: 4;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            border: 1.5px solid rgba(255, 255, 255, 0.55);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #FFFFFF;
+            font-size: 13px;
+            background: rgba(3, 4, 35, 0.35);
+            animation: heroScrollCue 1.8s ease-in-out infinite;
+            cursor: pointer;
+            transition: background var(--dur-base) var(--ease-smooth);
+        }
+
+        .hero-v2-scroll:hover {
+            background: rgba(3, 4, 35, 0.7);
+        }
+
+        @keyframes heroScrollCue {
+            0%, 100% {
+                transform: translate(-50%, 0);
+            }
+            50% {
+                transform: translate(-50%, 8px);
+            }
+        }
+
+        /* Las burbujas necesitan borde definido sobre el cian brillante */
+        .hero-v2 .bubble-body {
+            border-color: rgba(2, 40, 70, 0.3);
+            box-shadow:
+                inset 0 2px 5px rgba(255, 255, 255, 0.8),
+                inset 0 -4px 10px rgba(2, 32, 60, 0.28),
+                inset 0 0 18px rgba(255, 255, 255, 0.25),
+                0 10px 24px rgba(2, 32, 60, 0.22);
+        }
+
+        .hero-v2 .bubble-ring {
+            border-color: rgba(3, 4, 35, 0.35);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .hero-v2-scroll {
+                animation: none;
+            }
+        }
+
+        @media (max-width: 1024px) and (min-width: 769px) {
+            .hero-v2 {
+                min-height: 600px;
+            }
+
+            .hero-v2-chip-a,
+            .hero-v2-chip-b {
+                top: 8%;
+            }
+
+            .hero-v2-chip-c {
+                bottom: 10%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-v2 {
+                min-height: auto;
+                padding: 56px var(--space-lg) 90px;
+            }
+
+            .hero-v2-titulo {
+                font-size: clamp(26px, 8vw, 36px);
+                letter-spacing: 0.3px;
+            }
+
+            .hero-v2-subtitulo {
+                font-size: 14.5px;
+                margin-bottom: var(--space-xl);
+            }
+
+            .hero-v2-botones {
+                width: 100%;
+            }
+
+            .hero-v2-chip-c {
+                display: none;
+            }
+
+            .hero-v2-chip-a {
+                top: 4%;
+                left: 2%;
+            }
+
+            .hero-v2-chip-b {
+                top: auto;
+                bottom: 6%;
+                right: 2%;
+            }
+        }
+
+        @media (max-width: 375px) {
+            .hero-v2 {
+                padding: 40px 14px 84px;
+            }
+
+            .hero-v2-titulo {
+                font-size: 25px;
+                word-spacing: 1px;
+            }
+
+            .hero-v2-chip {
+                font-size: 10.5px;
+                padding: 6px 10px;
+            }
+
+            .hero-v2-scroll {
+                bottom: 64px;
+            }
+        }
     </style>
 </head>
 
@@ -3043,41 +3298,40 @@
         </div>
     </div>
 
-        <!-- ============ BANNER HERO ============ -->
-        <section class="banner-hero" aria-label="Presentación de Bubble Shop">
-            <!-- BURBUJAS DE FONDO (z-index bajo, detrás de todo) -->
+        <!-- ============ BANNER HERO V2 (hero banner mejorado) ============ -->
+        <section class="banner-hero hero-v2" aria-label="Presentación de Bubble Shop">
+            <!-- BURBUJAS: nacen abajo, se elevan y revientan en la mitad superior -->
             <div class="hero-burbujas-fondo" id="burbujasFondo" aria-hidden="true"></div>
 
-            <!-- CONTENIDO PRINCIPAL (2 columnas) -->
-            <div class="banner-hero-wrapper">
-                <!-- COLUMNA IZQUIERDA: INFORMACIÓN -->
-                <div class="banner-hero-contenido">
-                    <span class="banner-hero-eyebrow">
+            <div class="banner-hero-wrapper hero-v2-wrapper">
+                <div class="hero-v2-contenido">
+                    <span class="banner-hero-eyebrow hero-v2-eyebrow">
                         <i class="fas fa-bolt" aria-hidden="true"></i>
                         Envío GRATIS en compras &gt; $25
                     </span>
 
-                    <h1>Todo lo que buscas, <span class="hero-texto-acento">en un solo lugar</span></h1>
+                    <h1 class="hero-v2-titulo">
+                        Todo lo que buscas,
+                        <span class="hero-v2-titulo-acento">en un solo lugar</span>
+                    </h1>
 
-                    <div class="banner-hero-subtitle">Tecnología, hogar, belleza y mascotas con envío express</div>
+                    <p class="hero-v2-subtitulo">Tecnología, hogar, belleza y mascotas con envío express:
+                        recibe en 24‑48h en Riobamba y paga contra entrega.</p>
 
-                    <p>Explora nuestras colecciones y recibe en 24-48h en Riobamba. Calidad garantizada y compra
-                        segura, sin salir de casa.</p>
-
-                    <div class="banner-hero-botones">
+                    <div class="banner-hero-botones hero-v2-botones">
                         <button class="banner-hero-cta"
                             onclick="document.getElementById('categoriasNav').scrollIntoView({behavior: 'smooth'})">
                             <i class="fas fa-shopping-cart" aria-hidden="true"></i>
                             <span>Explorar Catálogo</span>
                         </button>
                         <button class="banner-hero-cta-secundario"
-                            onclick="document.getElementById('categoriasNav').scrollIntoView({behavior: 'smooth'})">
-                            <i class="fas fa-tag" aria-hidden="true"></i>
-                            <span>Ver Ofertas</span>
+                            onclick="document.getElementById('whatsappFlotante').click()">
+                            <i class="fab fa-whatsapp" aria-hidden="true"></i>
+                            <span>Comprar por WhatsApp</span>
                         </button>
                     </div>
 
-                    <ul class="banner-hero-stats">
+                    <ul class="banner-hero-stats hero-v2-stats">
                         <li>
                             <strong>+2.500</strong>
                             <span>clientes felices</span>
@@ -3092,35 +3346,23 @@
                         </li>
                     </ul>
                 </div>
-
-                <!-- COLUMNA DERECHA: BURBUJA PRINCIPAL -->
-                <div class="banner-hero-burbuja-container">
-                    <span class="hero-chip hero-chip-uno">
-                        <i class="fas fa-truck-fast" aria-hidden="true"></i> Envío express
-                    </span>
-
-                    <div class="burbuja-principal" id="burbujaPrincipal">
-                        <img class="burbuja-imagen" id="burbujaImagen"
-                            src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&h=400&fit=crop"
-                            alt="Producto destacado de la categoría Hogar"
-                            onerror="this.style.display='none'; document.getElementById('burbujaFallback').style.display='flex'">
-                        <div class="burbuja-fallback" id="burbujaFallback" style="display: none;">
-                            <i class="fas fa-camera" aria-hidden="true"></i>
-                            <div class="burbuja-fallback-text">Imagen no disponible</div>
-                        </div>
-                        <div class="burbuja-overlay">
-                            <div class="burbuja-contenido">
-                                <i class="burbuja-icon" id="burbujaIcono" aria-hidden="true"></i>
-                                <div class="burbuja-categoria" id="burbujaTexto">Hogar</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <span class="hero-chip hero-chip-dos">
-                        <i class="fas fa-shield-halved" aria-hidden="true"></i> Compra protegida
-                    </span>
-                </div>
             </div>
+
+            <span class="hero-chip hero-v2-chip hero-v2-chip-a">
+                <i class="fas fa-truck-fast" aria-hidden="true"></i> Envío express
+            </span>
+            <span class="hero-chip hero-v2-chip hero-v2-chip-b">
+                <i class="fas fa-star" aria-hidden="true"></i> 4.8 / 5 reseñas
+            </span>
+            <span class="hero-chip hero-v2-chip hero-v2-chip-c">
+                <i class="fas fa-shield-halved" aria-hidden="true"></i> Compra protegida
+            </span>
+
+            <button class="hero-v2-scroll" type="button"
+                onclick="document.getElementById('categoriasNav').scrollIntoView({behavior: 'smooth'})"
+                aria-label="Bajar al catálogo">
+                <i class="fas fa-chevron-down" aria-hidden="true"></i>
+            </button>
         </section>
 
         <!-- ============ FEATURES / GARANTÍAS (Design System: Feature grid 4-6) ============ -->
@@ -4124,6 +4366,18 @@
         init();
     </script>
     <!-- Bubble Animation System -->
+    <!-- Configuración de burbujas para el hero V2 (fondo cian brillante) -->
+    <script>
+        window.BUBBLE_CONFIG = {
+            colors: [
+                'rgba(3, 105, 161, 0.55)',
+                'rgba(2, 78, 130, 0.5)',
+                'rgba(3, 4, 35, 0.35)',
+                'rgba(255, 255, 255, 0.65)',
+                'rgba(6, 182, 212, 0.55)'
+            ]
+        };
+    </script>
     <script src="assets/js/bubble-animation-system.js"></script>
 </body>
 

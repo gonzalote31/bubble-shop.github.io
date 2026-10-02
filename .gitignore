@@ -10,6 +10,15 @@
 # Dependencies
 node_modules/
 
+# OpenCode local config & skills
+.opencode/
+
+# Screenshots / test harness
+shots/
+_anim-test*.html
+frame*.html
+probe.html
+
 # Build outputs
 dist/
 build/

@@ -1,300 +1,299 @@
-/* ============================================
-   🫧 BUBBLE ANIMATION STYLES - PREMIUM
-   ============================================ */
+/* ============================================================
+   BUBBLE ANIMATION STYLES — Bubble Shop
+   ------------------------------------------------------------
+   Ciclo de vida de cada burbuja:
+   1. Nace fuera del borde inferior del hero (0%)
+   2. Se eleva con vaivén horizontal (6% - 70%)
+   3. Revienta en un punto ALEATORIO de la mitad superior (55%-95%)
+   4. Estalla: anillo expansivo + 7 gotas que rebotan y caen
+   Solo se animan transform/opacity (GPU) + gradientes en el
+   cuerpo de la burbuja (se congela en el pop, sin repaint final).
+   ============================================================ */
 
-/* Contenedor de burbujas flotantes */
+/* ---------- Contenedor ---------- */
 .hero-burbujas-fondo {
     position: absolute;
     inset: 0;
+    overflow: hidden;
     pointer-events: none;
     z-index: 0;
-    overflow: hidden;
 }
 
-/* Burbuja principal - Elemento base */
+/* Pausa global (fuera de viewport / pestaña oculta) */
+.hero-burbujas-fondo.is-paused .bubble-flotante-premium,
+.hero-burbujas-fondo.is-paused .bubble-flotante-premium * {
+    animation-play-state: paused;
+}
+
+/* ---------- Burbuja (contenedor de transformación) ---------- */
 .bubble-flotante-premium {
     --size: 80px;
-    --duration: 3s;
-    --delay: 0s;
     --left: 50%;
-    --color: rgba(6, 182, 212, 0.4);
+    --dur: 6s;
+    --delay: 0s;
+    --color: rgba(6, 182, 212, 0.5);
+    --pop-delay: 4.2s;
+    --start-y: 140px;
+    --drift-1: 0px;
+    --drift-2: 0px;
+    --drift-3: 0px;
+    --drift-4: 0px;
 
-    position: fixed;
-    bottom: -150px;
+    position: absolute;
     left: var(--left);
+    bottom: 0;
     width: var(--size);
     height: var(--size);
-    
-    /* Forma esférica */
-    border-radius: 50%;
-    background: radial-gradient(
-        circle at 30% 30%,
-        rgba(255, 255, 255, 0.8) 0%,
-        rgba(255, 255, 255, 0.4) 10%,
-        var(--color) 30%,
-        rgba(6, 182, 212, 0.2) 70%,
-        rgba(6, 182, 212, 0.05) 100%
-    );
-    
-    /* Sombra interna para profundidad */
-    box-shadow: 
-        inset -2px -2px 5px rgba(0, 0, 0, 0.15),
-        inset 2px 2px 5px rgba(255, 255, 255, 0.4),
-        inset -1px -1px 2px rgba(0, 0, 0, 0.1);
-    
-    /* Propiedades */
-    will-change: transform, opacity;
-    backface-visibility: hidden;
-    perspective: 1000px;
-    
-    /* Para contener elementos hijos */
-    position: relative;
-}
+    margin-left: calc(var(--size) / -2);
 
-/* ============================================
-   SHINE EFFECT - Brillo realista
-   ============================================ */
-.bubble-shine {
-    position: absolute;
-    top: 15%;
-    left: 20%;
-    width: 35%;
-    height: 35%;
     border-radius: 50%;
-    background: radial-gradient(
-        circle at center,
-        rgba(255, 255, 255, 0.6) 0%,
-        rgba(255, 255, 255, 0.3) 30%,
-        rgba(255, 255, 255, 0) 70%
-    );
-    filter: blur(2px);
     pointer-events: none;
+    will-change: transform;
+
+    /* Eje de subida: desde abajo hasta el punto de pop, luego se queda fija */
+    animation: bubbleRise var(--dur) linear var(--delay) forwards;
 }
 
-/* ============================================
-   DROPS CONTAINER - Contenedor gotas
-   ============================================ */
-.bubble-drops-container {
+/* ---------- Cuerpo de vidrio (la esfera) ---------- */
+.bubble-body {
     position: absolute;
     inset: 0;
-    pointer-events: none;
+    border-radius: 50%;
+    border: 1.5px solid rgba(255, 255, 255, 0.55);
+    background:
+        radial-gradient(28% 14% at 50% 6%, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0) 72%),
+        radial-gradient(34% 26% at 28% 30%, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0) 70%),
+        radial-gradient(circle at 50% 55%, var(--color) 0%, rgba(255, 255, 255, 0.06) 100%);
+    box-shadow:
+        inset 0 2px 5px rgba(255, 255, 255, 0.65),
+        inset 0 -3px 8px rgba(2, 32, 60, 0.18),
+        inset 0 0 18px rgba(255, 255, 255, 0.22),
+        0 6px 18px rgba(2, 32, 60, 0.12);
+    will-change: transform, opacity;
+    animation: bubbleBodyLife var(--dur) linear var(--delay) forwards;
 }
 
-/* Drop individual - Gota decorativa */
-.bubble-drop {
-    --drop-index: 0;
-    
+/* Brillo especular superior-izquierdo */
+.bubble-body::after {
+    content: "";
     position: absolute;
-    width: calc(var(--size) * 0.12);
-    height: calc(var(--size) * 0.3);
-    background: linear-gradient(135deg, 
-        rgba(255, 255, 255, 0.7),
-        rgba(6, 182, 212, 0.3)
-    );
-    border-radius: 50% 50% 50% 0;
-    bottom: 50%;
-    left: 50%;
-    
-    /* Gota caída */
+    top: 16%;
+    left: 21%;
+    width: 26%;
+    height: 20%;
+    border-radius: 50%;
+    background: radial-gradient(circle at center, rgba(255, 255, 255, 0.85) 0%, rgba(255, 255, 255, 0) 72%);
+    filter: blur(1px);
+    transform: rotate(-24deg);
+}
+
+/* ---------- Anillo del estallido ---------- */
+.bubble-ring {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.85);
     opacity: 0;
-    pointer-events: none;
+    transform: scale(0.6);
+    animation: bubbleRingPop 0.7s cubic-bezier(0.16, 0.84, 0.44, 1) var(--pop-delay) forwards;
 }
 
-/* ============================================
-   MAIN ANIMATION: BUBBLE FLOAT UP
-   ============================================ */
-@keyframes bubbleFloatUp {
-    0% {
-        /* Comienza abajo fuera de pantalla */
-        bottom: -150px;
-        opacity: 0;
-        transform: scale(0) translateX(0);
-    }
+/* ---------- Gotas del estallido ---------- */
+.bubble-drop {
+    --dx: 0px;
+    --dy: 0px;
 
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: max(5px, calc(var(--size) * 0.11));
+    height: max(5px, calc(var(--size) * 0.11));
+    border-radius: 50%;
+    background: radial-gradient(circle at 32% 30%, rgba(255, 255, 255, 0.95), var(--color));
+    opacity: 0;
+    will-change: transform, opacity;
+    animation: bubbleDropBurst 1.05s cubic-bezier(0.25, 0.6, 0.4, 1) var(--drop-delay, var(--pop-delay)) forwards;
+}
+
+/* 7 direcciones de estallido (dx/dy en px) */
+.bubble-drop:nth-child(1) { --dx: -36px; --dy: -30px; --drop-delay: calc(var(--pop-delay) + 0s); }
+.bubble-drop:nth-child(2) { --dx: 36px;  --dy: -30px; --drop-delay: calc(var(--pop-delay) + 0.04s); }
+.bubble-drop:nth-child(3) { --dx: -46px; --dy: 2px;   --drop-delay: calc(var(--pop-delay) + 0.08s); }
+.bubble-drop:nth-child(4) { --dx: 46px;  --dy: 2px;   --drop-delay: calc(var(--pop-delay) + 0.12s); }
+.bubble-drop:nth-child(5) { --dx: -26px; --dy: 34px;  --drop-delay: calc(var(--pop-delay) + 0.16s); }
+.bubble-drop:nth-child(6) { --dx: 26px;  --dy: 34px;  --drop-delay: calc(var(--pop-delay) + 0.2s); }
+.bubble-drop:nth-child(7) { --dx: 0px;   --dy: -44px; --drop-delay: calc(var(--pop-delay) + 0.24s); }
+
+/* ============================================================
+   KEYFRAMES
+   ============================================================ */
+
+/* 1) Subida: desde bajo el borde inferior hasta el punto de pop (70%)
+      El JS calcula cada --y-* en px según la altura real del contenedor */
+@keyframes bubbleRise {
+    0% {
+        transform: translate3d(0, var(--start-y), 0);
+        animation-timing-function: cubic-bezier(0.22, 0.7, 0.35, 1);
+    }
+    6% {
+        transform: translate3d(0, var(--y-6, var(--start-y)), 0);
+    }
+    12% {
+        transform: translate3d(0, var(--y-12), 0);
+    }
+    22% {
+        transform: translate3d(var(--drift-1), var(--y-22), 0);
+    }
+    34% {
+        transform: translate3d(var(--drift-2), var(--y-34), 0);
+    }
+    46% {
+        transform: translate3d(var(--drift-3), var(--y-46), 0);
+    }
+    58% {
+        transform: translate3d(var(--drift-4), var(--y-58), 0);
+    }
+    70% {
+        transform: translate3d(var(--drift-4), var(--y-pop), 0);
+        animation-timing-function: ease-out;
+    }
+    /* Tras el pop la burbuja queda clavada en el punto de estallido */
+    100% {
+        transform: translate3d(var(--drift-4), var(--y-pop), 0);
+    }
+}
+
+/* 2) Cuerpo: nace, brilla, se infla y REVIENTA a las 70% del ciclo */
+@keyframes bubbleBodyLife {
+    0% {
+        opacity: 0;
+        transform: scale(0.2);
+    }
     5% {
-        /* Aparece rápido */
         opacity: 1;
-        transform: scale(0.8) translateX(0);
+        transform: scale(1);
+        animation-timing-function: ease-in-out;
     }
-
-    10% {
-        /* Escala completa */
-        transform: scale(1) translateX(0);
+    25% {
+        transform: scale(1.03);
     }
-
-    /* Movimiento fluctuante mientras sube */
-    20% {
-        transform: scale(1) translateX(15px);
+    45% {
+        transform: scale(0.98);
+    }
+    64% {
+        transform: scale(1.04);
+    }
+    70% {
+        /* inicio del estallido: se infla */
         opacity: 1;
+        transform: scale(1.18);
+        animation-timing-function: ease-out;
     }
-
-    40% {
-        transform: scale(1) translateX(-10px);
-        opacity: 1;
+    74% {
+        opacity: 0.55;
+        transform: scale(1.5);
     }
-
-    60% {
-        transform: scale(1.02) translateX(8px);
-        opacity: 1;
-    }
-
-    75% {
-        /* Comienza a desvanecerse */
-        opacity: 0.9;
-        transform: scale(1.02) translateX(-5px);
-    }
-
-    88% {
-        /* Pop effect - la burbuja revienta */
-        opacity: 0.5;
-        transform: scale(1.1) translateX(0);
-    }
-
-    92% {
-        /* Desaparece */
+    77% {
+        /* desapareció: el contenedor queda transparente para las gotas */
         opacity: 0;
-        transform: scale(0.5) translateX(0);
+        transform: scale(1.65);
     }
-
     100% {
-        /* Fin */
-        bottom: 100vh;
         opacity: 0;
-        transform: scale(0) translateX(0);
+        transform: scale(1.65);
     }
 }
 
-/* ============================================
-   DROP FALL ANIMATION - Gotas cayendo
-   ============================================ */
-@keyframes dropFall {
+/* 3) Anillo expansivo en el punto de pop */
+@keyframes bubbleRingPop {
+    0% {
+        opacity: 0.9;
+        transform: scale(0.55);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(2.1);
+    }
+}
+
+/* 4) Gotas: salen en zigzag y caen por gravedad */
+@keyframes bubbleDropBurst {
     0% {
         opacity: 0;
-        transform: translate(-50%, -50%) rotate(0deg) translateY(0);
+        transform: translate(-50%, -50%) scale(0.4);
     }
-
-    85% {
-        opacity: 0;
-    }
-
-    /* Las gotas aparecen cuando la burbuja revienta (88%) */
-    88% {
+    14% {
         opacity: 1;
-        transform: translate(-50%, -50%) rotate(var(--drop-index-deg)) translateY(0);
+        transform: translate(calc(-50% + var(--dx) * 0.55), calc(-50% + var(--dy) * 0.55)) scale(1);
     }
-
-    /* Caen hacia abajo */
-    95% {
-        opacity: 0.8;
-        transform: translate(-50%, -50%) rotate(calc(var(--drop-index-deg) + 360deg)) translateY(60px);
+    55% {
+        opacity: 0.95;
+        transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy) + 18px)) scale(0.9);
     }
-
     100% {
         opacity: 0;
-        transform: translate(-50%, -50%) rotate(calc(var(--drop-index-deg) + 720deg)) translateY(120px);
+        transform: translate(calc(-50% + var(--dx) * 1.1), calc(-50% + var(--dy) + 64px)) scale(0.35);
     }
 }
 
-/* Aplicar animación de caída a las gotas */
-.bubble-drop {
-    animation: dropFall var(--duration, 3s) ease-in forwards;
+/* ============================================================
+   RESPONSIVE — 375 / 768 / 1024 / 1440
+   ============================================================ */
+
+@media (max-width: 1440px) {
+    .bubble-drop {
+        width: max(5px, calc(var(--size) * 0.12));
+        height: max(5px, calc(var(--size) * 0.12));
+    }
 }
 
-/* ============================================
-   VARIACIONES DINÁMICAS POR ÍNDICE
-   ============================================ */
-
-.bubble-drop:nth-child(1) {
-    --drop-index-deg: 0deg;
-    --drop-delay: 0ms;
+@media (max-width: 1024px) {
+    .bubble-flotante-premium {
+        --dur: 7s;
+    }
 }
-
-.bubble-drop:nth-child(2) {
-    --drop-index-deg: 51.43deg;
-    --drop-delay: 20ms;
-}
-
-.bubble-drop:nth-child(3) {
-    --drop-index-deg: 102.86deg;
-    --drop-delay: 40ms;
-}
-
-.bubble-drop:nth-child(4) {
-    --drop-index-deg: 154.29deg;
-    --drop-delay: 60ms;
-}
-
-.bubble-drop:nth-child(5) {
-    --drop-index-deg: 205.72deg;
-    --drop-delay: 80ms;
-}
-
-.bubble-drop:nth-child(6) {
-    --drop-index-deg: 257.15deg;
-    --drop-delay: 100ms;
-}
-
-.bubble-drop:nth-child(7) {
-    --drop-index-deg: 308.58deg;
-    --drop-delay: 120ms;
-}
-
-/* ============================================
-   MEJORAS DE PERFORMANCE
-   ============================================ */
-
-/* GPU acceleration */
-.bubble-flotante-premium,
-.bubble-shine,
-.bubble-drop {
-    transform: translateZ(0);
-    -webkit-transform: translateZ(0);
-}
-
-/* Reducir re-paints */
-.bubble-flotante-premium {
-    contain: layout style paint;
-}
-
-/* ============================================
-   RESPONSIVE - Ajustar en mobile
-   ============================================ */
 
 @media (max-width: 768px) {
+    .bubble-body {
+        border-width: 1px;
+        box-shadow:
+            inset 0 2px 4px rgba(255, 255, 255, 0.6),
+            inset 0 -2px 6px rgba(2, 32, 60, 0.16),
+            0 4px 12px rgba(2, 32, 60, 0.1);
+        filter: blur(0);
+    }
+
+    .bubble-drop:nth-child(1) { --dx: -24px; --dy: -20px; }
+    .bubble-drop:nth-child(2) { --dx: 24px;  --dy: -20px; }
+    .bubble-drop:nth-child(3) { --dx: -32px; --dy: 2px; }
+    .bubble-drop:nth-child(4) { --dx: 32px;  --dy: 2px; }
+    .bubble-drop:nth-child(5) { --dx: -18px; --dy: 24px; }
+    .bubble-drop:nth-child(6) { --dx: 18px;  --dy: 24px; }
+    .bubble-drop:nth-child(7) { --dx: 0px;   --dy: -30px; }
+}
+
+@media (max-width: 375px) {
     .bubble-flotante-premium {
-        /* Burbujas más pequeñas en mobile */
-        --size: calc(var(--size) * 0.7) !important;
+        --dur: 8s;
     }
-    
-    .bubble-shine {
-        filter: blur(1px); /* Menos blur en mobile */
-    }
-}
 
-/* ============================================
-   DARK MODE SUPPORT (Opcional)
-   ============================================ */
-
-@media (prefers-color-scheme: dark) {
-    .bubble-flotante-premium {
-        --color: rgba(6, 182, 212, 0.3);
-        box-shadow: 
-            inset -2px -2px 5px rgba(0, 0, 0, 0.3),
-            inset 2px 2px 5px rgba(255, 255, 255, 0.2),
-            inset -1px -1px 2px rgba(0, 0, 0, 0.2);
+    .bubble-ring {
+        border-width: 1.5px;
     }
 }
 
-/* ============================================
-   DEBUG MODE (Opcional - descomentar para debug)
-   ============================================ */
+/* ============================================================
+   ACCESIBILIDAD — sin animación si el usuario lo pide
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+    .hero-burbujas-fondo {
+        display: none;
+    }
 
-/* 
-.bubble-flotante-premium {
-    border: 2px dashed rgba(255, 0, 0, 0.5);
+    .bubble-flotante-premium,
+    .bubble-body,
+    .bubble-ring,
+    .bubble-drop {
+        animation: none !important;
+    }
 }
-
-.bubble-drop {
-    border: 1px solid rgba(0, 255, 0, 0.5);
-}
-*/
