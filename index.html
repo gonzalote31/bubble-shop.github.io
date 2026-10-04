@@ -62,7 +62,7 @@
             --azul-claro: #3B82F6;
 
             --header-height: 77px;
-            --category-nav-height: 86px;
+            --category-nav-height: 66px;
 
             /* Layout */
             --container-max: 1280px;
@@ -380,114 +380,100 @@
 
         /* ============ CATEGORÍAS STICKY ============ */
         .categorias-container {
-            background: linear-gradient(180deg, var(--blanco) 0%, rgba(232, 244, 248, 0.2) 100%);
-            padding: var(--space-sm) 0;
             position: sticky;
             top: var(--header-height);
             z-index: 101;
-            box-shadow: 0 2px 12px rgba(26, 31, 58, 0.08);
+            padding: 11px 0;
+            background: rgba(246, 252, 255, 0.92);
+            backdrop-filter: blur(16px) saturate(165%);
+            -webkit-backdrop-filter: blur(16px) saturate(165%);
+            border-top: 1px solid rgba(3, 105, 161, 0.08);
+            border-bottom: 1px solid rgba(3, 105, 161, 0.12);
+            box-shadow: 0 10px 26px -14px rgba(15, 23, 42, 0.20);
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
-            border-bottom: 1px solid rgba(26, 31, 58, 0.06);
+            scrollbar-width: none;
+        }
+
+        .categorias-container::-webkit-scrollbar {
+            display: none;
         }
 
         .categorias {
             display: flex;
-            gap: var(--space-sm);
+            gap: 8px;
             padding: 0 var(--space-lg);
             min-width: min-content;
             justify-content: center;
+            justify-content: safe center;
         }
 
         .categoria-btn {
-            display: flex;
-            flex-direction: column;
+            display: inline-flex;
             align-items: center;
-            gap: var(--space-xs);
-            background: none;
-            border: none;
+            gap: 8px;
+            flex: 0 0 auto;
+            padding: 6px 15px 6px 6px;
+            border-radius: 999px;
+            background: var(--blanco);
+            border: 1px solid var(--azul-suave);
             color: var(--navy);
+            font-family: inherit;
             font-weight: 600;
-            font-size: 12px;
+            font-size: 12.5px;
+            line-height: 1;
+            white-space: nowrap;
             cursor: pointer;
-            transition: all 0.3s var(--ease-spring);
-            flex: 0 0 88px;
-            width: 88px;
-            min-width: 0;
-            flex-shrink: 0;
-            white-space: normal;
-            padding: var(--space-xs) var(--space-xs);
-            position: relative;
+            box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
+            transition: transform 0.25s var(--ease-spring), box-shadow 0.25s ease,
+                background 0.25s ease, border-color 0.25s ease, color 0.25s ease;
         }
 
-        .categoria-btn::before {
-            content: '';
-            width: 44px;
-            height: 44px;
-            background: var(--blanco);
-            border: 2px solid var(--azul-suave);
-            border-radius: 50%;
+        .categoria-btn>i {
+            width: 30px;
+            height: 30px;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.3s var(--ease-spring);
-            position: absolute;
-            top: var(--space-xs);
-            left: 50%;
-            transform: translateX(-50%);
+            border-radius: 50%;
+            background: #E6F8FC;
+            color: #0369A1;
+            font-size: 14px;
+            flex-shrink: 0;
+            transition: background 0.25s ease, color 0.25s ease;
+        }
+
+        .categoria-btn>div {
+            font-size: 12.5px;
+            line-height: 1;
+            white-space: nowrap;
         }
 
         .categoria-btn:hover {
             transform: translateY(-2px);
-        }
-
-        .categoria-btn:hover::before {
-            border-color: var(--cian);
-            background: #F0F9FF;
-            box-shadow: 0 4px 16px rgba(6, 182, 212, 0.2);
+            border-color: rgba(6, 182, 212, 0.6);
+            box-shadow: 0 10px 20px -10px rgba(3, 105, 161, 0.55);
         }
 
         .categoria-btn:active {
-            transform: translateY(-2px);
+            transform: translateY(0);
+        }
+
+        .categoria-btn:focus-visible {
+            outline: 3px solid var(--cian);
+            outline-offset: 2px;
         }
 
         .categoria-btn.activa {
-            color: var(--navy);
-        }
-
-        .categoria-btn.activa::before {
-            background: linear-gradient(135deg, var(--navy) 0%, #2A3F5F 100%);
-            border-color: var(--cian);
-            box-shadow: 0 6px 20px rgba(26, 31, 58, 0.25);
+            background: linear-gradient(135deg, var(--navy) 0%, #0369A1 100%);
+            border-color: transparent;
+            color: #FFFFFF;
+            box-shadow: 0 12px 24px -10px rgba(3, 105, 161, 0.65);
         }
 
         .categoria-btn.activa>i {
+            background: rgba(255, 255, 255, 0.16);
             color: var(--cian);
-        }
-
-        .categoria-btn>i {
-            width: 44px;
-            height: 44px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            z-index: 2;
-            font-size: 18px;
-        }
-
-        .categoria-btn>div {
-            position: relative;
-            z-index: 2;
-            width: 100%;
-            min-height: 26px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 11px;
-            line-height: 1.2;
-            text-align: center;
-            overflow-wrap: anywhere;
         }
 
         /* ============ CONTENEDOR PRINCIPAL ============ */
@@ -1559,6 +1545,7 @@
         .features-strip {
             max-width: var(--container-max);
             margin: calc(var(--space-4xl) * -1) auto 0;
+            margin-bottom: var(--space-xl);
             padding: 0 var(--space-xl);
             position: relative;
             z-index: 5;
@@ -1572,7 +1559,7 @@
             border: 1px solid var(--color-border);
             border-radius: var(--radius-lg);
             padding: var(--space-xl);
-            box-shadow: var(--sombra-hover);
+            box-shadow: 0 18px 40px -18px rgba(15, 23, 42, 0.28), 0 6px 16px -8px rgba(15, 23, 42, 0.12);
         }
 
         .feature-card {
@@ -2748,14 +2735,19 @@
             }
 
             .categorias {
-                padding: 0 var(--space-lg);
-                gap: var(--space-xs);
+                padding: 0 12px;
+                gap: 6px;
             }
 
             .categoria-btn {
-                flex-basis: 72px;
-                width: 72px;
-                padding: var(--space-xs);
+                font-size: 12px;
+                padding: 5px 12px 5px 5px;
+            }
+
+            .categoria-btn>i {
+                width: 26px;
+                height: 26px;
+                font-size: 13px;
             }
 
             .banner-hero h1 {
@@ -2846,6 +2838,23 @@
 
             .feature-card {
                 padding: var(--space-sm) var(--space-xs);
+                gap: var(--space-sm);
+            }
+
+            .feature-icono {
+                flex-basis: 38px;
+                width: 38px;
+                height: 38px;
+                font-size: 16px;
+            }
+
+            .feature-card h3 {
+                font-size: 14px;
+            }
+
+            .feature-card p {
+                font-size: 12.5px;
+                line-height: 1.45;
             }
 
             .hero-chip {
@@ -3812,6 +3821,40 @@
         }
 
         // ============ RENDERIZAR CATEGORÍAS ============
+        function activarCategoria(key, asegurarVisible = false) {
+            document.querySelectorAll('.categoria-btn').forEach(b => {
+                const on = b.dataset.categoria === key;
+                b.classList.toggle('activa', on);
+                b.setAttribute('aria-pressed', on ? 'true' : 'false');
+                if (on && asegurarVisible) asegurarChipVisible(b);
+            });
+        }
+
+        function centrarChipCategoria(btn) {
+            const cont = btn.closest('.categorias-container');
+            if (!cont) return;
+            const cr = cont.getBoundingClientRect();
+            const br = btn.getBoundingClientRect();
+            const destino = cont.scrollLeft + (br.left - cr.left) - ((cont.clientWidth - br.width) / 2);
+            cont.scrollTo({
+                left: Math.max(0, destino),
+                behavior: 'smooth'
+            });
+        }
+
+        function asegurarChipVisible(btn) {
+            const cont = btn.closest('.categorias-container');
+            if (!cont) return;
+            const cr = cont.getBoundingClientRect();
+            const br = btn.getBoundingClientRect();
+            if (br.right < cr.left || br.left > cr.right) {
+                cont.scrollTo({
+                    left: cont.scrollLeft + (br.left - cr.left) - ((cont.clientWidth - br.width) / 2),
+                    behavior: 'smooth'
+                });
+            }
+        }
+
         function renderizarCategorias() {
             const nav = document.getElementById('categoriasNav');
             nav.innerHTML = '';
@@ -3831,22 +3874,41 @@
             Object.entries(categorias).forEach(([key, nombre], index) => {
                 const btn = document.createElement('button');
                 btn.className = 'categoria-btn' + (index === 0 ? ' activa' : '');
+                btn.dataset.categoria = key;
                 btn.setAttribute('aria-label', `Ver categoría: ${nombre}`);
                 btn.setAttribute('aria-pressed', index === 0 ? 'true' : 'false');
                 const icono = iconosPorCategoria[key] || 'fa-tag';
                 btn.innerHTML = `<i class="fas ${icono}" aria-hidden="true"></i><div>${nombre}</div>`;
                 btn.addEventListener('click', () => {
-                    document.querySelectorAll('.categoria-btn').forEach(b => {
-                        b.classList.remove('activa');
-                        b.setAttribute('aria-pressed', 'false');
-                    });
-                    btn.classList.add('activa');
-                    btn.setAttribute('aria-pressed', 'true');
+                    activarCategoria(key);
+                    centrarChipCategoria(btn);
                     document.getElementById(`seccion-${key}`).scrollIntoView({ behavior: 'smooth', block: 'start' });
                 });
                 nav.appendChild(btn);
             });
         }
+
+        // ============ SCROLL-SPY: categoría activa según scroll ============
+        function actualizarCategoriaPorScroll() {
+            const raiz = document.documentElement;
+            const estilo = getComputedStyle(raiz);
+            const headerH = parseFloat(estilo.getPropertyValue('--header-height')) || 64;
+            const navH = parseFloat(estilo.getPropertyValue('--category-nav-height')) || 66;
+            const umbral = headerH + navH + 24;
+
+            let seccionActual = null;
+            document.querySelectorAll('[id^="seccion-"]').forEach(t => {
+                if (t.getBoundingClientRect().top <= umbral) seccionActual = t;
+            });
+
+            if (seccionActual) {
+                const key = seccionActual.id.replace('seccion-', '');
+                const activa = document.querySelector('.categoria-btn.activa');
+                if (!activa || activa.dataset.categoria !== key) activarCategoria(key, true);
+            }
+        }
+
+        window.addEventListener('scroll', actualizarCategoriaPorScroll, { passive: true });
 
         // ============ RENDERIZAR PRODUCTOS ============
         function renderizarProductos() {
