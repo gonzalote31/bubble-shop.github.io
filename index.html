@@ -2330,40 +2330,103 @@
             animation: revealLeft 0.5s var(--ease-spring) 0.1s backwards;
         }
 
-        .faq-item {
+        /* ============ FAQ: cabecera, lista de tarjetas y ayuda ============ */
+        .modal-cabecera {
+            display: flex;
+            align-items: center;
+            gap: var(--space-lg);
             margin-bottom: var(--space-xl);
+            padding-right: var(--space-3xl);
+            animation: revealLeft 0.5s var(--ease-spring) 0.1s backwards;
+        }
+
+        .modal-cabecera-icono {
+            width: 52px;
+            height: 52px;
+            flex-shrink: 0;
+            border-radius: 16px;
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+            color: var(--blanco);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            box-shadow: 0 8px 20px rgba(3, 105, 161, 0.3);
+        }
+
+        .modal-titulo--cabecera {
+            font-size: 24px;
+            margin-bottom: 2px;
+            padding-right: 0;
+        }
+
+        .modal-subtitulo {
+            font-size: 14px;
+            color: #64748B;
+            margin: 0;
+        }
+
+        .faq-lista {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-md);
+        }
+
+        .faq-item {
+            background: var(--blanco);
+            border: 1.5px solid var(--color-border);
+            border-radius: 14px;
+            padding: 0 var(--space-lg);
+            overflow: hidden;
+            transition: border-color 0.25s ease, box-shadow 0.25s ease,
+                background 0.25s ease;
             animation: revealUp 0.5s var(--ease-spring) backwards;
         }
 
-        .faq-item:nth-child(1) {
+        .faq-item:hover {
+            border-color: rgba(6, 182, 212, 0.55);
+            box-shadow: 0 4px 14px rgba(26, 31, 58, 0.07);
+        }
+
+        .faq-item.abierta {
+            border-color: var(--color-primary);
+            background: linear-gradient(180deg, #F0F9FF 0%, #FFFFFF 55%);
+            box-shadow: 0 8px 22px rgba(3, 105, 161, 0.12);
+        }
+
+        .faq-item:nth-of-type(1) {
+            animation-delay: 0.15s;
+        }
+
+        .faq-item:nth-of-type(2) {
             animation-delay: 0.2s;
         }
 
-        .faq-item:nth-child(2) {
+        .faq-item:nth-of-type(3) {
             animation-delay: 0.25s;
         }
 
-        .faq-item:nth-child(3) {
+        .faq-item:nth-of-type(4) {
             animation-delay: 0.3s;
         }
 
-        .faq-item:nth-child(4) {
+        .faq-item:nth-of-type(5) {
             animation-delay: 0.35s;
-        }
-
-        .faq-item:nth-child(5) {
-            animation-delay: 0.4s;
         }
 
         .faq-pregunta {
             font-weight: 700;
+            font-size: 15px;
             color: var(--navy);
-            margin-bottom: var(--space-md);
+            padding: var(--space-lg) 0;
+            margin-bottom: 0;
             cursor: pointer;
             display: flex;
+            flex-direction: row-reverse;
             align-items: center;
+            justify-content: space-between;
             gap: var(--space-md);
-            transition: all 0.2s var(--ease-smooth);
+            transition: color 0.2s var(--ease-smooth);
             letter-spacing: -0.3px;
         }
 
@@ -2371,36 +2434,45 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 24px;
-            height: 24px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #E4F4FD;
             color: var(--color-primary);
             flex-shrink: 0;
+            transition: background 0.3s ease, color 0.3s ease,
+                transform 0.3s var(--ease-spring);
         }
 
         .faq-icon i {
-            font-size: 18px;
-            transition: transform 0.3s var(--ease-spring);
+            font-size: 13px;
         }
 
         .faq-pregunta:hover {
             color: var(--color-primary);
-            transform: translateX(4px);
         }
 
-        .faq-pregunta:hover .faq-icon i {
-            transform: scale(1.15);
+        .faq-pregunta:hover .faq-icon {
+            transform: scale(1.12);
+        }
+
+        .faq-item.abierta .faq-icon {
+            background: var(--color-primary);
+            color: var(--blanco);
+            transform: scale(1.05);
         }
 
         .faq-respuesta {
-            color: #555;
+            color: #475569;
             font-size: 14px;
-            line-height: 1.7;
-            margin-left: var(--space-2xl);
+            line-height: 1.75;
+            margin-left: 0;
+            padding: 0 44px 0 0;
             max-height: 0;
             overflow: hidden;
             visibility: hidden;
             transition: max-height 0.4s var(--ease-spring), opacity 0.4s ease,
-                visibility 0s linear 0.4s;
+                padding-bottom 0.4s var(--ease-spring), visibility 0s linear 0.4s;
             opacity: 0;
         }
 
@@ -2408,8 +2480,84 @@
             max-height: 500px;
             opacity: 1;
             visibility: visible;
+            padding-bottom: var(--space-lg);
             transition: max-height 0.4s var(--ease-spring), opacity 0.4s ease,
-                visibility 0s linear 0s;
+                padding-bottom 0.4s var(--ease-spring), visibility 0s linear 0s;
+        }
+
+        .faq-ayuda {
+            margin-top: var(--space-xl);
+            padding: var(--space-lg) var(--space-xl);
+            background: linear-gradient(135deg, #F0F9FF 0%, #E6F7FE 100%);
+            border: 1.5px dashed rgba(3, 105, 161, 0.4);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: var(--space-md);
+            flex-wrap: wrap;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--navy);
+            animation: revealUp 0.5s var(--ease-spring) 0.45s backwards;
+        }
+
+        .faq-ayuda span i {
+            color: var(--color-primary);
+            margin-right: 6px;
+        }
+
+        .faq-ayuda-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #25D366;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 999px;
+            padding: 10px 20px;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.25s var(--ease-spring), box-shadow 0.25s ease;
+        }
+
+        .faq-ayuda-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 18px rgba(37, 211, 102, 0.4);
+        }
+
+        .faq-ayuda-btn:focus-visible {
+            outline: 3px solid rgba(37, 211, 102, 0.5);
+            outline-offset: 2px;
+        }
+
+        @media (max-width: 560px) {
+            .modal-cabecera {
+                padding-right: var(--space-2xl);
+                gap: var(--space-md);
+            }
+
+            .modal-cabecera-icono {
+                width: 44px;
+                height: 44px;
+                font-size: 18px;
+                border-radius: 12px;
+            }
+
+            .modal-titulo--cabecera {
+                font-size: 20px;
+            }
+
+            .faq-respuesta {
+                padding-right: 0;
+            }
+
+            .faq-ayuda {
+                flex-direction: column;
+                align-items: flex-start;
+            }
         }
 
         .modal-contenido h4 {
@@ -3869,8 +4017,15 @@
     <div class="modal" id="faqModal">
         <div class="modal-contenido">
             <button class="modal-cerrar" onclick="cerrarModal('faqModal')"><span class="modal-cerrar-icono"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false"><path d="M4.2 4.2l7.6 7.6M11.8 4.2l-7.6 7.6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></span></button>
-            <h2 class="modal-titulo"><i class="fas fa-question-circle"></i> Preguntas Frecuentes</h2>
+            <div class="modal-cabecera">
+                <span class="modal-cabecera-icono"><i class="fas fa-headset" aria-hidden="true"></i></span>
+                <div>
+                    <h2 class="modal-titulo modal-titulo--cabecera">Preguntas Frecuentes</h2>
+                    <p class="modal-subtitulo">Resolvemos tus dudas sobre pedidos, envíos y pagos</p>
+                </div>
+            </div>
 
+            <div class="faq-lista">
             <div class="faq-item">
                 <div class="faq-pregunta"
                     onclick="toggleFaq(this)" aria-expanded="false">
@@ -3928,6 +4083,15 @@
                     No almacenamos información sensible en nuestro servidor.
                 </div>
             </div>
+            </div>
+
+            <div class="faq-ayuda">
+                <span><i class="fas fa-comment-dots" aria-hidden="true"></i> ¿No encontraste tu respuesta?</span>
+                <button class="faq-ayuda-btn" type="button"
+                    onclick="window.open('https://wa.me/593978691094?text=' + encodeURIComponent('Hola, tengo una pregunta'), '_blank')">
+                    <i class="fab fa-whatsapp" aria-hidden="true"></i> Escríbenos
+                </button>
+            </div>
         </div>
     </div>
 
@@ -3935,7 +4099,13 @@
     <div class="modal" id="politicaModal">
         <div class="modal-contenido">
             <button class="modal-cerrar" onclick="cerrarModal('politicaModal')"><span class="modal-cerrar-icono"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false"><path d="M4.2 4.2l7.6 7.6M11.8 4.2l-7.6 7.6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></span></button>
-            <h2 class="modal-titulo"><i class="fas fa-lock"></i> Política de Privacidad</h2>
+            <div class="modal-cabecera">
+                <span class="modal-cabecera-icono"><i class="fas fa-lock" aria-hidden="true"></i></span>
+                <div>
+                    <h2 class="modal-titulo modal-titulo--cabecera">Política de Privacidad</h2>
+                    <p class="modal-subtitulo">Cómo recopilamos, usamos y protegemos tus datos</p>
+                </div>
+            </div>
 
             <h4>1. Información que Recopilamos</h4>
             <p>Bubble Shop recopila únicamente la información que voluntariamente proporcionas a través de WhatsApp al
@@ -3971,7 +4141,13 @@
     <div class="modal" id="terminosModal">
         <div class="modal-contenido">
             <button class="modal-cerrar" onclick="cerrarModal('terminosModal')"><span class="modal-cerrar-icono"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false"><path d="M4.2 4.2l7.6 7.6M11.8 4.2l-7.6 7.6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></span></button>
-            <h2 class="modal-titulo"><i class="fas fa-file-contract"></i> Términos y Condiciones</h2>
+            <div class="modal-cabecera">
+                <span class="modal-cabecera-icono"><i class="fas fa-file-contract" aria-hidden="true"></i></span>
+                <div>
+                    <h2 class="modal-titulo modal-titulo--cabecera">Términos y Condiciones</h2>
+                    <p class="modal-subtitulo">Reglas de compra, pagos, envíos y devoluciones</p>
+                </div>
+            </div>
 
             <h4>1. Aceptación de Términos</h4>
             <p>Al utilizar Bubble Shop, aceptas estos términos y condiciones en su totalidad. Si no estás de acuerdo,
@@ -4058,7 +4234,7 @@
                     </div>
 
                     <button class="btn-agregar-galeria" onclick="agregarAlCarritoDesdeGaleria()" id="btnAgregarGaleria">
-                        🛒 Agregar al Carrito
+                        <i class="fas fa-cart-plus" aria-hidden="true"></i> Agregar al Carrito
                     </button>
                     <div class="producto-envio-nota">🚚 Envío a todo el Ecuador · Cambios y garantía incluidos</div>
                 </div>
@@ -4223,6 +4399,8 @@
             const respuesta = pregunta.nextElementSibling;
             if (!respuesta || !respuesta.classList.contains('faq-respuesta')) return;
             const abierta = respuesta.classList.toggle('visible');
+            const item = pregunta.closest('.faq-item');
+            if (item) item.classList.toggle('abierta', abierta);
             pregunta.setAttribute('aria-expanded', abierta ? 'true' : 'false');
             const icono = pregunta.querySelector('.faq-icon i');
             if (icono) icono.className = abierta ? 'fas fa-minus-circle' : 'fas fa-plus-circle';
@@ -4371,12 +4549,12 @@
 
             // Mostrar feedback visual
             const boton = document.getElementById('btnAgregarGaleria');
-            const originalText = boton.textContent;
-            boton.textContent = '✓ ¡Agregado!';
+            const originalHTML = boton.innerHTML;
+            boton.innerHTML = '<i class="fas fa-check" aria-hidden="true"></i> ¡Agregado!';
             boton.style.background = 'linear-gradient(135deg, #27AE60 0%, #229954 100%)';
 
             setTimeout(() => {
-                boton.textContent = originalText;
+                boton.innerHTML = originalHTML;
                 boton.style.background = '';
             }, 1500);
 
