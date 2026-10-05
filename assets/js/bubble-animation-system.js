@@ -86,12 +86,13 @@ class BubbleSystem {
     }
 
     /**
-     * Calcula las variables CSS de la subida.
-     * Coordenadas: translateY positivo = hacia abajo (bajo el borde),
-     * negativo = hacia arriba. El centro de la burbuja parte en size/2.
-     * @returns {string} cadena de variables CSS
+     * Calcula los valores de la subida en px (startY → popY) y la deriva
+     * horizontal. Se animan con Web Animations API en vez de var() dentro
+     * de @keyframes, que no es soportado de forma fiable por todos los
+     * navegadores (las burbujas quedaban clavadas abajo y reventaban ahí).
+     * @returns {object} valores en px
      */
-    getRiseVariables(size, popPoint) {
+    getRisePlan(size, popPoint) {
         const height = this.container.clientHeight || 600;
 
         /* empieza completamente fuera del borde inferior */
@@ -104,30 +105,42 @@ class BubbleSystem {
 
         const at = (percent) => {
             const progress = Math.min(percent / 70, 1); // el pop ocurre al 70% del ciclo
-            return (startY + (popY - startY) * progress).toFixed(2) + 'px';
+            return +(startY + (popY - startY) * progress).toFixed(2);
         };
 
-        return `
-            --start-y: ${startY.toFixed(2)}px;
-            --y-6: ${at(6)};
-            --y-12: ${at(12)};
-            --y-22: ${at(22)};
-            --y-34: ${at(34)};
-            --y-46: ${at(46)};
-            --y-58: ${at(58)};
-            --y-pop: ${popY.toFixed(2)}px;
-        `;
+        /* deriva horizontal alternada (vaivén natural) */
+        const r = this.random(10, this.config.driftRange);
+        const drift = [r, -r * 0.8, r * 0.5, -r * 0.25];
+
+        return { startY, popY, at, drift };
     }
 
-    /** Deriva horizontal alternada (vaivén natural) */
-    getDriftVariables() {
-        const r = this.random(10, this.config.driftRange);
-        return `
-            --drift-1: ${r.toFixed(1)}px;
-            --drift-2: ${(-r * 0.8).toFixed(1)}px;
-            --drift-3: ${(r * 0.5).toFixed(1)}px;
-            --drift-4: ${(-r * 0.25).toFixed(1)}px;
-        `;
+    /** Crea la animación de subida (WAAPI) sobre una burbuja recién creada */
+    attachRiseAnimation(bubble, plan, duration, delay) {
+        if (typeof bubble.animate !== 'function') return null;
+
+        const { startY, popY, at, drift } = plan;
+        const d = drift;
+        const anim = bubble.animate([
+            { offset: 0, transform: `translate3d(0, ${startY}px, 0)` },
+            { offset: 0.06, transform: `translate3d(0, ${at(6)}px, 0)` },
+            { offset: 0.12, transform: `translate3d(0, ${at(12)}px, 0)` },
+            { offset: 0.22, transform: `translate3d(${d[0]}px, ${at(22)}px, 0)` },
+            { offset: 0.34, transform: `translate3d(${d[1]}px, ${at(34)}px, 0)` },
+            { offset: 0.46, transform: `translate3d(${d[2]}px, ${at(46)}px, 0)` },
+            { offset: 0.58, transform: `translate3d(${d[3]}px, ${at(58)}px, 0)` },
+            { offset: 0.7, transform: `translate3d(${d[3]}px, ${popY}px, 0)` },
+            { offset: 1, transform: `translate3d(${d[3]}px, ${popY}px, 0)` }
+        ], {
+            duration: duration * 1000,
+            delay: delay * 1000,
+            easing: 'linear',
+            fill: 'both'
+        });
+
+        bubble._riseAnim = anim;
+        if (this.isPaused) anim.pause();
+        return anim;
     }
 
     /* ---------- creación ---------- */
@@ -153,6 +166,7 @@ class BubbleSystem {
             this.config.popPointMin,
             Math.min(this.config.popPointMax, hardLimit)
         );
+        const plan = this.getRisePlan(clampedSize, popPoint);
 
         const bubble = document.createElement('div');
         bubble.className = 'bubble-flotante-premium';
@@ -163,8 +177,6 @@ class BubbleSystem {
             --delay: ${delay.toFixed(2)}s;
             --color: ${color};
             --pop-delay: ${(duration * 0.7).toFixed(2)}s;
-            ${this.getRiseVariables(clampedSize, popPoint)}
-            ${this.getDriftVariables()}
         `;
 
         /* cuerpo de vidrio */
@@ -189,6 +201,10 @@ class BubbleSystem {
         const cleanup = () => {
             clearTimeout(fallbackTimer);
             bubble.removeEventListener('animationend', handleAnimationEnd);
+            if (bubble._riseAnim) {
+                bubble._riseAnim.onfinish = null;
+                try { bubble._riseAnim.cancel(); } catch (e) { /* ya cancelada */ }
+            }
             if (bubble.parentNode) bubble.remove();
             this.activeBubbles.delete(bubble);
             this.cleanups.delete(bubble);
@@ -199,6 +215,8 @@ class BubbleSystem {
         };
 
         bubble.addEventListener('animationend', handleAnimationEnd);
+        const riseAnim = this.attachRiseAnimation(bubble, plan, duration, delay);
+        if (riseAnim) riseAnim.onfinish = () => cleanup();
         fallbackTimer = setTimeout(cleanup, (delay + duration + 0.5) * 1000);
         this.cleanups.set(bubble, cleanup);
 
@@ -326,6 +344,13 @@ class BubbleSystem {
         if (this.isPaused === paused) return;
         this.isPaused = paused;
         this.container.classList.toggle('is-paused', paused);
+        /* la subida es WAAPI: hay que pausarla/reanudarla a mano */
+        this.activeBubbles.forEach((bubble) => {
+            const anim = bubble._riseAnim;
+            if (!anim) return;
+            if (paused) anim.pause();
+            else anim.play();
+        });
     }
 
     /* ---------- API pública ---------- */

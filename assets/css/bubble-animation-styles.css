@@ -25,7 +25,9 @@
     animation-play-state: paused;
 }
 
-/* ---------- Burbuja (contenedor de transformación) ---------- */
+/* ---------- Burbuja (contenedor de transformación) ----------
+   La subida se anima con Web Animations API desde el JS (valores en px),
+   no con var() dentro de @keyframes. */
 .bubble-flotante-premium {
     --size: 80px;
     --left: 50%;
@@ -33,11 +35,6 @@
     --delay: 0s;
     --color: rgba(6, 182, 212, 0.5);
     --pop-delay: 4.2s;
-    --start-y: 140px;
-    --drift-1: 0px;
-    --drift-2: 0px;
-    --drift-3: 0px;
-    --drift-4: 0px;
 
     position: absolute;
     left: var(--left);
@@ -49,9 +46,6 @@
     border-radius: 50%;
     pointer-events: none;
     will-change: transform;
-
-    /* Eje de subida: desde abajo hasta el punto de pop, luego se queda fija */
-    animation: bubbleRise var(--dur) linear var(--delay) forwards;
 }
 
 /* ---------- Cuerpo de vidrio (la esfera) ---------- */
@@ -128,40 +122,8 @@
    KEYFRAMES
    ============================================================ */
 
-/* 1) Subida: desde bajo el borde inferior hasta el punto de pop (70%)
-      El JS calcula cada --y-* en px según la altura real del contenedor */
-@keyframes bubbleRise {
-    0% {
-        transform: translate3d(0, var(--start-y), 0);
-        animation-timing-function: cubic-bezier(0.22, 0.7, 0.35, 1);
-    }
-    6% {
-        transform: translate3d(0, var(--y-6, var(--start-y)), 0);
-    }
-    12% {
-        transform: translate3d(0, var(--y-12), 0);
-    }
-    22% {
-        transform: translate3d(var(--drift-1), var(--y-22), 0);
-    }
-    34% {
-        transform: translate3d(var(--drift-2), var(--y-34), 0);
-    }
-    46% {
-        transform: translate3d(var(--drift-3), var(--y-46), 0);
-    }
-    58% {
-        transform: translate3d(var(--drift-4), var(--y-58), 0);
-    }
-    70% {
-        transform: translate3d(var(--drift-4), var(--y-pop), 0);
-        animation-timing-function: ease-out;
-    }
-    /* Tras el pop la burbuja queda clavada en el punto de estallido */
-    100% {
-        transform: translate3d(var(--drift-4), var(--y-pop), 0);
-    }
-}
+/* 1) Subida → animada por JS con Web Animations API (ver
+      bubble-animation-system.js: attachRiseAnimation) */
 
 /* 2) Cuerpo: nace, brilla, se infla y REVIENTA a las 70% del ciclo */
 @keyframes bubbleBodyLife {
