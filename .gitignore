@@ -35,3 +35,6 @@ npm-debug.log*
 # Archives
 *.zip
 *.tar.gz
+# Internal docs (not published)
+/design-system/
+/docs/
