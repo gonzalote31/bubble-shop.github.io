@@ -37,7 +37,7 @@
             --color-primary: #0369A1;
             --color-primary-strong: #075985;
             --color-on-primary: #FFFFFF;
-            --color-secondary: #06B6D4;
+            --color-secondary: var(--azul-suave);
             --color-on-secondary: #06283A;
             --color-accent: #C2410C;
             --color-on-accent: #FFFFFF;
@@ -57,7 +57,7 @@
             --navy: #0F172A;
             --gris: #EFF7FB;
             --gris-oscuro: #E0F0F8;
-            --cian: #06B6D4;
+            --cian: var(--azul-suave);
             --blanco: #FFFFFF;
             --azul-primario: #0369A1;
             --azul-claro: #3B82F6;
@@ -138,13 +138,11 @@
             from {
                 opacity: 0;
                 transform: translateY(24px);
-                filter: blur(8px);
             }
 
             to {
                 opacity: 1;
                 transform: translateY(0);
-                filter: blur(0);
             }
         }
 
@@ -384,10 +382,9 @@
             position: sticky;
             top: var(--header-height);
             z-index: 101;
+            margin-top: -1px;
             padding: 11px 0;
             background: rgba(246, 252, 255, 0.92);
-            backdrop-filter: blur(16px) saturate(165%);
-            -webkit-backdrop-filter: blur(16px) saturate(165%);
             border-top: 1px solid rgba(3, 105, 161, 0.08);
             border-bottom: 1px solid rgba(3, 105, 161, 0.12);
             box-shadow: 0 10px 26px -14px rgba(15, 23, 42, 0.20);
@@ -466,7 +463,7 @@
         }
 
         .categoria-btn.activa {
-            background: linear-gradient(135deg, var(--navy) 0%, #0369A1 100%);
+            background: var(--navy);
             border-color: transparent;
             color: #FFFFFF;
             box-shadow: 0 12px 24px -10px rgba(3, 105, 161, 0.65);
@@ -770,7 +767,7 @@
             position: absolute;
             top: var(--space-md);
             right: var(--space-md);
-            background: linear-gradient(135deg, var(--cian) 0%, #0891B2 100%);
+            background: linear-gradient(135deg, var(--azul-suave) 0%, var(--cian) 100%);
             color: var(--navy);
             padding: var(--space-sm) var(--space-md);
             border-radius: 4px;
@@ -827,10 +824,37 @@
             font-size: 14px;
             font-weight: 700;
             color: var(--navy);
-            margin-bottom: var(--space-md);
+            margin-bottom: 6px;
             line-height: 1.4;
             min-height: 28px;
             letter-spacing: -0.2px;
+        }
+
+        .producto-descripcion-corta {
+            min-height: 34px;
+            margin: 0 0 var(--space-md);
+            color: #64748B;
+            font-size: 12px;
+            line-height: 1.42;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+            overflow: hidden;
+        }
+
+        .producto-envio-corto {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin: -6px 0 var(--space-md);
+            color: #16A34A;
+            font-size: 12px;
+            font-weight: 700;
+            line-height: 1.35;
+        }
+
+        .producto-envio-corto i {
+            font-size: 13px;
         }
 
         .producto-precio {
@@ -844,7 +868,7 @@
         .producto-agregar {
             width: 100%;
             padding: var(--space-md) var(--space-md);
-            background: linear-gradient(135deg, var(--color-primary) 0%, #0284C7 100%);
+            background: var(--navy);
             color: #FFFFFF;
             border: none;
             border-radius: 10px;
@@ -874,7 +898,7 @@
         }
 
         .producto-agregar:hover {
-            background: linear-gradient(135deg, #0284C7 0%, #075985 100%);
+            background: #1E293B;
             transform: translateY(-2px);
             box-shadow: 0 10px 20px -8px rgba(3, 105, 161, 0.6);
         }
@@ -886,6 +910,53 @@
 
         .producto-agregar:active {
             transform: translateY(0);
+        }
+
+        .producto-acciones {
+            display: flex;
+            align-items: stretch;
+            gap: 8px;
+            margin-top: auto;
+        }
+
+        .producto-acciones .producto-agregar {
+            flex: 1;
+            width: auto;
+        }
+
+        .producto-agregar-rapido {
+            width: 44px;
+            min-width: 44px;
+            height: 44px;
+            border: none;
+            border-radius: 10px;
+            background: var(--navy);
+            color: #FFFFFF;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2px;
+            font-size: 17px;
+            transition: all 0.25s var(--ease-spring);
+            box-shadow: 0 6px 14px -6px rgba(3, 105, 161, 0.55);
+        }
+
+        .producto-agregar-rapido:hover {
+            background: #1E293B;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px -8px rgba(3, 105, 161, 0.6);
+        }
+
+        .producto-agregar-rapido:active {
+            transform: translateY(0);
+        }
+
+        .producto-agregar-rapido:disabled {
+            background: var(--gris-oscuro);
+            color: #94A3B8;
+            cursor: not-allowed;
+            transform: none;
         }
 
         /* ============ MICRO-INTERACTIONS ============ */
@@ -1216,17 +1287,15 @@
         /* ============ BANNER HERO ============ */
         .banner-hero {
             /* Vibrant & Block-based: gradientes de marca + glows cian */
-            background:
-                radial-gradient(760px 420px at 86% 14%, rgba(6, 182, 212, 0.38), transparent 65%),
-                radial-gradient(640px 440px at 6% 94%, rgba(14, 165, 233, 0.32), transparent 62%),
-                linear-gradient(155deg, #075985 0%, #0369A1 44%, #0B2C4A 76%, #0F172A 100%);
+            background: var(--navy);
             color: var(--blanco);
-            padding: clamp(40px, 6vw, 72px) var(--space-lg);
+            padding: 8px var(--space-lg);
             margin: 0;
             position: relative;
             overflow: hidden;
-            min-height: 560px;
+            min-height: 260px;
             display: flex;
+            flex-direction: column;
             align-items: center;
         }
 
@@ -1264,6 +1333,7 @@
             flex-direction: column;
             justify-content: center;
             padding: var(--space-xl) var(--space-2xl) var(--space-xl) 0;
+            transform: translateY(0);
         }
 
         /* Eyebrow / badge de valor */
@@ -1281,7 +1351,6 @@
             font-weight: 700;
             letter-spacing: 0.2px;
             margin-bottom: var(--space-xl);
-            backdrop-filter: blur(8px);
             box-shadow: 0 4px 14px rgba(2, 32, 60, 0.25);
         }
 
@@ -1296,17 +1365,64 @@
             letter-spacing: -1.4px;
             line-height: 1.04;
             color: #FFFFFF;
-            text-shadow: 0 2px 10px rgba(2, 20, 40, 0.45);
+            text-shadow: none;
             text-wrap: balance;
         }
 
         .hero-texto-acento {
             display: block;
-            background: linear-gradient(92deg, #7DE8FA 0%, #38BDF8 48%, #FBBF24 100%);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
+            color: #FFFFFF;
             text-shadow: none;
+        }
+
+        .hero-buscador {
+            width: min(520px, 100%);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: var(--space-md);
+            padding: 5px;
+            border: 1px solid rgba(15, 23, 42, 0.12);
+            border-radius: 999px;
+            background: #FFFFFF;
+            box-shadow: 0 8px 20px rgba(15, 23, 42, 0.12);
+        }
+
+        .hero-buscador-input {
+            flex: 1;
+            min-width: 0;
+            height: 42px;
+            border: none;
+            outline: none;
+            padding: 0 10px 0 16px;
+            background: transparent;
+            color: var(--navy);
+            font: inherit;
+            font-size: 14px;
+        }
+
+        .hero-buscador-input::placeholder {
+            color: #64748B;
+        }
+
+        .hero-buscador-boton {
+            width: 42px;
+            height: 42px;
+            flex: 0 0 42px;
+            border: none;
+            border-radius: 50%;
+            background: var(--navy);
+            color: #FFFFFF;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s ease, background 0.2s ease;
+        }
+
+        .hero-buscador-boton:hover {
+            background: #1E293B;
+            transform: scale(1.04);
         }
 
         .banner-hero-subtitle {
@@ -1392,7 +1508,6 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
-            backdrop-filter: blur(8px);
         }
 
         .banner-hero-cta-secundario i {
@@ -1471,7 +1586,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 420px;
+            min-height: 210px;
             position: relative;
         }
 
@@ -1486,14 +1601,14 @@
         }
 
         .banner-hero-burbuja-container::before {
-            width: 430px;
-            height: 430px;
+            width: 215px;
+            height: 215px;
             animation: orbitSpin 34s linear infinite;
         }
 
         .banner-hero-burbuja-container::after {
-            width: 510px;
-            height: 510px;
+            width: 255px;
+            height: 255px;
             border-style: solid;
             border-color: rgba(255, 255, 255, 0.14);
             animation: orbitSpin 48s linear infinite reverse;
@@ -1562,8 +1677,8 @@
         /* Burbuja principal grande */
         .burbuja-principal {
             position: relative;
-            width: 350px;
-            height: 350px;
+            width: 175px;
+            height: 175px;
             border-radius: 50%;
             overflow: hidden;
             display: flex;
@@ -1572,7 +1687,6 @@
             justify-content: center;
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.1) 100%);
             border: 3px solid rgba(255, 255, 255, 0.3);
-            backdrop-filter: blur(10px);
             color: var(--blanco);
             box-shadow:
                 inset 0 1px 2px rgba(255, 255, 255, 0.6),
@@ -1602,7 +1716,6 @@
                 inset 0 -1px 2px rgba(0, 0, 0, 0.15),
                 0 12px 48px rgba(6, 182, 212, 0.25),
                 0 0 30px rgba(6, 182, 212, 0.15);
-            backdrop-filter: blur(12px);
         }
 
         .burbuja-imagen {
@@ -1674,7 +1787,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: var(--space-lg);
+            gap: var(--space-sm);
         }
 
         .burbuja-emoji {
@@ -1684,7 +1797,7 @@
         }
 
         .burbuja-icon {
-            font-size: 60px;
+            font-size: 30px;
             display: block;
             color: var(--cian);
             text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
@@ -1695,71 +1808,6 @@
             font-weight: 800;
             letter-spacing: -0.5px;
             text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
-        }
-
-        /* ============ FEATURES / GARANTÍAS ============ */
-        .features-strip {
-            max-width: var(--container-max);
-            margin: calc(var(--space-4xl) * -1) auto 0;
-            margin-bottom: var(--space-xl);
-            padding: 0 var(--space-xl);
-            position: relative;
-            z-index: 5;
-        }
-
-        .features-strip-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: var(--space-lg);
-            background: var(--color-card);
-            border: 1px solid var(--color-border);
-            border-radius: var(--radius-lg);
-            padding: var(--space-xl);
-            box-shadow: 0 18px 40px -18px rgba(15, 23, 42, 0.28), 0 6px 16px -8px rgba(15, 23, 42, 0.12);
-        }
-
-        .feature-card {
-            display: flex;
-            gap: var(--space-md);
-            align-items: flex-start;
-            padding: var(--space-sm);
-            border-radius: var(--radius-md);
-            transition: background var(--dur-base) var(--ease-smooth),
-                transform var(--dur-base) var(--ease-spring);
-            cursor: default;
-        }
-
-        .feature-card:hover {
-            background: var(--color-muted);
-            transform: translateY(-3px);
-        }
-
-        .feature-icono {
-            flex: 0 0 44px;
-            width: 44px;
-            height: 44px;
-            border-radius: var(--radius-sm);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
-            color: var(--color-on-primary);
-            font-size: 18px;
-            box-shadow: 0 6px 16px rgba(3, 105, 161, 0.28);
-        }
-
-        .feature-card h3 {
-            font-size: 15px;
-            font-weight: 700;
-            color: var(--color-foreground);
-            margin-bottom: 3px;
-            letter-spacing: -0.2px;
-        }
-
-        .feature-card p {
-            font-size: 13px;
-            line-height: 1.55;
-            color: var(--color-muted-foreground);
         }
 
         /* ============ CTA BAND (Design System: CTA repetido) ============ */
@@ -1846,11 +1894,16 @@
         @media (max-width: 1024px) and (min-width: 769px) {
             .banner-hero {
                 min-height: auto;
-                padding: var(--space-4xl) var(--space-xl);
+                padding: var(--space-md) var(--space-xl);
             }
 
             .banner-hero-wrapper {
                 gap: var(--space-2xl);
+                justify-content: center;
+            }
+
+            .banner-hero-burbuja-container {
+                display: none;
             }
 
             .banner-hero h1 {
@@ -1880,10 +1933,6 @@
                 height: 290px;
             }
 
-            .features-strip-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
             .contenedor-principal {
                 padding: var(--space-lg);
             }
@@ -1893,8 +1942,12 @@
         @media (max-width: 768px) {
             .banner-hero {
                 min-height: auto;
-                padding: var(--space-3xl) var(--space-lg) calc(var(--space-3xl) + 56px);
+                padding: var(--space-md) var(--space-lg);
                 align-items: stretch;
+            }
+
+            .banner-hero-burbuja-container {
+                display: none;
             }
 
             .banner-hero-wrapper {
@@ -1906,6 +1959,7 @@
                 text-align: center;
                 padding: var(--space-lg) 0;
                 align-items: center;
+                transform: translateY(0);
             }
 
             .banner-hero-eyebrow {
@@ -1989,17 +2043,6 @@
 
             .burbuja-categoria {
                 font-size: 16px;
-            }
-
-            .features-strip {
-                margin-top: -48px;
-                padding: 0 var(--space-lg);
-            }
-
-            .features-strip-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: var(--space-md);
-                padding: var(--space-lg);
             }
 
             .cta-band-botones {
@@ -2588,6 +2631,15 @@
             max-width: 920px;
         }
 
+        .modal-galeria-contenido > .modal-cerrar {
+            position: sticky;
+            top: 12px;
+            right: auto;
+            margin: -32px -32px -38px auto;
+            float: none;
+            z-index: 20;
+        }
+
         .galeria-grid {
             display: grid;
             grid-template-columns: 1.05fr 1fr;
@@ -2605,7 +2657,7 @@
         .galeria-principal {
             width: 100%;
             height: 380px;
-            background: linear-gradient(135deg, var(--azul-suave) 0%, rgba(232, 244, 248, 0.5) 100%);
+            background: var(--azul-suave);
             border: 1px solid var(--color-border);
             border-radius: 14px;
             display: flex;
@@ -2762,7 +2814,7 @@
             flex-wrap: wrap;
             gap: var(--space-md);
             padding: var(--space-lg);
-            background: linear-gradient(135deg, var(--azul-suave) 0%, rgba(232, 244, 248, 0.3) 100%);
+            background: var(--azul-suave);
             border-radius: 10px;
         }
 
@@ -2887,7 +2939,7 @@
 
         .btn-agregar-galeria {
             padding: var(--space-lg) var(--space-2xl);
-            background: linear-gradient(135deg, #0369A1 0%, #0284C7 100%);
+            background: var(--navy);
             color: var(--blanco);
             border: none;
             border-radius: 10px;
@@ -2903,6 +2955,7 @@
         }
 
         .btn-agregar-galeria:hover {
+            background: #1E293B;
             transform: translateY(-2px);
             box-shadow: 0 8px 20px rgba(3, 105, 161, 0.35);
         }
@@ -2988,43 +3041,95 @@
             letter-spacing: -0.2px;
         }
 
-        .provincia-selector select {
-            width: 100%;
-            padding: var(--space-md) 40px var(--space-md) var(--space-lg);
+        .provincia-controles {
+            display: flex;
+            gap: 8px;
+        }
+
+        .provincia-selector input {
+            flex: 1;
+            min-width: 0;
+            padding: var(--space-md) var(--space-lg);
             border: 1.5px solid rgba(3, 105, 161, 0.35);
             border-radius: 10px;
             font-size: 13px;
             color: var(--navy);
             background: var(--blanco);
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%230369A1' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 14px center;
-            cursor: pointer;
             font-weight: 600;
-            appearance: none;
-            -webkit-appearance: none;
             transition: all 0.25s var(--ease-spring);
             letter-spacing: -0.2px;
         }
 
-        .provincia-selector select option {
-            background: var(--blanco);
-            color: var(--navy);
-            font-weight: 600;
-            padding: 8px 10px;
-        }
-
-        .provincia-selector select:hover {
+        .provincia-selector input:hover {
             border-color: var(--cian);
             box-shadow: 0 4px 12px rgba(26, 31, 58, 0.12);
             transform: translateY(-1px);
         }
 
-        .provincia-selector select:focus {
+        .provincia-selector input:focus {
             outline: none;
             border-color: var(--cian);
             box-shadow: 0 0 0 4px rgba(6, 182, 212, 0.15);
             transform: translateY(-2px);
+        }
+
+        .provincia-desplegar {
+            width: 44px;
+            min-width: 44px;
+            border: 1.5px solid rgba(3, 105, 161, 0.35);
+            border-radius: 10px;
+            background: var(--blanco);
+            color: var(--navy);
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.25s var(--ease-spring);
+        }
+
+        .provincia-desplegar:hover,
+        .provincia-desplegar:focus {
+            border-color: var(--cian);
+            background: var(--azul-suave);
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(6, 182, 212, 0.15);
+        }
+
+        .provincia-sugerencias {
+            display: none;
+            position: relative;
+            max-height: 180px;
+            overflow-y: auto;
+            margin-top: 6px;
+            border: 1px solid rgba(3, 105, 161, 0.18);
+            border-radius: 10px;
+            background: var(--blanco);
+            box-shadow: 0 8px 18px rgba(26, 31, 58, 0.12);
+        }
+
+        .provincia-sugerencias.mostrar {
+            display: block;
+        }
+
+        .provincia-sugerencia {
+            width: 100%;
+            padding: 10px 12px;
+            border: 0;
+            border-bottom: 1px solid rgba(26, 31, 58, 0.06);
+            background: transparent;
+            color: var(--navy);
+            text-align: left;
+            cursor: pointer;
+            font: inherit;
+            font-weight: 600;
+        }
+
+        .provincia-sugerencia:last-child {
+            border-bottom: 0;
+        }
+
+        .provincia-sugerencia:hover,
+        .provincia-sugerencia:focus {
+            background: var(--azul-suave);
+            outline: none;
         }
 
         /* ============ INDICADOR ENVÍO ============ */
@@ -3502,7 +3607,7 @@
             }
 
             .banner-hero {
-                padding: var(--space-2xl) var(--space-lg);
+                padding: var(--space-lg) var(--space-lg);
             }
 
             .banner-hero h1 {
@@ -3514,37 +3619,6 @@
                 font-size: 14px;
             }
 
-            .features-strip {
-                margin-top: -40px;
-                padding: 0 var(--space-lg);
-            }
-
-            .features-strip-grid {
-                grid-template-columns: 1fr;
-                gap: var(--space-sm);
-                padding: var(--space-lg);
-            }
-
-            .feature-card {
-                padding: var(--space-sm) var(--space-xs);
-                gap: var(--space-sm);
-            }
-
-            .feature-icono {
-                flex-basis: 38px;
-                width: 38px;
-                height: 38px;
-                font-size: 16px;
-            }
-
-            .feature-card h3 {
-                font-size: 14px;
-            }
-
-            .feature-card p {
-                font-size: 12.5px;
-                line-height: 1.45;
-            }
 
             .hero-chip {
                 font-size: 11px;
@@ -3573,7 +3647,7 @@
         /* ============ RESPONSIVE — MÓVIL PEQUEÑO 375px ============ */
         @media (max-width: 375px) {
             .banner-hero {
-                padding: var(--space-2xl) 14px calc(var(--space-2xl) + 52px);
+                padding: var(--space-md) 14px;
             }
 
             .banner-hero-eyebrow {
@@ -3662,8 +3736,8 @@
             }
 
             .features-strip {
-                margin-top: -36px;
-                padding: 0 14px;
+                margin-top: var(--space-sm);
+                padding: 0;
             }
 
             .cta-band {
@@ -3686,8 +3760,8 @@
         /* ============ RESPONSIVE — ESCRITORIO ANCHO 1440px ============ */
         @media (min-width: 1440px) {
             .banner-hero {
-                min-height: 620px;
-                padding: 72px var(--space-4xl);
+                min-height: 260px;
+                padding: 8px var(--space-4xl);
             }
 
             .banner-hero-wrapper {
@@ -3729,13 +3803,11 @@
             <div class="info-bar-grupo">
                 <span><i class="fas fa-truck" aria-hidden="true"></i> Envío <strong>GRATIS en compras
                         &gt;$25</strong></span>
-                <span><i class="fas fa-map-pin" aria-hidden="true"></i> <strong>GRATIS en Riobamba</strong></span>
                 <span><i class="fas fa-comment-dots" aria-hidden="true"></i> Compra fácil por
                     <strong>WhatsApp</strong></span>
             </div>
             <div class="info-bar-grupo" aria-hidden="true">
-                <span><i class="fas fa-truck"></i> Envío <strong>GRATIS en compras &gt;$25</strong></span>
-                <span><i class="fas fa-map-pin"></i> <strong>GRATIS en Riobamba</strong></span>
+                <span><i class="fas fa-truck"></i> Envío <strong>GRATIS a todo el Ecuador</strong></span>
                 <span><i class="fas fa-comment-dots"></i> Compra fácil por <strong>WhatsApp</strong></span>
             </div>
         </div>
@@ -3750,31 +3822,31 @@
             <div class="banner-hero-wrapper">
                 <!-- COLUMNA IZQUIERDA: INFORMACIÓN -->
                 <div class="banner-hero-contenido">
-                    <span class="banner-hero-eyebrow">
+                    <!-- <span class="banner-hero-eyebrow">
                         <i class="fas fa-bolt" aria-hidden="true"></i>
                         Envío GRATIS en compras &gt; $25
-                    </span>
+                    </span> -->
 
                     <h1>Todo lo que buscas, <span class="hero-texto-acento">en un solo lugar</span></h1>
 
-                    <div class="banner-hero-subtitle">Tecnología, hogar, belleza y mascotas con envío express</div>
+                    <form class="hero-buscador" id="heroBuscador" role="search">
+                        <input class="hero-buscador-input" id="heroBuscarInput" type="search"
+                            placeholder="Buscar productos" aria-label="Buscar productos" autocomplete="off">
+                        <button class="hero-buscador-boton" type="submit" aria-label="Buscar">
+                            <i class="fas fa-magnifying-glass" aria-hidden="true"></i>
+                        </button>
+                    </form>
 
-                    <p>Explora nuestras colecciones y recibe en 24-48h en Riobamba. Calidad garantizada y compra
-                        segura, sin salir de casa.</p>
+                   <!--  <div class="banner-hero-subtitle">Tecnología, hogar, belleza y mascotas con envío express</div>
 
-                    <div class="banner-hero-botones">
+                  <div class="banner-hero-botones">
                         <button class="banner-hero-cta" onclick="irAlCatalogo()">
                             <i class="fas fa-shopping-cart" aria-hidden="true"></i>
                             <span>Explorar Catálogo</span>
                         </button>
-                        <button class="banner-hero-cta-secundario"
-                            onclick="window.open('https://whatsapp.com/channel/0029Vb9KOxu3WHTZCEV5gc0z', '_blank')">
-                            <i class="fab fa-whatsapp" aria-hidden="true"></i>
-                            <span>Ofertas por WhatsApp</span>
-                        </button>
-                    </div>
+                    </div> --> 
 
-                    <ul class="banner-hero-stats">
+                   <!-- <ul class="banner-hero-stats">
                         <li>
                             <strong>+2.500</strong>
                             <span>clientes felices</span>
@@ -3783,11 +3855,7 @@
                             <strong>4.8/5 <i class="fas fa-star" aria-hidden="true"></i></strong>
                             <span>reseñas verificadas</span>
                         </li>
-                        <li>
-                            <strong>24-48h</strong>
-                            <span>entrega en Riobamba</span>
-                        </li>
-                    </ul>
+                    </ul> -->
                 </div>
 
                 <!-- COLUMNA DERECHA: BURBUJA PRINCIPAL -->
@@ -3818,40 +3886,7 @@
                     </span>
                 </div>
             </div>
-        </section>
 
-        <!-- ============ FEATURES / GARANTÍAS (Design System: Feature grid 4-6) ============ -->
-        <section class="features-strip" aria-label="Garantías de compra">
-            <div class="features-strip-grid">
-                <article class="feature-card">
-                    <div class="feature-icono"><i class="fas fa-truck" aria-hidden="true"></i></div>
-                    <div>
-                        <h3>Envío gratis</h3>
-                        <p>En todas las compras superiores a $25 a todo el país.</p>
-                    </div>
-                </article>
-                <article class="feature-card">
-                    <div class="feature-icono"><i class="fas fa-map-pin" aria-hidden="true"></i></div>
-                    <div>
-                        <h3>Entrega en Riobamba</h3>
-                        <p>Recibe el mismo día en la ciudad, sin costo adicional.</p>
-                    </div>
-                </article>
-                <article class="feature-card">
-                    <div class="feature-icono"><i class="fab fa-whatsapp" aria-hidden="true"></i></div>
-                    <div>
-                        <h3>Compra por WhatsApp</h3>
-                        <p>Te atendemos en minutos, sin formularios ni registros.</p>
-                    </div>
-                </article>
-                <article class="feature-card">
-                    <div class="feature-icono"><i class="fas fa-rotate-left" aria-hidden="true"></i></div>
-                    <div>
-                        <h3>Devolución fácil</h3>
-                        <p>¿No era lo que esperabas? Cambio o devolución en 7 días.</p>
-                    </div>
-                </article>
-            </div>
         </section>
 
 
@@ -3912,10 +3947,16 @@
                 <!-- Selector Provincia -->
                 <div class="provincia-selector">
                     <label for="provinciaSelect">Enviar a:</label>
-                    <select id="provinciaSelect">
-                        <option value="riobamba">Riobamba</option>
-                        <option value="otras">Otras provincias</option>
-                    </select>
+                    <div class="provincia-controles">
+                        <input id="provinciaSelect" type="text"
+                            placeholder="Escribe aquí tu provincia" autocomplete="off">
+                        <button id="provinciaDesplegar" class="provincia-desplegar" type="button"
+                            aria-label="Mostrar todas las provincias" aria-expanded="false"
+                            title="Mostrar provincias">
+                            <i class="fas fa-chevron-down" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <div id="provinciaSugerencias" class="provincia-sugerencias" role="listbox"></div>
                 </div>
 
                 <!-- Indicador Envío -->
@@ -3954,16 +3995,8 @@
             <!-- Marca -->
             <div class="footer-seccion footer-marca">
                 <div class="footer-logo">BUBBLE<span>SHOP</span></div>
-                <p class="footer-desc">Tu tienda online en Riobamba: hogar, moda, tecnología, belleza y más,
-                    con entrega en 24-48h y pago contra entrega.</p>
-                <div class="footer-redes">
-                    <a href="https://wa.me/593978691094" title="WhatsApp" aria-label="WhatsApp"><i
-                            class="fab fa-whatsapp" aria-hidden="true"></i></a>
-                    <!-- <a href="https://instagram.com/bubbleshop.ec" title="Instagram" aria-label="Instagram"><i
-                            class="fab fa-instagram" aria-hidden="true"></i></a>
-                    <a href="https://facebook.com/BubbleShopEC" title="Facebook" aria-label="Facebook"><i
-                            class="fab fa-facebook-f" aria-hidden="true"></i></a> -->
-                </div>
+                <p class="footer-desc">Tu tienda online: hogar, moda, tecnología, belleza y más,
+                    con entrega en 24-48h.</p>
             </div>
 
             <!-- Contacto y Horarios -->
@@ -3972,14 +4005,8 @@
                 <ul class="footer-lista">
                     <li><i class="fab fa-whatsapp" aria-hidden="true"></i>
                         <a href="https://wa.me/593978691094">0978691094</a></li>
-                    <li><i class="far fa-clock" aria-hidden="true"></i>
-                        <span>Lunes a Domingo · 8:00 AM - 8:00 PM</span></li>
-                    <li><i class="fas fa-money-bill-wave" aria-hidden="true"></i>
-                        <span>Pago contra entrega al recibir tu pedido</span></li>
-                    <li><i class="fas fa-truck-fast" aria-hidden="true"></i>
-                        <span>Entrega en 24h a 48h en Riobamba</span></li>
                     <li><i class="fas fa-gift" aria-hidden="true"></i>
-                        <span>Gratis desde $25 para todo el país</span></li>
+                        <span>Envío gratis a todo el país</span></li>
                 </ul>
             </div>
 
@@ -4005,12 +4032,6 @@
 
         <div class="footer-divider">
             <p>&copy; 2026 Bubble Shop. Todos los derechos reservados.</p>
-            <div class="footer-badges">
-                <span class="footer-badge"><i class="fas fa-shield-alt" aria-hidden="true"></i> Compra segura</span>
-                <span class="footer-badge"><i class="fas fa-truck-fast" aria-hidden="true"></i> Envío 24-48h</span>
-                <span class="footer-badge"><i class="fas fa-money-bill-wave" aria-hidden="true"></i> Pago contra
-                    entrega</span>
-            </div>
         </div>
     </footer>
 
@@ -4057,8 +4078,8 @@
                     <span class="faq-icon"><i class="fas fa-plus-circle"></i></span> ¿Cuáles son los tiempos de entrega?
                 </div>
                 <div class="faq-respuesta">
-                    Una vez confirmado tu pedido por WhatsApp, haremos la entrega en el plazo acordado. Riobamba: 1-2
-                    días. Otras provincias: 3-5 días hábiles aproximadamente.
+                    Una vez confirmado tu pedido por WhatsApp, haremos la entrega en el plazo acordado.
+                    Otras provincias: 3-5 días hábiles aproximadamente.
                 </div>
             </div>
 
@@ -4237,7 +4258,7 @@
                     <button class="btn-agregar-galeria" onclick="agregarAlCarritoDesdeGaleria()" id="btnAgregarGaleria">
                         <i class="fas fa-cart-plus" aria-hidden="true"></i> Agregar al Carrito
                     </button>
-                    <div class="producto-envio-nota">🚚 Envío a todo el Ecuador · Cambios y garantía incluidos</div>
+                    <div class="producto-envio-nota">🚚 Envío gratis a todo el Ecuador</div>
                 </div>
             </div>
         </div>
@@ -4264,7 +4285,15 @@
 
         // ============ ESTADO DEL CARRITO ============
         let carrito = [];
-        let provinciaSeleccionada = 'riobamba';
+        let provinciaSeleccionada = '';
+        const provinciasEcuador = [
+            'Azuay', 'Bolívar', 'Cañar', 'Carchi', 'Chimborazo', 'Cotopaxi',
+            'El Oro', 'Esmeraldas', 'Galápagos', 'Guayas', 'Imbabura', 'Loja',
+            'Los Ríos', 'Manabí', 'Morona Santiago', 'Napo', 'Orellana',
+            'Pastaza', 'Pichincha', 'Santa Elena',
+            'Santo Domingo de los Tsáchilas', 'Sucumbíos', 'Tungurahua',
+            'Zamora Chinchipe'
+        ];
 
         // ============ BURBUJAS ANIMADAS ============
         // El sistema de burbujas dinámicas se inicializa automáticamente desde bubble-animation-system.js
@@ -4322,6 +4351,7 @@
 
         function iniciarRotacionBurbuja() {
             if (!document.getElementById('burbujaPrincipal')) return;
+            if (window.innerWidth <= 1024) return;
             categoriasBurbuja.forEach(c => { const i = new Image(); i.src = c.imagen; });
             timerBurbuja = setInterval(cambiarBurbuja, 4500);
         }
@@ -4570,6 +4600,29 @@
             }, 600);
         }
 
+        function agregarProductoRapido(id, boton) {
+            const producto = productos.find(item => item.id === id);
+            if (!producto || !producto.stock) return;
+
+            const existeItem = carrito.find(item => item.id === id);
+            if (existeItem) {
+                existeItem.cantidad++;
+            } else {
+                carrito.push({ id, nombre: producto.nombre, precio: producto.precio, cantidad: 1 });
+            }
+
+            guardarCarrito();
+            actualizarCarrito();
+
+            const originalHTML = boton.innerHTML;
+            boton.innerHTML = '<i class="fas fa-check" aria-hidden="true"></i>';
+            boton.classList.add('agregado');
+            setTimeout(() => {
+                boton.innerHTML = originalHTML;
+                boton.classList.remove('agregado');
+            }, 700);
+        }
+
         // ============ INICIALIZACIÓN ============
         function init() {
             cargarCarritoGuardado();
@@ -4608,14 +4661,12 @@
 
         function cargarCarritoGuardado() {
             const carritoGuardado = localStorage.getItem('bubble-shop-carrito');
-            const provinciaGuardada = localStorage.getItem('bubble-shop-provincia');
+            localStorage.removeItem('bubble-shop-provincia');
 
             if (carritoGuardado) {
                 carrito = JSON.parse(carritoGuardado);
             }
-            if (provinciaGuardada) {
-                provinciaSeleccionada = provinciaGuardada;
-            }
+            provinciaSeleccionada = '';
         }
 
         // ============ RENDERIZAR CATEGORÍAS ============
@@ -4738,12 +4789,25 @@
             document.querySelectorAll('.orden-dropdown').forEach(d => d.classList.remove('abierto'));
         }
 
-        function renderizarProductos() {
+        function renderizarProductos(textoBusqueda = '') {
             const section = document.getElementById('productosSection');
             section.innerHTML = '';
+            const termino = textoBusqueda.trim().toLocaleLowerCase('es');
+            let coincidenciasTotales = 0;
 
             Object.entries(categorias).forEach(([key]) => {
-                const items = productos.filter(p => p.categorias && p.categorias.includes(key));
+                let items = productos.filter(p => p.categorias && p.categorias.includes(key));
+                if (termino) {
+                    items = items.filter(p => {
+                        const texto = [
+                            p.nombre,
+                            p.descripcion,
+                            ...(p.categorias || []).map(categoria => categorias[categoria] || categoria)
+                        ].filter(Boolean).join(' ').toLocaleLowerCase('es');
+                        return texto.includes(termino);
+                    });
+                }
+                coincidenciasTotales += items.length;
                 if (!items.length) return;
 
                 const categoriaSeccion = document.createElement('section');
@@ -4830,11 +4894,25 @@
                         ${producto.stock ? '' : '<div class="producto-badge">Sin Stock</div>'}
                         <div class="producto-info">
                             <div class="producto-nombre">${producto.nombre}</div>
+                            <p class="producto-descripcion-corta">${producto.descripcion || 'Producto de alta calidad disponible en Bubble Shop.'}</p>
+                            <div class="producto-envio-corto">
+                                <i class="fas fa-truck-fast" aria-hidden="true"></i>
+                                <span>Envío gratis a todo el país</span>
+                            </div>
                             <div class="producto-precio">$${producto.precio.toFixed(2)}</div>
-                            <button class="producto-agregar" ${!producto.stock ? 'disabled' : ''} 
-                                onclick="event.stopPropagation(); abrirGaleriaProducto(${producto.id})">
-                                ${producto.stock ? 'Ver Detalles' : 'No disponible'}
-                            </button>
+                            <div class="producto-acciones">
+                                <button class="producto-agregar" ${!producto.stock ? 'disabled' : ''}
+                                    onclick="event.stopPropagation(); abrirGaleriaProducto(${producto.id})">
+                                    ${producto.stock ? 'Ver Detalles' : 'No disponible'}
+                                </button>
+                                ${producto.stock ? `
+                                    <button type="button" class="producto-agregar-rapido"
+                                        aria-label="Agregar ${producto.nombre} al carrito"
+                                        onclick="event.stopPropagation(); agregarProductoRapido(${producto.id}, this)">
+                                        <i class="fas fa-shopping-cart" aria-hidden="true"></i><span>+</span>
+                                    </button>
+                                ` : ''}
+                            </div>
                         </div>
                     `;
                         card.addEventListener('click', () => {
@@ -4910,6 +4988,10 @@
                 categoriaSeccion.appendChild(grid);
                 section.appendChild(categoriaSeccion);
             });
+
+            if (termino && coincidenciasTotales === 0) {
+                section.innerHTML = '<div class="categoria-seccion"><div class="categoria-cabecera"><h3 class="categoria-titulo">Sin resultados</h3></div><p style="padding: 0 var(--space-xl); color: var(--navy);">No encontramos productos para tu búsqueda.</p></div>';
+            }
         }
 
         // ============ CARRITO - AGREGAR PRODUCTO ============ (La función está arriba con feedback animations)
@@ -4947,12 +5029,54 @@
         }
 
         // ============ CALCULAR TOTALES ============
+        function mostrarSugerenciasProvincia(texto, mostrarTodas = false) {
+            const contenedor = document.getElementById('provinciaSugerencias');
+            if (!contenedor) return;
+
+            const busqueda = texto.trim().toLocaleLowerCase('es');
+            if (!mostrarTodas && busqueda === '') {
+                contenedor.classList.remove('mostrar');
+                contenedor.innerHTML = '';
+                document.getElementById('provinciaDesplegar').setAttribute('aria-expanded', 'false');
+                return;
+            }
+
+            const coincidencias = mostrarTodas ? provinciasEcuador : provinciasEcuador.filter(provincia =>
+                provincia.toLocaleLowerCase('es').includes(busqueda)
+            );
+
+            if (coincidencias.length === 0) {
+                contenedor.classList.remove('mostrar');
+                contenedor.innerHTML = '';
+                return;
+            }
+
+            contenedor.innerHTML = coincidencias.map(provincia => `
+                <button type="button" class="provincia-sugerencia" role="option"
+                    data-provincia="${provincia}">${provincia}</button>
+            `).join('');
+            contenedor.classList.add('mostrar');
+
+            contenedor.querySelectorAll('.provincia-sugerencia').forEach(boton => {
+                boton.addEventListener('mousedown', (e) => e.preventDefault());
+                boton.addEventListener('click', () => {
+                    const provincia = boton.dataset.provincia;
+                    document.getElementById('provinciaSelect').value = provincia;
+                    provinciaSeleccionada = provincia;
+                    guardarCarrito();
+                    actualizarCarrito();
+                    contenedor.classList.remove('mostrar');
+                    document.getElementById('provinciaDesplegar').setAttribute('aria-expanded', 'false');
+                });
+            });
+        }
+
         function calcularTotales() {
             const subtotal = carrito.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
             let envio = 0;
 
             if (carrito.length > 0) {
-                if (provinciaSeleccionada === 'riobamba') {
+                if (provinciaSeleccionada.trim().toLowerCase() === 'riobamba') {
                     envio = subtotal >= 25 ? 0 : 2.50;
                 } else {
                     envio = subtotal >= 25 ? 0 : 5.00;
@@ -5030,6 +5154,24 @@
 
         // ============ EVENTOS ============
         function setupEventListeners() {
+            const buscadorHero = document.getElementById('heroBuscador');
+            const inputBusqueda = document.getElementById('heroBuscarInput');
+
+            if (buscadorHero && inputBusqueda) {
+                buscadorHero.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    renderizarProductos(inputBusqueda.value);
+                    document.getElementById('productosSection').scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                });
+
+                inputBusqueda.addEventListener('input', (e) => {
+                    renderizarProductos(e.target.value);
+                });
+            }
+
             // Menús de orden: cerrar al hacer click fuera o con Escape
             document.addEventListener('click', (e) => {
                 if (!e.target.closest('.orden-dropdown')) cerrarTodosMenusOrden();
@@ -5054,10 +5196,31 @@
             });
 
             // Provincia
-            document.getElementById('provinciaSelect').addEventListener('change', (e) => {
-                provinciaSeleccionada = e.target.value;
+            document.getElementById('provinciaSelect').addEventListener('input', (e) => {
+                provinciaSeleccionada = e.target.value.trim();
                 guardarCarrito();
                 actualizarCarrito();
+                mostrarSugerenciasProvincia(e.target.value);
+            });
+
+            document.getElementById('provinciaSelect').addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    document.getElementById('provinciaSugerencias').classList.remove('mostrar');
+                    document.getElementById('provinciaDesplegar').setAttribute('aria-expanded', 'false');
+                }
+            });
+
+            document.getElementById('provinciaDesplegar').addEventListener('click', () => {
+                const sugerencias = document.getElementById('provinciaSugerencias');
+                const boton = document.getElementById('provinciaDesplegar');
+
+                if (sugerencias.classList.contains('mostrar')) {
+                    sugerencias.classList.remove('mostrar');
+                    boton.setAttribute('aria-expanded', 'false');
+                } else {
+                    mostrarSugerenciasProvincia('', true);
+                    boton.setAttribute('aria-expanded', 'true');
+                }
             });
 
             // Limpiar carrito
@@ -5083,7 +5246,7 @@
             if (carrito.length === 0) return;
 
             const { subtotal, envio, total } = calcularTotales();
-            const provincia = provinciaSeleccionada === 'riobamba' ? 'Riobamba' : 'Otras provincias';
+            const provincia = provinciaSeleccionada.trim() || 'Provincia por confirmar';
 
             let mensaje = `*🛍️ PEDIDO BUBBLE SHOP*\n\n`;
             mensaje += `*Productos:*\n`;
