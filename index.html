@@ -4244,74 +4244,10 @@
     </div>
 
     <!-- ============ SCRIPT ============ -->
+    <script src="assets/js/productos-data.js"></script>
     <script>
-        // ============ DATOS DE PRODUCTOS ============
-        // Cada producto declara sus categorías en `categorias: [...]` (puede ser más de una).
-        // Ejemplo: categorias: ['hombre', 'belleza'] → aparece en ambas secciones.
-        // Imágenes: sube el archivo a assets/images/products/ y escribe SOLO su nombre:
-        //   imagenes: ['lampara_3d_luna.jpeg', 'lampara_3d_luna_info.jpeg']
-        // (la primera es portada; si no hay imagen se muestra `emoji`).
-        const productos = [
-            { id: 1, categorias: ['hogar'], nombre: 'Juego de Platos 12 piezas', emoji: '🍽️', precio: 24.99, stock: true, imagenes: ['🍽️', '🥘', '🍴'], descripcion: 'Juego completo de platos de cerámica de alta calidad. Incluye 12 piezas: 4 platos grandes, 4 medianos y 4 pequeños. Perfectos para comidas familiares.' },
-            { id: 2, categorias: ['hogar'], nombre: 'Olla de Presión 6L', emoji: '🍲', precio: 34.99, stock: true, imagenes: ['🍲', '🔥', '⏱️'], descripcion: 'Olla de presión con capacidad de 6 litros. Material de aluminio duradero. Incluye válvulas de seguridad. Ideal para cocinar rápido y ahorrar energía.' },
-            { id: 3, categorias: ['hogar'], nombre: 'Set de Cucharas de Medida', emoji: '🥄', precio: 8.99, stock: true, imagenes: ['🥄', '📏', '🎯'], descripcion: 'Set de 4 cucharas medidoras en acero inoxidable. Perfectas para repostería y cocina. Incluye marcas en ml y onzas fluidas.' },
-            { id: 4, categorias: ['hogar'], nombre: 'Tabla de Cortar Bambú', emoji: '🪵', precio: 15.99, stock: true },
-            { id: 5, categorias: ['hogar'], nombre: 'Jarras de Vidrio 1L (3 piezas)', emoji: '🥛', precio: 18.99, stock: true },
-            { id: 6, categorias: ['hogar'], nombre: 'Escurridor de Frutas', emoji: '🫒', precio: 12.99, stock: true },
-            { id: 47, categorias: ['hogar'], nombre: 'Lámpara 3D Mundo', emoji: '💡', precio: 24.99, stock: true, imagenes: ['lampara_3d_mundo.jpeg', 'lampara_3d_luna.jpeg'], descripcion: 'Lámpara decorativa 3D con silueta de mundo. Iluminación suave y ambiental para escritorio o mesita. Diseño moderno que funciona como lámpara y como pieza de decoración.' },
-            // { id: 48, categorias: ['hogar'], nombre: 'Lámpara 3D Luna', emoji: '🌙', precio: 19.99, stock: true, imagenes: ['lampara_3d_luna.jpeg'], descripcion: 'Lámpara con forma de luna en 3D. Luz cálida regulable, ideal para dormitorios y lectura. Base estable y diseño minimalista.' },
-            { id: 7, categorias: ['ninos'], nombre: 'Set de Construcción 100 bloques', emoji: '🧱', precio: 22.99, stock: true },
-            { id: 8, categorias: ['ninos'], nombre: 'Puzzle Infantil 48 piezas', emoji: '🧩', precio: 14.99, stock: true },
-            { id: 9, categorias: ['ninos'], nombre: 'Patineta para Niños', emoji: '🛹', precio: 39.99, stock: true },
-            { id: 10, categorias: ['ninos'], nombre: 'Mochilas Escolares', emoji: '🎒', precio: 19.99, stock: true },
-            { id: 11, categorias: ['ninos'], nombre: 'Colores Pastel 24 colores', emoji: '✏️', precio: 9.99, stock: true },
-            { id: 12, categorias: ['mujer'], nombre: 'Pijama Algodón Rosa', emoji: '👕', precio: 28.99, stock: true },
-            { id: 13, categorias: ['mujer'], nombre: 'Pijama Térmico Gris', emoji: '👖', precio: 32.99, stock: true },
-            { id: 14, categorias: ['mujer'], nombre: 'Conjunto Lencería Elegante', emoji: '💗', precio: 24.99, stock: true },
-            { id: 15, categorias: ['mujer'], nombre: 'Bata de Baño Suave', emoji: '🧴', precio: 21.99, stock: true },
-            { id: 16, categorias: ['mujer'], nombre: 'Pijama Estampado Flores', emoji: '🌸', precio: 26.99, stock: true },
-            { id: 55, categorias: ['hombre'], nombre: 'Camiseta Básica Algodón', emoji: '👕', precio: 12.99, stock: true },
-            { id: 56, categorias: ['hombre'], nombre: 'Pantalón Jeans Clásico', emoji: '👖', precio: 29.99, stock: true },
-            { id: 57, categorias: ['hombre'], nombre: 'Sudadera con Capucha', emoji: '🧥', precio: 27.99, stock: true },
-            { id: 58, categorias: ['hombre'], nombre: 'Camisa Formal Manga Larga', emoji: '👔', precio: 24.99, stock: true },
-            { id: 59, categorias: ['hombre'], nombre: 'Gorra Deportiva Ajustable', emoji: '🧢', precio: 11.99, stock: true },
-            { id: 17, categorias: ['tecnologia'], nombre: 'Cable USB-C 2m', emoji: '🔌', precio: 9.99, stock: true },
-            { id: 18, categorias: ['tecnologia'], nombre: 'Protector Pantalla Vidrio Templado', emoji: '📱', precio: 7.99, stock: true },
-            { id: 19, categorias: ['tecnologia'], nombre: 'Power Bank 20000mAh', emoji: '🔋', precio: 29.99, stock: true },
-            { id: 20, categorias: ['tecnologia'], nombre: 'Auriculares Bluetooth', emoji: '🎧', precio: 34.99, stock: true },
-            { id: 21, categorias: ['tecnologia'], nombre: 'Funda Protectora para Celular', emoji: '🛡️', precio: 12.99, stock: true },
-            { id: 22, categorias: ['electrodomesticos'], nombre: 'Licuadora 5 Velocidades', emoji: '🍹', precio: 44.99, stock: true },
-            { id: 23, categorias: ['electrodomesticos'], nombre: 'Tostador 2 ranuras', emoji: '🍞', precio: 36.99, stock: true },
-            { id: 24, categorias: ['electrodomesticos'], nombre: 'Ventilador de Torre 80W', emoji: '🌀', precio: 52.99, stock: true },
-            { id: 25, categorias: ['electrodomesticos'], nombre: 'Microondas Compacto', emoji: '📻', precio: 89.99, stock: true },
-            { id: 26, categorias: ['electrodomesticos'], nombre: 'Cafetera Automática', emoji: '☕', precio: 42.99, stock: true },
-            { id: 49, categorias: ['electrodomesticos', 'hogar'], nombre: 'Waflera Eléctrica', emoji: '🧇', precio: 27.99, stock: true, imagenes: ['waflera.jpeg', 'waflera_info.jpeg'], descripcion: 'Waflera eléctrica con placas antiadherentes y control de temperatura. Prepara waffles crujientes en minutos. Compacta y fácil de limpiar.' },
-            { id: 27, categorias: ['mascotas'], nombre: 'Collar Ajustable Perro', emoji: '🐕', precio: 11.99, stock: true },
-            { id: 28, categorias: ['mascotas'], nombre: 'Juguete Cuerda Mascotas', emoji: '🧸', precio: 8.99, stock: true },
-            { id: 29, categorias: ['mascotas'], nombre: 'Comedero Gato Cerámica', emoji: '🐈', precio: 14.99, stock: true },
-            { id: 30, categorias: ['mascotas'], nombre: 'Cama Felpa para Perro', emoji: '🛏️', precio: 28.99, stock: true },
-            { id: 31, categorias: ['mascotas'], nombre: 'Bolsa Viaje Mascota', emoji: '🎒', precio: 19.99, stock: true },
-            { id: 32, categorias: ['belleza'], nombre: 'Mascarilla Facial Carbón', emoji: '✨', precio: 16.99, stock: true },
-            { id: 33, categorias: ['belleza'], nombre: 'Set de Brochas Maquillaje 10pz', emoji: '🪮', precio: 21.99, stock: true },
-            { id: 34, categorias: ['belleza'], nombre: 'Crema Hidratante 200ml', emoji: '🧴', precio: 19.99, stock: true },
-            { id: 35, categorias: ['belleza'], nombre: 'Sérum Vitamina C', emoji: '💧', precio: 24.99, stock: true },
-            { id: 36, categorias: ['belleza'], nombre: 'Espejo LED Maquillaje', emoji: '🪞', precio: 32.99, stock: true },
-            { id: 51, categorias: ['belleza'], nombre: 'Lámpara de Uñas Gel', emoji: '💅', precio: 22.99, stock: true, imagenes: ['lampara_unias_gel.jpeg'], descripcion: 'Lámpara UV/LED para esmalte de uñas en gel. Curado rápido y uniforme, apagado automático. Ideal para manicura en casa.' },
-            { id: 52, categorias: ['belleza'], nombre: 'Masajeador Eléctrico', emoji: '💆', precio: 15.99, stock: true, imagenes: ['masajeador_electrico.jpeg', 'masajeador_electrico_info.jpeg'], descripcion: 'Masajeador eléctrico portátil con múltiples modos de vibración. Alivia tensión muscular en cuello, espalda y hombros. Recargable por USB.' },
-            { id: 53, categorias: ['belleza'], nombre: 'Masajeador Mariposa', emoji: '🦋', precio: 12.99, stock: true, imagenes: ['masajeador_mariposa.jpeg', 'masajeador_mariposa_info.jpeg'], descripcion: 'Masajeador con forma de mariposa, suave y silencioso. Perfecto para manos, pies y puntos de tensión. Diseño ergonómico y ligero.' },
-            { id: 54, categorias: ['belleza', 'mujer'], nombre: 'Rasuradora Eléctrica', emoji: '🪒', precio: 18.99, stock: true, imagenes: ['rasuradora_electrica.jpeg', 'rasuradora_electrica_info.jpeg', 'rasuradora_electrica_detalle.jpeg'], descripcion: 'Rasuradora eléctrica recargable con cabezal flotante y protección para la piel. Uso húmedo o seco, incluye cepillo de limpieza. Acabado sin irritaciones.' },
-            { id: 37, categorias: ['herramientas'], nombre: 'Kit Destornilladores 12 piezas', emoji: '🔧', precio: 17.99, stock: true },
-            { id: 38, categorias: ['herramientas'], nombre: 'Martillo Acero 500g', emoji: '🔨', precio: 14.99, stock: true },
-            { id: 39, categorias: ['herramientas'], nombre: 'Taladro Manual', emoji: '⚙️', precio: 28.99, stock: true },
-            { id: 40, categorias: ['herramientas'], nombre: 'Cinta Métrica 5m', emoji: '📏', precio: 9.99, stock: true },
-            { id: 41, categorias: ['herramientas'], nombre: 'Nivel Burbuja 60cm', emoji: '📐', precio: 12.99, stock: true },
-            { id: 50, categorias: ['herramientas', 'hogar'], nombre: 'Caja de Herramientas', emoji: '🧰', precio: 49.99, stock: true, imagenes: ['caja_herramientas.jpeg', 'caja_herramientas_piezas.jpeg'], descripcion: 'Caja de herramientas con piezas esenciales para el hogar: martillo, destornilladores, alicates, cinta métrica y más. Maletín organizador con compartimentos.' },
-            { id: 42, categorias: ['bebes'], nombre: 'Chupete Silicona Suave', emoji: '👶', precio: 7.99, stock: true },
-            { id: 43, categorias: ['bebes'], nombre: 'Toallas Bebé Suaves', emoji: '🧼', precio: 21.99, stock: true },
-            { id: 44, categorias: ['bebes'], nombre: 'Set Mamadera Vidrio 3piezas', emoji: '🍼', precio: 18.99, stock: true },
-            { id: 45, categorias: ['bebes'], nombre: 'Pañales Desechables 40 unidades', emoji: '👼', precio: 23.99, stock: true },
-            { id: 46, categorias: ['bebes'], nombre: 'Mudador Portátil', emoji: '📦', precio: 15.99, stock: true },
-        ];
+        // Los productos viven en assets/js/productos-data.js
+        // (generado desde data/catalogo.json — ver scripts/catalogo.py)
 
         const categorias = {
             'hombre': 'Hombre',
