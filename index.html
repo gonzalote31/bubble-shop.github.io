@@ -62,7 +62,7 @@
             --azul-primario: #0369A1;
             --azul-claro: #3B82F6;
 
-            --header-height: 77px;
+            --header-height: 60px;
             --category-nav-height: 66px;
 
             /* Layout */
@@ -224,7 +224,7 @@
         /* ============ HEADER ============ */
         header {
             background: var(--blanco);
-            padding: var(--space-lg) var(--space-lg);
+            padding: var(--space-md) var(--space-lg);
             min-height: var(--header-height);
             display: flex;
             justify-content: space-between;
@@ -322,11 +322,16 @@
             display: flex;
             flex: 0 0 max-content;
             align-items: center;
-            justify-content: space-around;
-            gap: clamp(20px, 3vw, 48px);
-            min-width: 100vw;
-            padding: 0 var(--space-xl);
+            gap: 24px;
+            padding-right: 24px;
             box-sizing: border-box;
+        }
+
+        @media (min-width: 1024px) {
+            .info-bar-grupo {
+                gap: 64px;
+                padding-right: 64px;
+            }
         }
 
         .info-bar-grupo>span {
@@ -365,6 +370,10 @@
                 opacity: 1 !important;
                 transform: none !important;
                 filter: none !important;
+            }
+
+            .carrito-item.eliminando {
+                animation-duration: 1ms !important;
             }
 
             * {
@@ -491,7 +500,7 @@
         /* ============ GRID DE PRODUCTOS ============ */
         .productos-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            grid-template-columns: repeat(4, minmax(0, 1fr));
             gap: var(--space-lg);
             margin-bottom: var(--space-4xl);
         }
@@ -523,6 +532,42 @@
             padding: var(--space-2xl) 0 var(--space-3xl);
             border-bottom: 1px solid rgba(3, 105, 161, 0.14);
             margin-bottom: var(--space-xl);
+        }
+
+        .categoria-seccion-navidad {
+            position: relative;
+            padding: var(--space-xl);
+            border: 1px solid rgba(251, 191, 36, 0.42);
+            border-top: 5px solid #166534;
+            border-radius: var(--radius-lg);
+            background: #9D0030;
+        }
+
+        .categoria-seccion-navidad::before {
+            content: "";
+            position: absolute;
+            top: 5px;
+            left: var(--space-xl);
+            right: var(--space-xl);
+            height: 9px;
+            background:
+                radial-gradient(circle, #15803D 0 3px, transparent 3.5px) 0 0 / 36px 9px repeat-x,
+                radial-gradient(circle, #FBBF24 0 3px, transparent 3.5px) 18px 0 / 36px 9px repeat-x;
+            pointer-events: none;
+        }
+
+        .categoria-seccion-navidad .categoria-titulo::before {
+            background: linear-gradient(180deg, #FBBF24 0%, #15803D 100%);
+        }
+
+        .categoria-seccion-navidad .categoria-titulo,
+        .categoria-seccion-navidad .categoria-controles,
+        .categoria-seccion-navidad .categoria-controles-etiqueta {
+            color: #FFFFFF;
+        }
+
+        .categoria-seccion-navidad .categoria-cabecera {
+            padding-top: var(--space-sm);
         }
 
         .categoria-seccion:last-child {
@@ -820,48 +865,37 @@
             justify-content: space-between;
         }
 
+        .producto > .producto-info {
+            padding: 4px var(--space-lg);
+        }
+
         .producto-nombre {
             font-size: 14px;
             font-weight: 700;
             color: var(--navy);
-            margin-bottom: 6px;
+            margin-bottom: 4px;
             line-height: 1.4;
             min-height: 28px;
             letter-spacing: -0.2px;
         }
 
         .producto-descripcion-corta {
-            min-height: 34px;
-            margin: 0 0 var(--space-md);
+            min-height: 30px;
+            margin: 0 0 4px;
             color: #64748B;
             font-size: 12px;
-            line-height: 1.42;
+            line-height: 1.35;
             display: -webkit-box;
             -webkit-box-orient: vertical;
             -webkit-line-clamp: 2;
             overflow: hidden;
         }
 
-        .producto-envio-corto {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            margin: -6px 0 var(--space-md);
-            color: #16A34A;
-            font-size: 12px;
-            font-weight: 700;
-            line-height: 1.35;
-        }
-
-        .producto-envio-corto i {
-            font-size: 13px;
-        }
-
         .producto-precio {
             font-size: 17px;
-            color: var(--color-accent);
+            color: #DC2626;
             font-weight: 800;
-            margin-bottom: var(--space-lg);
+            margin-bottom: 8px;
             letter-spacing: -0.3px;
         }
 
@@ -922,6 +956,72 @@
         .producto-acciones .producto-agregar {
             flex: 1;
             width: auto;
+        }
+
+        @media (max-width: 640px) {
+            .producto-ver-detalles {
+                display: none;
+            }
+
+            .producto > .producto-info {
+                display: grid;
+                grid-template-columns: minmax(0, 1fr) auto auto minmax(0, 1fr);
+                grid-template-areas:
+                    "nombre nombre nombre nombre"
+                    "descripcion descripcion descripcion descripcion"
+                    ". precio acciones .";
+                align-items: center;
+                gap: 4px 8px;
+                padding: 4px 10px;
+            }
+
+            .producto > .producto-info .producto-nombre {
+                grid-area: nombre;
+                margin-bottom: 0;
+            }
+
+            .producto > .producto-info .producto-descripcion-corta {
+                grid-area: descripcion;
+                margin-bottom: 0;
+            }
+
+            .producto > .producto-info .producto-precio {
+                grid-area: precio;
+                margin-bottom: 0;
+                font-size: 16px;
+            }
+
+            .producto > .producto-info .producto-acciones {
+                grid-area: acciones;
+                justify-self: start;
+                width: max-content;
+                justify-content: flex-start;
+                margin-top: 0;
+            }
+
+            .producto > .producto-info .producto-agregar-rapido {
+                width: 40px;
+                min-width: 40px;
+                height: 40px;
+            }
+
+            .producto-sin-stock > .producto-info {
+                grid-template-columns: minmax(0, 1fr);
+                grid-template-areas:
+                    "nombre"
+                    "descripcion"
+                    "precio"
+                    "acciones";
+            }
+
+            .producto-sin-stock > .producto-info .producto-precio {
+                justify-self: start;
+            }
+
+            .producto-sin-stock > .producto-info .producto-acciones {
+                justify-self: stretch;
+                width: auto;
+            }
         }
 
         .producto-agregar-rapido {
@@ -1096,7 +1196,7 @@
         }
 
         .carrito-header {
-            padding: var(--space-xl);
+            padding: 10px;
             background: var(--navy);
             color: var(--blanco);
             display: flex;
@@ -1106,7 +1206,7 @@
 
         .carrito-header h2 {
             font-size: 20px;
-            font-weight: 700;
+            font-weight: 600;
             letter-spacing: -0.5px;
         }
 
@@ -1165,6 +1265,23 @@
             animation: revealUp 0.4s var(--ease-spring) backwards;
         }
 
+        .carrito-item.eliminando {
+            pointer-events: none;
+            animation: carritoItemSalida 360ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        @keyframes carritoItemSalida {
+            from {
+                opacity: 1;
+                transform: translateX(0) scale(1);
+            }
+
+            to {
+                opacity: 0;
+                transform: translateX(14px) scale(0.97);
+            }
+        }
+
         .carrito-item:nth-child(1) {
             animation-delay: 0.1s;
         }
@@ -1193,6 +1310,7 @@
 
         .carrito-item-info {
             flex: 1;
+            min-width: 0;
         }
 
         .carrito-item-nombre {
@@ -1201,6 +1319,43 @@
             color: var(--navy);
             margin-bottom: var(--space-sm);
             letter-spacing: -0.3px;
+        }
+
+        .carrito-item-detalles {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+        }
+
+        .carrito-item-miniatura {
+            width: 56px;
+            height: 56px;
+            flex: 0 0 56px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border-radius: 6px;
+            background: var(--blanco);
+        }
+
+        .carrito-item-miniatura img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .carrito-item-miniatura span {
+            font-size: 30px;
+        }
+
+        .carrito-item-detalles-principales {
+            display: flex;
+            flex: 1;
+            min-width: 0;
+            align-items: center;
+            justify-content: space-between;
+            gap: var(--space-sm);
         }
 
         .carrito-item-cantidad {
@@ -1250,6 +1405,12 @@
         .carrito-item-cantidad-controls:hover {
             border-color: var(--cian);
             box-shadow: 0 2px 8px rgba(26, 31, 58, 0.1);
+        }
+
+        @media (max-width: 420px) {
+            .carrito-item-detalles-principales {
+                flex-basis: 100%;
+            }
         }
 
         .btn-cantidad {
@@ -2298,6 +2459,80 @@
             box-shadow: 0 20px 60px rgba(26, 31, 58, 0.25);
         }
 
+        .confirmacion-limpiar-modal {
+            z-index: 3600;
+        }
+
+        .confirmacion-limpiar-contenido {
+            max-width: 420px;
+            text-align: center;
+        }
+
+        .confirmacion-limpiar-icono {
+            width: 56px;
+            height: 56px;
+            margin: 0 auto var(--space-lg);
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            background: rgba(220, 38, 38, 0.1);
+            color: var(--color-destructive);
+            font-size: 23px;
+        }
+
+        .confirmacion-limpiar-contenido h2 {
+            margin-bottom: var(--space-sm);
+            color: var(--navy);
+            font-size: 22px;
+        }
+
+        .confirmacion-limpiar-contenido p {
+            margin-bottom: var(--space-xl);
+            color: var(--color-muted-foreground);
+            font-size: 14px;
+        }
+
+        .confirmacion-limpiar-acciones {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-md);
+        }
+
+        .confirmacion-limpiar-acciones button {
+            min-height: 44px;
+            padding: var(--space-md) var(--space-lg);
+            border: 0;
+            border-radius: 8px;
+            font: inherit;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform var(--dur-fast) ease, background var(--dur-fast) ease;
+        }
+
+        .confirmacion-limpiar-cancelar {
+            background: var(--gris);
+            color: var(--navy);
+        }
+
+        .confirmacion-limpiar-cancelar:hover {
+            background: var(--gris-oscuro);
+        }
+
+        .confirmacion-limpiar-confirmar {
+            background: var(--color-destructive);
+            color: var(--color-on-primary);
+        }
+
+        .confirmacion-limpiar-confirmar:hover {
+            background: #B91C1C;
+            transform: translateY(-2px);
+        }
+
+        .confirmacion-limpiar-acciones button:focus-visible {
+            outline: 3px solid var(--color-ring);
+            outline-offset: 2px;
+        }
+
         @keyframes modalEnter {
             from {
                 opacity: 0;
@@ -2640,13 +2875,6 @@
             z-index: 20;
         }
 
-        .galeria-grid {
-            display: grid;
-            grid-template-columns: 1.05fr 1fr;
-            gap: var(--space-3xl);
-            align-items: start;
-        }
-
         .galeria-imagenes {
             display: flex;
             flex-direction: column;
@@ -2657,6 +2885,7 @@
         .galeria-principal {
             width: 100%;
             height: 380px;
+            padding: var(--space-md);
             background: var(--azul-suave);
             border: 1px solid var(--color-border);
             border-radius: 14px;
@@ -2812,8 +3041,8 @@
             align-items: center;
             justify-content: space-between;
             flex-wrap: wrap;
-            gap: var(--space-md);
-            padding: var(--space-lg);
+            gap: var(--space-sm) var(--space-md);
+            padding: var(--space-md) var(--space-lg);
             background: var(--azul-suave);
             border-radius: 10px;
         }
@@ -2821,7 +3050,7 @@
         .producto-precio {
             display: flex;
             flex-direction: column;
-            gap: var(--space-sm);
+            gap: var(--space-xs);
         }
 
         .producto-precio label {
@@ -2835,7 +3064,7 @@
         .producto-precio-monto {
             font-size: 28px;
             font-weight: 800;
-            color: var(--navy);
+            color: #DC2626;
         }
 
         .producto-precio-monto sup {
@@ -2977,11 +3206,6 @@
         }
 
         @media (max-width: 768px) {
-            .galeria-grid {
-                grid-template-columns: 1fr;
-                gap: var(--space-xl);
-            }
-
             .galeria-principal {
                 height: 300px;
             }
@@ -3025,8 +3249,12 @@
 
         /* ============ SELECTOR PROVINCIA ============ */
         .provincia-selector {
-            padding: var(--space-lg);
-            background: linear-gradient(135deg, var(--azul-suave) 0%, rgba(232, 244, 248, 0.5) 100%);
+            display: grid;
+            grid-template-columns: auto minmax(0, 1fr);
+            align-items: center;
+            gap: var(--space-md);
+            padding: 8px 12px;
+            background: var(--azul-suave);
             border-radius: 8px;
             margin: 0 var(--space-lg);
             border: 1px solid rgba(26, 31, 58, 0.08);
@@ -3035,8 +3263,8 @@
         .provincia-selector label {
             display: block;
             font-weight: 700;
-            font-size: 13px;
-            margin-bottom: var(--space-md);
+            font-size: 14px;
+            margin-bottom: 0;
             color: var(--navy);
             letter-spacing: -0.2px;
         }
@@ -3044,6 +3272,24 @@
         .provincia-controles {
             display: flex;
             gap: 8px;
+            min-width: 0;
+            align-items: center;
+        }
+
+        .provincia-envio-nota {
+            display: flex;
+            flex: 0 1 112px;
+            min-width: 0;
+            align-items: center;
+            gap: 5px;
+            color: #15803D;
+            font-size: 11px;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .provincia-envio-nota i {
+            flex: 0 0 auto;
         }
 
         .provincia-selector input {
@@ -3052,12 +3298,18 @@
             padding: var(--space-md) var(--space-lg);
             border: 1.5px solid rgba(3, 105, 161, 0.35);
             border-radius: 10px;
-            font-size: 13px;
+            font-family: inherit;
+            font-size: 14px;
             color: var(--navy);
             background: var(--blanco);
             font-weight: 600;
             transition: all 0.25s var(--ease-spring);
             letter-spacing: -0.2px;
+        }
+
+        .provincia-selector input::placeholder {
+            font-family: inherit;
+            font-size: inherit;
         }
 
         .provincia-selector input:hover {
@@ -3073,95 +3325,17 @@
             transform: translateY(-2px);
         }
 
-        .provincia-desplegar {
-            width: 44px;
-            min-width: 44px;
-            border: 1.5px solid rgba(3, 105, 161, 0.35);
-            border-radius: 10px;
-            background: var(--blanco);
-            color: var(--navy);
-            cursor: pointer;
-            font-size: 14px;
-            transition: all 0.25s var(--ease-spring);
-        }
-
-        .provincia-desplegar:hover,
-        .provincia-desplegar:focus {
-            border-color: var(--cian);
-            background: var(--azul-suave);
-            outline: none;
-            box-shadow: 0 0 0 4px rgba(6, 182, 212, 0.15);
-        }
-
-        .provincia-sugerencias {
-            display: none;
-            position: relative;
-            max-height: 180px;
-            overflow-y: auto;
-            margin-top: 6px;
-            border: 1px solid rgba(3, 105, 161, 0.18);
-            border-radius: 10px;
-            background: var(--blanco);
-            box-shadow: 0 8px 18px rgba(26, 31, 58, 0.12);
-        }
-
-        .provincia-sugerencias.mostrar {
-            display: block;
-        }
-
-        .provincia-sugerencia {
-            width: 100%;
-            padding: 10px 12px;
-            border: 0;
-            border-bottom: 1px solid rgba(26, 31, 58, 0.06);
-            background: transparent;
-            color: var(--navy);
-            text-align: left;
-            cursor: pointer;
-            font: inherit;
-            font-weight: 600;
-        }
-
-        .provincia-sugerencia:last-child {
-            border-bottom: 0;
-        }
-
-        .provincia-sugerencia:hover,
-        .provincia-sugerencia:focus {
-            background: var(--azul-suave);
-            outline: none;
-        }
-
-        /* ============ INDICADOR ENVÍO ============ */
-        .envio-indicador {
-            padding: var(--space-lg);
-            margin: var(--space-lg) var(--space-lg) var(--space-xl);
-            background: var(--cian);
-            border-radius: 8px;
-            text-align: center;
-            font-weight: 700;
-            font-size: 13px;
-            color: var(--navy);
-            display: none;
-            letter-spacing: -0.3px;
-            box-shadow: 0 4px 12px rgba(6, 182, 212, 0.25);
-            transition: all 0.3s cubic-bezier(0.2, 0.3, 0.25, 0.46);
-        }
-
-        .envio-indicador.mostrar {
-            display: block;
-            animation: slideDown 0.4s cubic-bezier(0.2, 0.3, 0.25, 0.46);
-        }
-
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
+        @media (max-width: 480px) {
+            .provincia-controles {
+                flex-wrap: wrap;
             }
 
-            to {
-                opacity: 1;
-                transform: translateY(0);
+            .provincia-selector input {
+                flex: 1 1 100%;
+            }
+
+            .provincia-envio-nota {
+                flex: 1 1 100%;
             }
         }
 
@@ -3254,16 +3428,10 @@
 
         
 
-        .envio-gratis {
-            background: #27AE60 !important;
-            color: var(--blanco) !important;
-            box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3) !important;
-        }
-
         /* ============ RESUMEN CARRITO ============ */
         .carrito-resumen {
             padding: var(--space-lg);
-            border-top: 2px solid var(--gris);
+            border-top: 4px solid var(--gris);
             background: var(--gris);
         }
 
@@ -3280,14 +3448,14 @@
             font-size: 16px;
             font-weight: 800;
             color: var(--cian);
-            border-top: 2px solid var(--blanco);
+            border-top: 4px solid var(--blanco);
             padding-top: var(--space-lg);
             margin-top: var(--space-lg);
             letter-spacing: -0.3px;
         }
 
         .resumen-fila label {
-            color: #666;
+            color: var(--navy);
             font-weight: 600;
         }
 
@@ -3297,7 +3465,7 @@
         }
 
         .resumen-fila.total span {
-            color: var(--cian);
+            color: var(--navy);
         }
 
         /* ============ BOTONES CARRITO ============ */
@@ -3328,13 +3496,14 @@
         }
 
         .btn-limpiar {
-            background: var(--cian);
-            color: var(--navy);
+            background: var(--navy);
+            color: var(--blanco);
             transition: all 0.25s cubic-bezier(0.2, 0.3, 0.25, 0.46);
         }
 
         .btn-limpiar:hover {
-            background: #FF9500;
+            background: var(--color-destructive);
+            color: var(--blanco);
             transform: translateY(-2px);
             box-shadow: var(--sombra-md);
         }
@@ -3787,6 +3956,18 @@
 
 <body>
 
+    <!-- ============ BARRA INFORMATIVA ============ -->
+    <div class="info-bar">
+        <div class="info-bar-track">
+            <div class="info-bar-grupo">
+                <span><i class="fas fa-truck" aria-hidden="true"></i> Envío <strong>GRATIS a todo el Ecuador</strong></span>
+                <span><i class="fas fa-comment-dots" aria-hidden="true"></i> Compra fácil por
+                    <strong>WhatsApp</strong></span>
+                <span><i class="fas fa-box" aria-hidden="true"></i> Recibe tu pedido de <strong>24h a 48h</strong></span>
+            </div>
+        </div>
+    </div>
+
     <!-- ============ HEADER ============ -->
     <header>
         <div class="logo">Bubble<span>Shop</span></div>
@@ -3796,22 +3977,6 @@
             <span class="carrito-contador" id="cartCounter">0</span>
         </button>
     </header>
-
-    <!-- ============ BARRA INFORMATIVA ============ -->
-    <div class="info-bar">
-        <div class="info-bar-track">
-            <div class="info-bar-grupo">
-                <span><i class="fas fa-truck" aria-hidden="true"></i> Envío <strong>GRATIS en compras
-                        &gt;$25</strong></span>
-                <span><i class="fas fa-comment-dots" aria-hidden="true"></i> Compra fácil por
-                    <strong>WhatsApp</strong></span>
-            </div>
-            <div class="info-bar-grupo" aria-hidden="true">
-                <span><i class="fas fa-truck"></i> Envío <strong>GRATIS a todo el Ecuador</strong></span>
-                <span><i class="fas fa-comment-dots"></i> Compra fácil por <strong>WhatsApp</strong></span>
-            </div>
-        </div>
-    </div>
 
         <!-- ============ BANNER HERO ============ -->
         <section class="banner-hero" aria-label="Presentación de Bubble Shop">
@@ -3950,27 +4115,14 @@
                     <div class="provincia-controles">
                         <input id="provinciaSelect" type="text"
                             placeholder="Escribe aquí tu provincia" autocomplete="off">
-                        <button id="provinciaDesplegar" class="provincia-desplegar" type="button"
-                            aria-label="Mostrar todas las provincias" aria-expanded="false"
-                            title="Mostrar provincias">
-                            <i class="fas fa-chevron-down" aria-hidden="true"></i>
-                        </button>
+                        <span class="provincia-envio-nota">
+                            <i class="fas fa-truck-fast" aria-hidden="true"></i>
+                            Envío gratis a todo el país
+                        </span>
                     </div>
-                    <div id="provinciaSugerencias" class="provincia-sugerencias" role="listbox"></div>
                 </div>
-
-                <!-- Indicador Envío -->
-                <div class="envio-indicador" id="envioIndicador"></div>
 
                 <!-- Resumen -->
-                <div class="resumen-fila">
-                    <label>Subtotal:</label>
-                    <span id="subtotal">$0.00</span>
-                </div>
-                <div class="resumen-fila">
-                    <label>Envío:</label>
-                    <span id="envio">$0.00</span>
-                </div>
                 <div class="resumen-fila total">
                     <label>TOTAL:</label>
                     <span id="total">$0.00</span>
@@ -3978,9 +4130,28 @@
             </div>
 
             <div class="carrito-botones">
-                <button class="btn-limpiar" id="limpiarCarrito">Limpiar</button>
+                <button class="btn-limpiar" id="limpiarCarrito">Vaciar carrito</button>
                 <button class="btn-whatsapp" id="enviarWhatsapp"><i class="fab fa-whatsapp"
                         aria-hidden="true"></i> Comprar</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal confirmacion-limpiar-modal" id="confirmarLimpiarModal">
+        <div class="modal-contenido confirmacion-limpiar-contenido" role="dialog" aria-modal="true"
+            aria-labelledby="confirmarLimpiarTitulo" aria-describedby="confirmarLimpiarDescripcion">
+            <div class="confirmacion-limpiar-icono" aria-hidden="true">
+                <i class="fas fa-trash-can"></i>
+            </div>
+            <h2 id="confirmarLimpiarTitulo">¿Vaciar el carrito?</h2>
+            <p id="confirmarLimpiarDescripcion">Se eliminarán todos los productos de tu carrito.</p>
+            <div class="confirmacion-limpiar-acciones">
+                <button type="button" class="confirmacion-limpiar-cancelar" id="cancelarLimpiarCarrito">
+                    Cancelar
+                </button>
+                <button type="button" class="confirmacion-limpiar-confirmar" id="confirmarLimpiarCarrito">
+                    Sí, vaciar
+                </button>
             </div>
         </div>
     </div>
@@ -4066,9 +4237,7 @@
                     <span class="faq-icon"><i class="fas fa-plus-circle"></i></span> ¿Cuál es el costo del envío?
                 </div>
                 <div class="faq-respuesta">
-                    En Riobamba: envío gratis en compras mayores a $25, caso contrario $2.50. En otras provincias: envío
-                    gratis en compras mayores a $25, caso contrario $5.00. El costo se suma automáticamente en el
-                    carrito según tu selección.
+                    Envío GRATIS a todo el Ecuador.
                 </div>
             </div>
 
@@ -4221,45 +4390,43 @@
         <div class="modal-contenido modal-galeria-contenido">
             <button class="modal-cerrar" onclick="cerrarModal('galeriaModal')" aria-label="Cerrar"><span class="modal-cerrar-icono"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false"><path d="M4.2 4.2l7.6 7.6M11.8 4.2l-7.6 7.6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></span></button>
 
-            <div class="galeria-grid">
-                <div class="galeria-imagenes sin-multi">
-                    <div class="galeria-principal" id="galeriaPrincipal">🍽️</div>
-                    <button type="button" class="galeria-nav galeria-nav-prev" aria-label="Imagen anterior" onclick="navegarGaleria(-1)">‹</button>
-                    <button type="button" class="galeria-nav galeria-nav-next" aria-label="Imagen siguiente" onclick="navegarGaleria(1)">›</button>
-                    <div class="galeria-contador" id="galeriaContador">1 / 1</div>
-                    <div class="galeria-thumbnails" id="galeriaThumbnails">
-                        <!-- Se genera dinámicamente con JS -->
+            <div class="galeria-imagenes sin-multi">
+                <div class="galeria-principal" id="galeriaPrincipal">🍽️</div>
+                <button type="button" class="galeria-nav galeria-nav-prev" aria-label="Imagen anterior" onclick="navegarGaleria(-1)">‹</button>
+                <button type="button" class="galeria-nav galeria-nav-next" aria-label="Imagen siguiente" onclick="navegarGaleria(1)">›</button>
+                <div class="galeria-contador" id="galeriaContador">1 / 1</div>
+                <div class="galeria-thumbnails" id="galeriaThumbnails">
+                    <!-- Se genera dinámicamente con JS -->
+                </div>
+            </div>
+
+            <div class="producto-info">
+                <div class="producto-categorias" id="galeriaProductoCategorias"></div>
+                <h2 id="galeriaProductoNombre">Nombre del Producto</h2>
+                <div class="producto-stock" id="galeriaProductoStock"><span class="stock-punto"></span> En stock</div>
+
+                <div class="producto-descripcion" id="galeriaProductoDescripcion">
+                    Descripción del producto
+                </div>
+
+                <div class="producto-precio-section">
+                    <div class="producto-precio">
+                        <label>Precio</label>
+                        <div class="producto-precio-monto">
+                            <sup>$</sup><span id="galeriaProductoPrecio">0.00</span>
+                        </div>
+                    </div>
+                    <div class="cantidad-selector" role="group" aria-label="Cantidad">
+                        <button type="button" class="cantidad-btn" aria-label="Restar" onclick="cambiarCantidadGaleria(-1)">−</button>
+                        <span class="cantidad-valor" id="galeriaCantidad">1</span>
+                        <button type="button" class="cantidad-btn" aria-label="Sumar" onclick="cambiarCantidadGaleria(1)">+</button>
                     </div>
                 </div>
 
-                <div class="producto-info">
-                    <div class="producto-categorias" id="galeriaProductoCategorias"></div>
-                    <h2 id="galeriaProductoNombre">Nombre del Producto</h2>
-                    <div class="producto-stock" id="galeriaProductoStock"><span class="stock-punto"></span> En stock</div>
-
-                    <div class="producto-descripcion" id="galeriaProductoDescripcion">
-                        Descripción del producto
-                    </div>
-
-                    <div class="producto-precio-section">
-                        <div class="producto-precio">
-                            <label>Precio</label>
-                            <div class="producto-precio-monto">
-                                <sup>$</sup><span id="galeriaProductoPrecio">0.00</span>
-                            </div>
-                        </div>
-                        <div class="cantidad-selector" role="group" aria-label="Cantidad">
-                            <button type="button" class="cantidad-btn" aria-label="Restar" onclick="cambiarCantidadGaleria(-1)">−</button>
-                            <span class="cantidad-valor" id="galeriaCantidad">1</span>
-                            <button type="button" class="cantidad-btn" aria-label="Sumar" onclick="cambiarCantidadGaleria(1)">+</button>
-                        </div>
-                    </div>
-
-                    <button class="btn-agregar-galeria" onclick="agregarAlCarritoDesdeGaleria()" id="btnAgregarGaleria">
-                        <i class="fas fa-cart-plus" aria-hidden="true"></i> Agregar al Carrito
-                    </button>
-                    <div class="producto-envio-nota">🚚 Envío gratis a todo el Ecuador</div>
-                </div>
+                <button class="btn-agregar-galeria" onclick="agregarAlCarritoDesdeGaleria()" id="btnAgregarGaleria">
+                    <i class="fas fa-cart-plus" aria-hidden="true"></i> Agregar al Carrito
+                </button>
+                <div class="producto-envio-nota">🚚 Envío gratis a todo el Ecuador</div>
             </div>
         </div>
     </div>
@@ -4271,6 +4438,7 @@
         // (generado desde data/catalogo.json — ver scripts/catalogo.py)
 
         const categorias = {
+            'navidad': 'Navidad',
             'hombre': 'Hombre',
             'mujer': 'Mujer',
             'ninos': 'Niños',
@@ -4286,14 +4454,6 @@
         // ============ ESTADO DEL CARRITO ============
         let carrito = [];
         let provinciaSeleccionada = '';
-        const provinciasEcuador = [
-            'Azuay', 'Bolívar', 'Cañar', 'Carchi', 'Chimborazo', 'Cotopaxi',
-            'El Oro', 'Esmeraldas', 'Galápagos', 'Guayas', 'Imbabura', 'Loja',
-            'Los Ríos', 'Manabí', 'Morona Santiago', 'Napo', 'Orellana',
-            'Pastaza', 'Pichincha', 'Santa Elena',
-            'Santo Domingo de los Tsáchilas', 'Sucumbíos', 'Tungurahua',
-            'Zamora Chinchipe'
-        ];
 
         // ============ BURBUJAS ANIMADAS ============
         // El sistema de burbujas dinámicas se inicializa automáticamente desde bubble-animation-system.js
@@ -4624,7 +4784,42 @@
         }
 
         // ============ INICIALIZACIÓN ============
+        let infoBarFrasesBase = null;
+        let temporizadorInfoBarResize;
+
+        function prepararInfoBar() {
+            const track = document.querySelector('.info-bar-track');
+            const grupo = track && track.querySelector('.info-bar-grupo:not([aria-hidden="true"])');
+            if (!track || !grupo) return;
+
+            if (!infoBarFrasesBase) {
+                infoBarFrasesBase = [...grupo.children].map(frase => frase.cloneNode(true));
+            }
+
+            grupo.replaceChildren(...infoBarFrasesBase.map(frase => frase.cloneNode(true)));
+            track.replaceChildren(grupo);
+
+            const separacion = parseFloat(getComputedStyle(grupo).paddingRight) || 24;
+            while (grupo.scrollWidth < window.innerWidth + separacion) {
+                infoBarFrasesBase.forEach(frase => {
+                    const copia = frase.cloneNode(true);
+                    copia.setAttribute('aria-hidden', 'true');
+                    grupo.appendChild(copia);
+                });
+            }
+
+            const grupoRepetido = grupo.cloneNode(true);
+            grupoRepetido.setAttribute('aria-hidden', 'true');
+            track.appendChild(grupoRepetido);
+        }
+
+        window.addEventListener('resize', () => {
+            window.clearTimeout(temporizadorInfoBarResize);
+            temporizadorInfoBarResize = window.setTimeout(prepararInfoBar, 120);
+        });
+
         function init() {
+            prepararInfoBar();
             cargarCarritoGuardado();
             renderizarCategorias();
             renderizarFooterCategorias();
@@ -4718,7 +4913,8 @@
                 'mascotas': 'fa-paw',
                 'belleza': 'fa-wand-magic-sparkles',
                 'herramientas': 'fa-screwdriver-wrench',
-                'bebes': 'fa-baby'
+                'bebes': 'fa-baby',
+                'navidad': 'fa-gift'
             };
 
             Object.entries(categorias).forEach(([key, nombre], index) => {
@@ -4796,7 +4992,9 @@
             let coincidenciasTotales = 0;
 
             Object.entries(categorias).forEach(([key]) => {
-                let items = productos.filter(p => p.categorias && p.categorias.includes(key));
+                let items = key === 'navidad'
+                    ? productos.filter(p => p.categorias && p.categorias.includes('ninos'))
+                    : productos.filter(p => p.categorias && p.categorias.includes(key));
                 if (termino) {
                     items = items.filter(p => {
                         const texto = [
@@ -4811,7 +5009,9 @@
                 if (!items.length) return;
 
                 const categoriaSeccion = document.createElement('section');
-                categoriaSeccion.className = 'categoria-seccion';
+                categoriaSeccion.className = key === 'navidad'
+                    ? 'categoria-seccion categoria-seccion-navidad'
+                    : 'categoria-seccion';
 
                 const cabecera = document.createElement('div');
                 cabecera.className = 'categoria-cabecera';
@@ -4820,7 +5020,9 @@
                 const titulo = document.createElement('h3');
                 titulo.className = 'categoria-titulo';
                 titulo.id = `seccion-${key}`;
-                titulo.textContent = categorias[key];
+                titulo.textContent = key === 'navidad'
+                    ? '🎄 Especial de Navidad 🎁'
+                    : categorias[key];
                 cabecera.appendChild(titulo);
 
                 const controles = document.createElement('div');
@@ -4828,7 +5030,7 @@
 
                 const etiquetaOrden = document.createElement('span');
                 etiquetaOrden.className = 'categoria-controles-etiqueta';
-                etiquetaOrden.textContent = 'Ordenar:';
+                //etiquetaOrden.textContent = 'Ordenar:';
 
                 const OPCIONES_ORDEN = [
                     ['original', 'Orden original'],
@@ -4883,7 +5085,7 @@
                     grid.replaceChildren();
                     itemsOrdenados.forEach(producto => {
                         const card = document.createElement('div');
-                        card.className = 'producto';
+                        card.className = producto.stock ? 'producto' : 'producto producto-sin-stock';
                         card.style.cursor = 'pointer';
                         const media = mediaPrincipal(producto);
                         const mediaHtml = esRutaImagen(media)
@@ -4895,13 +5097,9 @@
                         <div class="producto-info">
                             <div class="producto-nombre">${producto.nombre}</div>
                             <p class="producto-descripcion-corta">${producto.descripcion || 'Producto de alta calidad disponible en Bubble Shop.'}</p>
-                            <div class="producto-envio-corto">
-                                <i class="fas fa-truck-fast" aria-hidden="true"></i>
-                                <span>Envío gratis a todo el país</span>
-                            </div>
                             <div class="producto-precio">$${producto.precio.toFixed(2)}</div>
                             <div class="producto-acciones">
-                                <button class="producto-agregar" ${!producto.stock ? 'disabled' : ''}
+                                <button class="producto-agregar ${producto.stock ? 'producto-ver-detalles' : ''}" ${!producto.stock ? 'disabled' : ''}
                                     onclick="event.stopPropagation(); abrirGaleriaProducto(${producto.id})">
                                     ${producto.stock ? 'Ver Detalles' : 'No disponible'}
                                 </button>
@@ -4998,9 +5196,34 @@
 
         // ============ CARRITO - ELIMINAR PRODUCTO ============
         function eliminarDelCarrito(id) {
+            const tarjeta = document.querySelector(`.carrito-item[data-producto-id="${id}"]`);
+            if (!tarjeta || tarjeta.classList.contains('eliminando')) return;
+
+            tarjeta.classList.add('eliminando');
+            const botonEliminar = tarjeta.querySelector('.carrito-item-btn-eliminar');
+            if (botonEliminar) botonEliminar.disabled = true;
+
             carrito = carrito.filter(item => item.id !== id);
             guardarCarrito();
-            actualizarCarrito();
+            actualizarResumenCarrito();
+
+            let eliminacionFinalizada = false;
+            const finalizarEliminacion = (evento) => {
+                if (evento && (evento.target !== tarjeta || evento.animationName !== 'carritoItemSalida')) return;
+                if (eliminacionFinalizada) return;
+
+                eliminacionFinalizada = true;
+                tarjeta.removeEventListener('animationend', finalizarEliminacion);
+                tarjeta.remove();
+
+                if (carrito.length === 0) {
+                    document.getElementById('carritoItems').innerHTML =
+                        '<div class="carrito-vacio">Tu carrito está vacío 📦</div>';
+                }
+            };
+
+            tarjeta.addEventListener('animationend', finalizarEliminacion);
+            window.setTimeout(() => finalizarEliminacion(), 450);
         }
 
         // ============ CARRITO - AUMENTAR CANTIDAD ============
@@ -5009,7 +5232,12 @@
             if (item) {
                 item.cantidad++;
                 guardarCarrito();
-                actualizarCarrito();
+
+                const tarjeta = document.querySelector(`.carrito-item[data-producto-id="${id}"]`);
+                tarjeta.querySelector('.cantidad-valor').textContent = item.cantidad;
+                tarjeta.querySelector('.carrito-item-precio').textContent =
+                    `$${(item.precio * item.cantidad).toFixed(2)}`;
+                actualizarResumenCarrito();
             }
         }
 
@@ -5029,48 +5257,6 @@
         }
 
         // ============ CALCULAR TOTALES ============
-        function mostrarSugerenciasProvincia(texto, mostrarTodas = false) {
-            const contenedor = document.getElementById('provinciaSugerencias');
-            if (!contenedor) return;
-
-            const busqueda = texto.trim().toLocaleLowerCase('es');
-            if (!mostrarTodas && busqueda === '') {
-                contenedor.classList.remove('mostrar');
-                contenedor.innerHTML = '';
-                document.getElementById('provinciaDesplegar').setAttribute('aria-expanded', 'false');
-                return;
-            }
-
-            const coincidencias = mostrarTodas ? provinciasEcuador : provinciasEcuador.filter(provincia =>
-                provincia.toLocaleLowerCase('es').includes(busqueda)
-            );
-
-            if (coincidencias.length === 0) {
-                contenedor.classList.remove('mostrar');
-                contenedor.innerHTML = '';
-                return;
-            }
-
-            contenedor.innerHTML = coincidencias.map(provincia => `
-                <button type="button" class="provincia-sugerencia" role="option"
-                    data-provincia="${provincia}">${provincia}</button>
-            `).join('');
-            contenedor.classList.add('mostrar');
-
-            contenedor.querySelectorAll('.provincia-sugerencia').forEach(boton => {
-                boton.addEventListener('mousedown', (e) => e.preventDefault());
-                boton.addEventListener('click', () => {
-                    const provincia = boton.dataset.provincia;
-                    document.getElementById('provinciaSelect').value = provincia;
-                    provinciaSeleccionada = provincia;
-                    guardarCarrito();
-                    actualizarCarrito();
-                    contenedor.classList.remove('mostrar');
-                    document.getElementById('provinciaDesplegar').setAttribute('aria-expanded', 'false');
-                });
-            });
-        }
-
         function calcularTotales() {
             const subtotal = carrito.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
             let envio = 0;
@@ -5088,68 +5274,58 @@
             return { subtotal, envio, total };
         }
 
+        function actualizarTotalCarrito() {
+            const { total } = calcularTotales();
+            document.getElementById('total').textContent = `$${total.toFixed(2)}`;
+        }
+
+        function actualizarResumenCarrito() {
+            const totalItems = carrito.reduce((sum, item) => sum + item.cantidad, 0);
+            document.getElementById('cartCounter').textContent = totalItems;
+            document.getElementById('provinciaSelect').value = provinciaSeleccionada;
+            actualizarTotalCarrito();
+            document.getElementById('limpiarCarrito').disabled = carrito.length === 0;
+            document.getElementById('enviarWhatsapp').disabled = carrito.length === 0;
+        }
+
         // ============ ACTUALIZAR CARRITO ============
         function actualizarCarrito() {
             const carritoItems = document.getElementById('carritoItems');
-            const contador = document.getElementById('cartCounter');
-            const { subtotal, envio, total } = calcularTotales();
-
-            // Contador
-            const totalItems = carrito.reduce((sum, item) => sum + item.cantidad, 0);
-            contador.textContent = totalItems;
 
             // Items
             if (carrito.length === 0) {
                 carritoItems.innerHTML = '<div class="carrito-vacio">Tu carrito está vacío 📦</div>';
             } else {
-                carritoItems.innerHTML = carrito.map(item => `
-                    <div class="carrito-item">
-                        <div class="carrito-item-info">
-                            <div class="carrito-item-nombre">${item.nombre}</div>
-                            <div style="display: flex; align-items: center; gap: 10px; margin-top: 8px;">
-                                <div class="carrito-item-cantidad-controls">
-                                    <button class="btn-cantidad" onclick="disminuirCantidad(${item.id})">−</button>
-                                    <span class="cantidad-valor">${item.cantidad}</span>
-                                    <button class="btn-cantidad" onclick="aumentarCantidad(${item.id})">+</button>
+                carritoItems.innerHTML = carrito.map(item => {
+                    const producto = productos.find(producto => producto.id === item.id);
+                    const imagen = producto ? mediaPrincipal(producto) : item.emoji || '📦';
+                    const miniatura = esRutaImagen(imagen)
+                        ? `<img src="${imagen}" alt="${item.nombre}" loading="lazy">`
+                        : `<span aria-hidden="true">${imagen}</span>`;
+
+                    return `
+                        <div class="carrito-item" data-producto-id="${item.id}">
+                            <div class="carrito-item-info">
+                                <div class="carrito-item-nombre">${item.nombre}</div>
+                                <div class="carrito-item-detalles">
+                                    <div class="carrito-item-miniatura">${miniatura}</div>
+                                    <div class="carrito-item-detalles-principales">
+                                        <div class="carrito-item-cantidad-controls">
+                                            <button class="btn-cantidad" onclick="disminuirCantidad(${item.id})">−</button>
+                                            <span class="cantidad-valor">${item.cantidad}</span>
+                                            <button class="btn-cantidad" onclick="aumentarCantidad(${item.id})">+</button>
+                                        </div>
+                                        <div class="carrito-item-precio">$${(item.precio * item.cantidad).toFixed(2)}</div>
+                                        <button class="carrito-item-btn-eliminar" onclick="eliminarDelCarrito(${item.id})">✕ Eliminar</button>
+                                    </div>
                                 </div>
-                                <span style="font-size: 12px; color: #666;">x $${item.precio.toFixed(2)}</span>
                             </div>
                         </div>
-                        <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 8px;">
-                            <div class="carrito-item-precio">$${(item.precio * item.cantidad).toFixed(2)}</div>
-                            <button class="carrito-item-btn-eliminar" onclick="eliminarDelCarrito(${item.id})">✕ Eliminar</button>
-                        </div>
-                    </div>
-                `).join('');
+                    `;
+                }).join('');
             }
 
-            // Provincia
-            document.getElementById('provinciaSelect').value = provinciaSeleccionada;
-
-            // Indicador envío gratis
-            const indicador = document.getElementById('envioIndicador');
-            if (carrito.length > 0) {
-                if (subtotal >= 25) {
-                    indicador.textContent = '¡Tu pedido tiene envío GRATIS!';
-                    indicador.classList.add('envio-gratis', 'mostrar');
-                } else {
-                    const faltante = 25 - subtotal;
-                    indicador.textContent = `Te faltan $${faltante.toFixed(2)} para obtener envío GRATIS 🎉`;
-                    indicador.classList.remove('envio-gratis');
-                    indicador.classList.add('mostrar');
-                }
-            } else {
-                indicador.classList.remove('mostrar');
-            }
-
-            // Resumen
-            document.getElementById('subtotal').textContent = `$${subtotal.toFixed(2)}`;
-            document.getElementById('envio').textContent = `$${envio.toFixed(2)}`;
-            document.getElementById('total').textContent = `$${total.toFixed(2)}`;
-
-            // Botones
-            document.getElementById('limpiarCarrito').disabled = carrito.length === 0;
-            document.getElementById('enviarWhatsapp').disabled = carrito.length === 0;
+            actualizarResumenCarrito();
         }
 
         // ============ EVENTOS ============
@@ -5199,37 +5375,27 @@
             document.getElementById('provinciaSelect').addEventListener('input', (e) => {
                 provinciaSeleccionada = e.target.value.trim();
                 guardarCarrito();
-                actualizarCarrito();
-                mostrarSugerenciasProvincia(e.target.value);
-            });
-
-            document.getElementById('provinciaSelect').addEventListener('keydown', (e) => {
-                if (e.key === 'Escape') {
-                    document.getElementById('provinciaSugerencias').classList.remove('mostrar');
-                    document.getElementById('provinciaDesplegar').setAttribute('aria-expanded', 'false');
-                }
-            });
-
-            document.getElementById('provinciaDesplegar').addEventListener('click', () => {
-                const sugerencias = document.getElementById('provinciaSugerencias');
-                const boton = document.getElementById('provinciaDesplegar');
-
-                if (sugerencias.classList.contains('mostrar')) {
-                    sugerencias.classList.remove('mostrar');
-                    boton.setAttribute('aria-expanded', 'false');
-                } else {
-                    mostrarSugerenciasProvincia('', true);
-                    boton.setAttribute('aria-expanded', 'true');
-                }
+                actualizarTotalCarrito();
             });
 
             // Limpiar carrito
-            document.getElementById('limpiarCarrito').addEventListener('click', () => {
-                if (confirm('¿Seguro que deseas vaciar el carrito?')) {
-                    carrito = [];
-                    guardarCarrito();
-                    actualizarCarrito();
-                }
+            const botonLimpiarCarrito = document.getElementById('limpiarCarrito');
+            botonLimpiarCarrito.addEventListener('click', () => {
+                abrirModal('confirmarLimpiarModal');
+                document.getElementById('cancelarLimpiarCarrito').focus();
+            });
+
+            document.getElementById('cancelarLimpiarCarrito').addEventListener('click', () => {
+                cerrarModal('confirmarLimpiarModal');
+                botonLimpiarCarrito.focus();
+            });
+
+            document.getElementById('confirmarLimpiarCarrito').addEventListener('click', () => {
+                carrito = [];
+                guardarCarrito();
+                actualizarCarrito();
+                cerrarModal('confirmarLimpiarModal');
+                document.getElementById('cerrarCarrito').focus();
             });
 
             // Enviar WhatsApp
